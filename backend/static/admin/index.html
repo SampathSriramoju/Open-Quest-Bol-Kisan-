@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bol Kisan – Admin Knowledge Management Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { background-color: #f8fafc; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  </style>
+</head>
+<body class="text-slate-800">
+  <!-- Top Navigation -->
+  <header class="bg-emerald-800 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <i class="fa-solid fa-wheat-awn text-amber-400 text-2xl"></i>
+        <div>
+          <h1 class="text-xl font-bold tracking-tight">Bol Kisan Knowledge Authority</h1>
+          <p class="text-xs text-emerald-200">Admin Document Verification & Knowledge Pack Management</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-4">
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+          <span class="w-2 h-2 mr-1.5 bg-emerald-500 rounded-full"></span> Active Authority Node
+        </span>
+        <span class="text-xs text-emerald-100">Team Straw Hats | INNOVASIA 2K26</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+    
+    <!-- Left Column: Upload New PDF Document -->
+    <div class="lg:col-span-1 space-y-6">
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <h2 class="text-lg font-semibold text-slate-900 mb-4 flex items-center">
+          <i class="fa-solid fa-file-arrow-up text-emerald-600 mr-2"></i> Upload Agricultural Manual
+        </h2>
+        
+        <form id="uploadForm" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Document Title</label>
+            <input type="text" id="docTitle" required placeholder="e.g. Cotton Pink Bollworm Advisory 2025" 
+                   class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Crop</label>
+              <select id="docCrop" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+                <option value="Cotton">Cotton (కపాస్ / పత్తి)</option>
+                <option value="Paddy">Paddy (వరి / धान)</option>
+                <option value="Chilli">Chilli (మిరప / मिर्च)</option>
+                <option value="Groundnut">Groundnut (వేరుశనగ)</option>
+                <option value="Red Gram">Red Gram (కంది / अरहर)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Region</label>
+              <input type="text" id="docRegion" value="Telangana" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Language</label>
+              <select id="docLanguage" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg">
+                <option value="te">Telugu (తెలుగు)</option>
+                <option value="hi">Hindi (हिन्दी)</option>
+                <option value="en">English</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Publication Year</label>
+              <input type="text" id="docPubDate" value="2025-2026" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Issuing Authority</label>
+            <input type="text" id="docAuthority" required placeholder="e.g. PJTSAU, ICAR-CICR, CIBRC" value="PJTSAU" 
+                   class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Advisory PDF File</label>
+            <input type="file" id="pdfFileInput" accept="application/pdf" required 
+                   class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100">
+          </div>
+
+          <button type="submit" id="uploadBtn" 
+                  class="w-full py-2.5 px-4 bg-emerald-700 hover:bg-emerald-800 text-white font-medium rounded-lg text-sm transition shadow-sm flex items-center justify-center">
+            <i class="fa-solid fa-cloud-arrow-up mr-2"></i> Ingest & Chunk Document
+          </button>
+        </form>
+        <div id="uploadStatus" class="mt-3 text-xs hidden"></div>
+      </div>
+
+      <!-- Publish Knowledge Pack Section -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <h2 class="text-lg font-semibold text-slate-900 mb-2 flex items-center">
+          <i class="fa-solid fa-box-archive text-amber-600 mr-2"></i> Publish Knowledge Pack
+        </h2>
+        <p class="text-xs text-slate-600 mb-4">Bundles all currently <b>APPROVED</b> documents into an offline SQLite database for Android devices.</p>
+        
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Pack Name</label>
+            <input type="text" id="packName" value="Kharif 2026 Verified Agricultural Pack" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Pack Version</label>
+            <input type="text" id="packVersion" value="2026.1" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg">
+          </div>
+          <button id="publishPackBtn" class="w-full py-2.5 px-4 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg text-sm transition shadow-sm flex items-center justify-center">
+            <i class="fa-solid fa-stamp mr-2"></i> Bundle & Publish Pack
+          </button>
+        </div>
+        <div id="packStatus" class="mt-3 text-xs hidden"></div>
+      </div>
+    </div>
+
+    <!-- Right Column: Document Review & Approval Table -->
+    <div class="lg:col-span-2 space-y-6">
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-lg font-semibold text-slate-900 flex items-center">
+            <i class="fa-solid fa-clipboard-check text-emerald-600 mr-2"></i> Documents Awaiting Verification
+          </h2>
+          <button id="refreshDocsBtn" class="text-xs text-emerald-700 hover:text-emerald-800 font-medium flex items-center">
+            <i class="fa-solid fa-rotate mr-1"></i> Refresh List
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm text-slate-600">
+            <thead class="bg-slate-50 text-xs uppercase font-semibold text-slate-500 border-b">
+              <tr>
+                <th class="py-3 px-3">Title & Crop</th>
+                <th class="py-3 px-3">Authority</th>
+                <th class="py-3 px-3">Status</th>
+                <th class="py-3 px-3">Chunks</th>
+                <th class="py-3 px-3 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="documentsTableBody" class="divide-y divide-slate-100">
+              <tr><td colspan="5" class="text-center py-6 text-slate-400">Loading documents...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Published Knowledge Packs Table -->
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+        <h2 class="text-lg font-semibold text-slate-900 mb-4 flex items-center">
+          <i class="fa-solid fa-mobile-screen-button text-indigo-600 mr-2"></i> Offline Mobile Knowledge Packs
+        </h2>
+        <div id="knowledgePacksList" class="space-y-3">
+          <p class="text-xs text-slate-400">Loading packs...</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    const API_BASE = '/api/v1';
+
+    async function loadDocuments() {
+      try {
+        const res = await fetch(`${API_BASE}/documents/`);
+        const docs = await res.json();
+        const tbody = document.getElementById('documentsTableBody');
+        tbody.innerHTML = '';
+
+        if (docs.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" class="text-center py-6 text-slate-400">No documents found. Upload one on the left.</td></tr>';
+          return;
+        }
+
+        docs.forEach(doc => {
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-slate-50 transition';
+          
+          let badgeColor = 'bg-yellow-100 text-yellow-800';
+          if (doc.approval_status === 'APPROVED') badgeColor = 'bg-emerald-100 text-emerald-800';
+          if (doc.approval_status === 'REJECTED') badgeColor = 'bg-rose-100 text-rose-800';
+
+          tr.innerHTML = `
+            <td class="py-3 px-3">
+              <div class="font-medium text-slate-900">${doc.title}</div>
+              <div class="text-xs text-slate-500">${doc.crop} • ${doc.language.toUpperCase()} • ${doc.region}</div>
+            </td>
+            <td class="py-3 px-3 text-xs font-semibold text-slate-700">${doc.issuing_authority}</td>
+            <td class="py-3 px-3">
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${badgeColor}">
+                ${doc.approval_status}
+              </span>
+            </td>
+            <td class="py-3 px-3 text-xs">${doc.chunks ? doc.chunks.length : 0} chunks</td>
+            <td class="py-3 px-3 text-right space-x-1">
+              ${doc.approval_status !== 'APPROVED' ? `
+                <button onclick="approveDoc('${doc.id}', 'APPROVE')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded shadow-sm">
+                  Approve
+                </button>
+              ` : ''}
+              ${doc.approval_status !== 'REJECTED' ? `
+                <button onclick="approveDoc('${doc.id}', 'REJECT')" class="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white text-xs font-medium rounded shadow-sm">
+                  Reject
+                </button>
+              ` : ''}
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function approveDoc(docId, action) {
+      try {
+        const res = await fetch(`${API_BASE}/documents/${docId}/approve`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: action, approved_by: 'Admin_Officer' })
+        });
+        if (res.ok) {
+          loadDocuments();
+        } else {
+          alert('Failed to update status');
+        }
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    async function loadKnowledgePacks() {
+      try {
+        const res = await fetch(`${API_BASE}/knowledge-packs/`);
+        const packs = await res.json();
+        const container = document.getElementById('knowledgePacksList');
+        container.innerHTML = '';
+
+        if (packs.length === 0) {
+          container.innerHTML = '<p class="text-xs text-slate-400">No published knowledge packs yet.</p>';
+          return;
+        }
+
+        packs.forEach(pack => {
+          const div = document.createElement('div');
+          div.className = 'p-3 bg-slate-50 border border-slate-200 rounded-lg flex justify-between items-center';
+          div.innerHTML = `
+            <div>
+              <div class="font-medium text-xs text-slate-800">${pack.pack_name} <span class="text-emerald-600 font-bold">v${pack.version}</span></div>
+              <div class="text-[11px] text-slate-500">Size: ${(pack.file_size_bytes / 1024).toFixed(1)} KB • Target: ${pack.target_crop} (${pack.target_region})</div>
+              <div class="text-[10px] text-slate-400 font-mono">SHA256: ${pack.checksum_sha256 ? pack.checksum_sha256.substring(0, 16) + '...' : 'N/A'}</div>
+            </div>
+            <a href="${pack.download_url}" download class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-medium flex items-center shadow-sm">
+              <i class="fa-solid fa-download mr-1.5"></i> Download DB
+            </a>
+          `;
+          container.appendChild(div);
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const statusDiv = document.getElementById('uploadStatus');
+      const submitBtn = document.getElementById('uploadBtn');
+      submitBtn.disabled = true;
+      statusDiv.className = 'mt-3 text-xs text-indigo-600 block';
+      statusDiv.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Ingesting PDF, running OCR/chunking...';
+
+      const formData = new FormData();
+      formData.append('title', document.getElementById('docTitle').value);
+      formData.append('crop', document.getElementById('docCrop').value);
+      formData.append('region', document.getElementById('docRegion').value);
+      formData.append('language', document.getElementById('docLanguage').value);
+      formData.append('issuing_authority', document.getElementById('docAuthority').value);
+      formData.append('publication_date', document.getElementById('docPubDate').value);
+      formData.append('file', document.getElementById('pdfFileInput').files[0]);
+
+      try {
+        const res = await fetch(`${API_BASE}/documents/upload`, {
+          method: 'POST',
+          body: formData
+        });
+        if (res.ok) {
+          statusDiv.className = 'mt-3 text-xs text-emerald-600 block';
+          statusDiv.innerHTML = '<i class="fa-solid fa-check mr-1"></i> Document successfully chunked and queued for Admin Review!';
+          document.getElementById('uploadForm').reset();
+          loadDocuments();
+        } else {
+          const err = await res.json();
+          statusDiv.className = 'mt-3 text-xs text-rose-600 block';
+          statusDiv.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> Error: ${err.detail || 'Upload failed'}`;
+        }
+      } catch (err) {
+        statusDiv.className = 'mt-3 text-xs text-rose-600 block';
+        statusDiv.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> Error: ${err.message}`;
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+
+    document.getElementById('publishPackBtn').addEventListener('click', async () => {
+      const statusDiv = document.getElementById('packStatus');
+      statusDiv.className = 'mt-3 text-xs text-indigo-600 block';
+      statusDiv.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Generating SQLite FTS5 knowledge bundle...';
+
+      try {
+        const res = await fetch(`${API_BASE}/knowledge-packs/publish`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            pack_name: document.getElementById('packName').value,
+            version: document.getElementById('packVersion').value,
+            target_crop: 'All',
+            target_region: 'Telangana',
+            target_language: 'te'
+          })
+        });
+
+        if (res.ok) {
+          statusDiv.className = 'mt-3 text-xs text-emerald-600 block';
+          statusDiv.innerHTML = '<i class="fa-solid fa-check mr-1"></i> Knowledge pack successfully published and ready for offline Android sync!';
+          loadKnowledgePacks();
+        } else {
+          const err = await res.json();
+          statusDiv.className = 'mt-3 text-xs text-rose-600 block';
+          statusDiv.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> Error: ${err.detail || 'Publication failed'}`;
+        }
+      } catch (err) {
+        statusDiv.className = 'mt-3 text-xs text-rose-600 block';
+        statusDiv.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> Error: ${err.message}`;
+      }
+    });
+
+    document.getElementById('refreshDocsBtn').addEventListener('click', loadDocuments);
+
+    // Initial Load
+    loadDocuments();
+    loadKnowledgePacks();
+  </script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+{
+  "pack_name": "Essential Core Advisory Pack (Safety, Soil, Schemes, Weather)",
+  "version": "2026.1",
+  "target_crop": "Multi",
+  "target_region": "Telangana",
+  "created_at": "2026-11-05T17:45:23.778496",
+  "documents_count": 6,
+  "documents": [
+    {
+      "id": "doc_cibrc_banned_list_2025",
+      "title": "CIBRC Gazette List of Banned & Prohibited Pesticides in India 2025",
+      "crop": "Multi",
+      "language": "te",
+      "issuing_authority": "Central Insecticide Board & Registration Committee (CIBRC)",
+      "chunks": [
+        {
+          "id": "ch_doc_cibrc_banned_list_2025_1_0",
+          "page_number": 1,
+          "chunk_index": 0,
+          "content": "భారత ప్రభుత్వం & CIBRC గెజిట్ నోటిఫికేషన్ ద్వారా పూర్తిగా నిషేధించబడిన రసాయనాలు: మోనోక్రోటోఫాస్ (Monocrotophos), పారాక్వాట్ డైక్లోరైడ్ (Paraquat), ఎండోసల్ఫాన్ (Endosulfan), డిడిటి (DDT), కార్బోఫ్యూరాన్ (Carbofuran), ఫోరేట్ (Phorate), మిథైల్ పారాథియాన్. ఈ ప్రమాదకర రసాయనాలను వ్యవసాయంలో ఉపయోగించడం చట్టరీత్యా నేరం మరియు పంటలకు, ప్రజలకు ప్రాణాంతక ప్రమాదం.",
+          "crop_tag": "Multi",
+          "topic_tag": "chemical_safety"
+        },
+        {
+          "id": "ch_doc_cibrc_banned_list_2025_1_1",
+          "page_number": 1,
+          "chunk_index": 1,
+          "content": "भारत सरकार एवं CIBRC राजपत्र अधिसूचना द्वारा पूर्णतः प्रतिबंधित कीटनाशक: मोनोक्रोटोफॉस (Monocrotophos), पैराक्वाट (Paraquat), एंडोसल्फान (Endosulfan), डीडीटी (DDT), कार्बोफ्यूरॉन (Carbofuran), फोरेट (Phorate)। इन रसायनों का कृषि में छिड़काव पूर्णतः गैरकानूनी एवं विषैला है।",
+          "crop_tag": "Multi",
+          "topic_tag": "chemical_safety"
+        },
+        {
+          "id": "ch_doc_cibrc_banned_list_2025_1_2",
+          "page_number": 1,
+          "chunk_index": 2,
+          "content": "Government of India & CIBRC Prohibited Chemical Pesticides Gazette Notification: Active ingredients Monocrotophos, Paraquat Dichloride, Endosulfan, DDT, Carbofuran, Phorate, and Methyl Parathion are strictly banned for manufacture, import, sale, and agricultural application in India. Unauthorized usage is a cognizable legal offense under the Insecticides Act.",
+          "crop_tag": "Multi",
+          "topic_tag": "chemical_safety"
+        }
+      ]
+    },
+    {
+      "id": "doc_cibrc_safety_guidelines",
+      "title": "CIBRC Pesticide Safety, Dosage & Label Regulations",
+      "crop": "Multi",
+      "language": "te",
+      "issuing_authority": "Central Insecticide Board & Registration Committee (CIBRC)",
+      "chunks": [
+        {
+          "id": "ch_doc_cibrc_safety_guidelines_1_0",
+          "page_number": 1,
+          "chunk_index": 0,
+          "content": "పురుగుమందులు పిచికారీ చేసేటప్పుడు తీసుకోవాల్సిన జాగ్రత్తలు: గాలి వీచే దిశలోనే పిచికారీ చేయాలి. ముక్కు మరియు నోటికి మాస్క్, చేతులకు రబ్బరు గ్లౌజులు ధరించాలి. ఖాళీ డబ్బాలను మూడుసార్లు కడిగి రంధ్రం చేసి పూడ్చివేయాలి. నిరీక్షణ కాలాన్ని (PHI) ఖచ్చితంగా పాటించాలి.",
+          "crop_tag": "Multi",
+          "topic_tag": "chemical_safety"
+        },
+        {
+          "id": "ch_doc_cibrc_safety_guidelines_1_1",
+          "page_number": 1,
+          "chunk_index": 1,
+          "content": "Pesticide application safety guidelines and mandatory precautions: Always spray in the direction of wind. Wear protective face masks, eye goggles, and nitrile rubber gloves. Empty pesticide containers must undergo triple-rinsing, puncture destruction, and safe burial away from water bodies. Adhere strictly to the recommended Pre-Harvest Interval (PHI).",
+          "crop_tag": "Multi",
+          "topic_tag": "chemical_safety"
+        }
+      ]
+    },
+    {
+      "id": "doc_pjtsau_soil_health_te_2025",
+      "title": "PJTSAU నేల పరీక్షలు, సమగ్ర పోషక యాజమాన్యం మరియు సూక్ష్మధాతు లోపాల నివారణ 2025-26",
+      "crop": "Multi",
+      "language": "te",
+      "issuing_authority": "Professor Jayashankar Telangana State Agricultural University (PJTSAU)",
+      "chunks": [
+        {
+          "id": "ch_doc_pjtsau_soil_health_te_2025_5_0",
+          "page_number": 5,
+          "chunk_index": 0,
+          "content": "నేల నమూనా సేకరించే సరైన పద్ధతి (Scientific Soil Sampling Methodology): పంట కోత తర్వాత లేదా వేసవిలో దుక్కులు దున్నకముందు నేల నమూనా సేకరించాలి. పొలంలో 'V' ఆకారంలో 15 సెం.మీ (వరి, పత్తికి) లేదా 30 సెం.మీ (పండ్ల తోటలకు) గుంత తీసి పైనుండి కింది వరకు ఒక పలుచటి మట్టి పొరను సేకరించాలి. పొలంలో 10-12 చోట్ల మట్టిని సేకరించి బాగా కలిపి నాలుగు భాగాలుగా విభజించి అర కిలో నమూనాను ల్యాబ్‌కు పంపాలి.",
+          "crop_tag": "Multi",
+          "topic_tag": "soil_testing"
+        },
+        {
+          "id": "ch_doc_pjtsau_soil_health_te_2025_12_1",
+          "page_number": 12,
+          "chunk_index": 1,
+          "content": "సమగ్ర పోషక యాజమాన్యం మరియు సూక్ష్మధాతు లోపాల నివారణ: నేలలో సేంద్రీయ కర్బనాన్ని పెంచడానికి ఎకరానికి 4-5 టన్నుల పశువుల ఎరువు లేదా జీలుగ/జనుము పచ్చిరొట్ట ఎరువులను కలిపి కలియదున్నాలి. జింక్ లోప నివారణకు ఆఖరి దుక్కిలో ఎకరానికి 10-15 కిలోల జింక్ సల్ఫేట్ వేయాలి. జింక్ మరియు భాస్వరం ఎరువులను నేరుగా ఎప్పుడూ కలపకూడదు.",
+          "crop_tag": "Multi",
+          "topic_tag": "nutrient_management"
+        }
+      ]
+    },
+    {
+      "id": "doc_icar_weed_mgmt_en_2025",
+      "title": "ICAR-DWR Integrated Weed Management and Herbicide Safety Guidelines 2025",
+      "crop": "Multi",
+      "language": "en",
+      "issuing_authority": "ICAR - Directorate of Weed Research (DWR)",
+      "chunks": [
+        {
+          "id": "ch_doc_icar_weed_mgmt_en_2025_6_0",
+          "page_number": 6,
+          "chunk_index": 0,
+          "content": "Integrated Weed Management & Herbicide Safety Rules: Apply pre-emergence herbicides (such as Pendimethalin 30% EC at 1.0-1.3 L/acre) within 48-72 hours of sowing under adequate soil moisture. Use flat-fan or flood-jet nozzles for uniform ground coverage. Avoid spraying in windy weather to prevent herbicide drift onto adjacent sensitive broadleaf crops. Always clean spray tanks thoroughly before insecticide application.",
+          "crop_tag": "Multi",
+          "topic_tag": "weed_management"
+        }
+      ]
+    },
+    {
+      "id": "doc_imd_agromet_te_2025",
+      "title": "IMD-PJTSAU వాతావరణ ఆధారిత వ్యవసాయ సలహాలు మరియు విపత్తు నిర్వహణ 2025-26",
+      "crop": "Multi",
+      "language": "te",
+      "issuing_authority": "India Meteorological Department (IMD) & PJTSAU AMFU",
+      "chunks": [
+        {
+          "id": "ch_doc_imd_agromet_te_2025_4_0",
+          "page_number": 4,
+          "chunk_index": 0,
+          "content": "భారీ వర్షాలు మరియు మురుగునీటి యాజమాన్యం: వాతావరణ శాఖ భారీ వర్ష సూచన ఇచ్చినప్పుడు పత్తి, మిరప, మొక్కజొన్న మరియు సోయాబీన్ పంటలలో వెంటనే మురుగునీటి కాల్వలను శుభ్రం చేసి నీరు బయటకు పోయేలా చూడాలి. వేర్ల వద్ద నీరు 24 గంటల కంటే ఎక్కువ నిలిస్తే వేరుకుళ్లు తెగులు వ్యాపిస్తుంది. వర్షం తగ్గిన తర్వాత ఎకరానికి 20-25 కిలోల యూరియా + 10 కిలోల పొటాష్ వేయాలి.",
+          "crop_tag": "Multi",
+          "topic_tag": "weather_advisory"
+        },
+        {
+          "id": "ch_doc_imd_agromet_te_2025_8_1",
+          "page_number": 8,
+          "chunk_index": 1,
+          "content": "వర్షాభావ పరిస్థితులలో తేమ సంరక్షణ: వర్షాలు లేని బెట్ట సమయాలలో పంటలపై 2% పొటాషియం నైట్రేట్ (13-0-45) 10 గ్రాములు లేదా యూరియా 20 గ్రాములు లీటరు నీటికి కలిపి పిచికారీ చేయడం వల్ల పైరు బెట్టను తట్టుకుంటుంది. అంతరకృషి చేసి నేలపై పగుళ్లను పూడ్చడం ద్వారా తేమ ఆవిరి కాకుండా కాపాడుకోవచ్చు.",
+          "crop_tag": "Multi",
+          "topic_tag": "weather_advisory"
+        }
+      ]
+    },
+    {
+      "id": "doc_govt_schemes_te_2025",
+      "title": "తెలంగాణ వ్యవసాయ శాఖ & భారత ప్రభుత్వం రైతు సంక్షేమ పథకాలు (రైతు భరోసా & PMFBY ఫసల్ బీమా యోజన) 2025-26",
+      "crop": "Multi",
+      "language": "te",
+      "issuing_authority": "Department of Agriculture, Government of Telangana & Ministry of Agriculture, GoI",
+      "chunks": [
+        {
+          "id": "ch_doc_govt_schemes_te_2025_3_0",
+          "page_number": 3,
+          "chunk_index": 0,
+          "content": "రైతు భరోసా పథకం అర్హతలు మరియు సహాయం: తెలంగాణ రాష్ట్ర ప్రభుత్వ నిబంధనల ప్రకారం పట్టాదారు పాస్ పుస్తకం కలిగిన అర్హులైన ప్రతి రైతుకు మరియు కౌలు రైతులకు పంట పెట్టుబడి సహాయంగా ఎకరానికి సీజన్‌కు ఆర్థిక సహాయం జమ చేయబడుతుంది. ఆధార్ సీడింగ్ మరియు ఈ-కేవైసీ (e-KYC) తప్పనిసరిగా పూర్తి చేసి బ్యాంకు ఖాతాతో అనుసంధానం చేసుకోవాలి.",
+          "crop_tag": "Multi",
+          "topic_tag": "government_schemes"
+        },
+        {
+          "id": "ch_doc_govt_schemes_te_2025_7_1",
+          "page_number": 7,
+          "chunk_index": 1,
+          "content": "ప్రధాన మంత్రి ఫసల్ బీమా యోజన (PMFBY Crop Insurance) నమోదు మరియు క్లెయిమ్: ప్రకృతి విపత్తులు (కరువు, అధిక వర్షాలు, తుఫానులు, తెగుళ్లు) వల్ల పంట నష్టపోతే బీమా పరిహారం అందుతుంది. ఖరీఫ్ పంటల ప్రీమియం రైతులు కేవలం 2%, రబీ పంటలకు 1.5% చెల్లించాలి. పంట నష్టం జరిగిన 72 గంటలలోపు టోల్ ఫ్రీ నంబర్ 14447 లేదా క్రాప్ ఇన్సూరెన్స్ యాప్ ద్వారా వివరాలు నమోదు చేయాలి.",
+          "crop_tag": "Multi",
+          "topic_tag": "government_schemes"
+        }
+      ]
+    }
+  ],
+  "file_size_bytes": 77824,
+  "checksum_sha256": "cb9257f3c84930dd38adbca14489f6a85429eef038aee8c2c13ce7bf134a96fa",
+  "download_url": "/api/v1/knowledge-packs/download/knowledge_pack_essential_2026.1.db"
+}

@@ -1,0 +1,96 @@
+{
+  "pack_name": "Paddy (Rice) IPM & Water Management Knowledge Pack",
+  "version": "2026.1",
+  "target_crop": "Paddy",
+  "target_region": "Telangana",
+  "created_at": "2026-11-05T17:45:23.851216",
+  "documents_count": 3,
+  "documents": [
+    {
+      "id": "doc_pjtsau_paddy_te_2025",
+      "title": "PJTSAU Paddy Crop Management & Protection Guide 2025-26",
+      "crop": "Paddy",
+      "language": "te",
+      "issuing_authority": "Professor Jayashankar Telangana State Agricultural University (PJTSAU)",
+      "chunks": [
+        {
+          "id": "ch_doc_pjtsau_paddy_te_2025_14_0",
+          "page_number": 14,
+          "chunk_index": 0,
+          "content": "వరిలో కాండం తొలుచు పురుగు (Stem Borer) మరియు చనిపోయిన మొవ్వులు (Dead hearts) నివారణ: సిఫార్సు చేసిన క్లోరాంట్రానిలీప్రోల్ (Chlorantraniliprole 18.5% SC) 60 మి.లీ ఎకరాకు 200 లీటర్ల నీటిలో కలిపి పిచికారీ చేయాలి. ఎకరానికి 5 లింగాకర్షక బుట్టలను అమర్చాలి.",
+          "crop_tag": "Paddy",
+          "topic_tag": "pest_management"
+        },
+        {
+          "id": "ch_doc_pjtsau_paddy_te_2025_16_1",
+          "page_number": 16,
+          "chunk_index": 1,
+          "content": "వరిలో ఆకులు పసుపు రంగులోకి మారుతున్నాయి (వరి ఆకులు పసుపుబారడం మరియు జింక్ లోపం నివారణ): వరి పైరులో జింక్ లేదా ఇనుము లోపం వల్ల లేదా కాండం తొలుచు పురుగు ఉధృతి వల్ల ఆకులు పసుపు రంగులోకి మారుతాయి. నివారణకు జింక్ సల్ఫేట్ 2 గ్రాములు లీటరు నీటికి కలిపి పిచికారీ చేయాలి.",
+          "crop_tag": "Paddy",
+          "topic_tag": "symptom_yellowing"
+        },
+        {
+          "id": "ch_doc_pjtsau_paddy_te_2025_24_2",
+          "page_number": 24,
+          "chunk_index": 2,
+          "content": "వరిలో సమగ్ర కలుపు నివారణ: నాటిన 3-5 రోజులలోపు లేదా వెదజల్లిన 5-7 రోజులలోపు ఎకరానికి 1 లీటరు పెండిమిథాలిన్ 30% EC లేదా 500 మి.లీ ప్రిటిలాక్లోర్ 50% EC ని 200 లీటర్ల నీటిలో కలిపి లేదా 20-25 కిలోల ఇసుకలో కలిపి చల్లాలి. పొలంలో పల్చగా నీరు నిల్వ ఉండేలా చూడాలి.",
+          "crop_tag": "Paddy",
+          "topic_tag": "weed_management"
+        }
+      ]
+    },
+    {
+      "id": "doc_icar_paddy_hi_2025",
+      "title": "ICAR-IIRR धान कीट एवं रोग प्रबंधन संदर्शिका 2025",
+      "crop": "Paddy",
+      "language": "hi",
+      "issuing_authority": "ICAR - Indian Institute of Rice Research (IIRR)",
+      "chunks": [
+        {
+          "id": "ch_doc_icar_paddy_hi_2025_12_0",
+          "page_number": 12,
+          "chunk_index": 0,
+          "content": "धान में तना छेदक (Stem Borer) एवं मृत गोभ (Dead heart) की रोकथाम: फसल में लक्षण दिखने पर क्लोरांट्रानिलीप्रोल (Chlorantraniliprole 18.5% SC) 60 मिली प्रति एकड़ 200 लीटर पानी में मिलाकर छिड़काव करें। 5 फेरोमोन ट्रैप प्रति एकड़ लगाएं।",
+          "crop_tag": "Paddy",
+          "topic_tag": "pest_management"
+        },
+        {
+          "id": "ch_doc_icar_paddy_hi_2025_15_1",
+          "page_number": 15,
+          "chunk_index": 1,
+          "content": "धान में पत्तियों का पीलापन एवं जिंक की कमी का नियंत्रण: जिंक या लौह तत्व की कमी से धान की पत्तियां पीली पड़ जाती हैं। रोकथाम के लिए जिंक सल्फेट (Zinc Sulphate 21%) 2 ग्राम प्रति लीटर पानी में मिलाकर छिड़कें।",
+          "crop_tag": "Paddy",
+          "topic_tag": "symptom_yellowing"
+        }
+      ]
+    },
+    {
+      "id": "doc_icar_paddy_en_2025",
+      "title": "ICAR-IIRR Rice Crop Production & Protection Guidelines 2025",
+      "crop": "Paddy",
+      "language": "en",
+      "issuing_authority": "ICAR - Indian Institute of Rice Research (IIRR)",
+      "chunks": [
+        {
+          "id": "ch_doc_icar_paddy_en_2025_14_0",
+          "page_number": 14,
+          "chunk_index": 0,
+          "content": "Paddy rice stem borer and dead heart control: Upon noticing dead hearts during vegetative stage or white ears at heading, apply Chlorantraniliprole 18.5% SC at 60 ml per acre mixed in 200 liters of water. Install 5 pheromone traps per acre to monitor yellow stem borer adult activity.",
+          "crop_tag": "Paddy",
+          "topic_tag": "pest_management"
+        },
+        {
+          "id": "ch_doc_icar_paddy_en_2025_18_1",
+          "page_number": 18,
+          "chunk_index": 1,
+          "content": "Paddy rice leaves turning yellow due to zinc deficiency or iron chlorosis: Yellowing appears on younger leaves and spreads down the blades. Spray Zinc Sulphate (ZnSO4) at 2 grams per liter of water (400-500 grams per acre in 200 liters of water) twice at 10-day intervals.",
+          "crop_tag": "Paddy",
+          "topic_tag": "symptom_yellowing"
+        }
+      ]
+    }
+  ],
+  "file_size_bytes": 40960,
+  "checksum_sha256": "afb5e85ce97b534ff373f1b9694d4a8df377d2acd96085d39c24564c268342af",
+  "download_url": "/api/v1/knowledge-packs/download/knowledge_pack_paddy_2026.1.db"
+}

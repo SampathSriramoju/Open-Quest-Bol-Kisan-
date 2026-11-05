@@ -1,0 +1,96 @@
+{
+  "pack_name": "Cotton IPM & Production Knowledge Pack",
+  "version": "2026.1",
+  "target_crop": "Cotton",
+  "target_region": "Telangana",
+  "created_at": "2026-11-05T17:45:23.813087",
+  "documents_count": 3,
+  "documents": [
+    {
+      "id": "doc_pjtsau_cotton_te_2025",
+      "title": "PJTSAU Cotton Integrated Pest Management Guide 2025-26",
+      "crop": "Cotton",
+      "language": "te",
+      "issuing_authority": "Professor Jayashankar Telangana State Agricultural University (PJTSAU)",
+      "chunks": [
+        {
+          "id": "ch_doc_pjtsau_cotton_te_2025_4_0",
+          "page_number": 4,
+          "chunk_index": 0,
+          "content": "పత్తిలో గులాబీ రంగు పురుగు నివారణ మరియు యాజమాన్యం (Cotton Pink Bollworm Control): పూత మరియు కాయ దశలో ఎకరానికి 8 లింగాకర్షక బుట్టలను అమర్చాలి. నివారణకు: వేప నూనె 10,000 PPM ఎకరానికి 400-500 మి.లీ 200 లీటర్ల నీటిలో కలిపి పిచికారీ చేయాలి. పురుగు ఉధృతిని బట్టి పిచికారీ చేయాలి. పత్తి పంటలో గులాబీ రంగు పురుగు సమస్యలు సమర్థవంతంగా అదుపులోకి వస్తాయి.",
+          "crop_tag": "Cotton",
+          "topic_tag": "pest_management"
+        },
+        {
+          "id": "ch_doc_pjtsau_cotton_te_2025_7_1",
+          "page_number": 7,
+          "chunk_index": 1,
+          "content": "పత్తిలో ఆకులు పసుపు రంగులోకి మారుతున్నాయి (ఆకులు పసుపుబారడం మరియు రసం పీల్చే పురుగుల నివారణ): తెల్లదోమ మరియు జెస్సిడ్స్ ఆకుల రసాన్ని పీల్చడం వల్ల ఆకులు, ఆకుల అంచులు పసుపు రంగులోకి మారుతాయి / మారుతున్నాయి. నివారణకు పసుపు మరియు నీలి రంగు జిగురు అట్టలను ఎకరానికి 10 చొప్పున అమర్చాలి. వేపనూనె 5 మి.లీ లీటరు నీటికి కలిపి పిచికారీ చేయాలి. నత్రజని అధికంగా వేయవద్దు.",
+          "crop_tag": "Cotton",
+          "topic_tag": "symptom_yellowing"
+        },
+        {
+          "id": "ch_doc_pjtsau_cotton_te_2025_12_2",
+          "page_number": 12,
+          "chunk_index": 2,
+          "content": "పత్తి విత్తన శుద్ధి (Cotton Seed Treatment): విత్తనం ద్వారా వ్యాపించే నల్లమచ్చ మరియు వేరుకుళ్లు తెగుళ్ల నివారణకు కిలో విత్తనానికి కార్బాక్సిన్ + థైరామ్ 3 గ్రాములు లేదా ట్రైకోడెర్మా విరిడి 10 గ్రాములు కలిపి విత్తన శుద్ధి చేయాలి. రసం పీల్చే పురుగుల నివారణకు ఇమిడాక్లోప్రిడ్ 70% WS 5 గ్రాములు కిలో విత్తనానికి కలపాలి.",
+          "crop_tag": "Cotton",
+          "topic_tag": "seed_treatment"
+        }
+      ]
+    },
+    {
+      "id": "doc_icar_cotton_hi_2025",
+      "title": "ICAR-CICR कपास समेकित कीट एवं रोग प्रबंधन संदर्शिका 2025",
+      "crop": "Cotton",
+      "language": "hi",
+      "issuing_authority": "ICAR - Central Institute for Cotton Research (CICR)",
+      "chunks": [
+        {
+          "id": "ch_doc_icar_cotton_hi_2025_5_0",
+          "page_number": 5,
+          "chunk_index": 0,
+          "content": "कपास की फसल में मुख्य समस्याएं एवं गुलाबी सुंडी (Pink Bollworm) का नियंत्रण: फूल और गूलर बनने की अवस्था में प्रति एकड़ 8 फेरोमोन ट्रैप लगाएं। नियंत्रण के लिए नीम का तेल (Neem oil 10000 PPM) 400-500 मिली प्रति एकड़ 200 लीटर पानी में मिलाकर छिड़काव करें। लगातार 3 दिन तक 8 पतंगे मिलने पर तुरंत उपचार करें।",
+          "crop_tag": "Cotton",
+          "topic_tag": "pest_management"
+        },
+        {
+          "id": "ch_doc_icar_cotton_hi_2025_8_1",
+          "page_number": 8,
+          "chunk_index": 1,
+          "content": "कपास में पत्तियों का पीलापन और सफेद मक्खी की रोकथाम: सफेद मक्खी पत्तियों से रस चूसती है जिससे पत्तियां पीली पड़ जाती हैं। रोकथाम के लिए प्रति एकड़ 10-15 पीले चिपचिपे कार्ड लगाएं और नीम तेल 5 मिली प्रति लीटर पानी में मिलाकर छिड़कें। यूरिया का अत्यधिक उपयोग न करें।",
+          "crop_tag": "Cotton",
+          "topic_tag": "symptom_yellowing"
+        }
+      ]
+    },
+    {
+      "id": "doc_icar_cotton_en_2025",
+      "title": "ICAR-CICR Best Management Practices for Cotton in India 2025",
+      "crop": "Cotton",
+      "language": "en",
+      "issuing_authority": "ICAR - Central Institute for Cotton Research (CICR)",
+      "chunks": [
+        {
+          "id": "ch_doc_icar_cotton_en_2025_6_0",
+          "page_number": 6,
+          "chunk_index": 0,
+          "content": "Cotton Pink Bollworm management and prevention: Install 8 pheromone traps per acre during flowering and boll formation stage. Economic Threshold Level (ETL) is 8 moths per trap per day for 3 consecutive days. For control, spray Neem oil 10,000 PPM at 400-500 ml per acre in 200 liters of water or Chlorantraniliprole 18.5% SC at 60 ml per acre.",
+          "crop_tag": "Cotton",
+          "topic_tag": "pest_management"
+        },
+        {
+          "id": "ch_doc_icar_cotton_en_2025_10_1",
+          "page_number": 10,
+          "chunk_index": 1,
+          "content": "Cotton leaves turning yellow and sucking pest control: Whiteflies and jassids suck cell sap, causing cotton leaf edges to curl and turn yellow. Control with 10 yellow and blue sticky traps per acre. Spray 5% neem seed kernel extract (NSKE) or neem oil at 5 ml per liter of water. Avoid excessive nitrogenous fertilizers.",
+          "crop_tag": "Cotton",
+          "topic_tag": "symptom_yellowing"
+        }
+      ]
+    }
+  ],
+  "file_size_bytes": 57344,
+  "checksum_sha256": "794f787d369cffb7766207ef908c6ff0743ef1267f85f9f410f30ebcc765a66b",
+  "download_url": "/api/v1/knowledge-packs/download/knowledge_pack_cotton_2026.1.db"
+}

@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: bol_kisan_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: bol_kisan_user
+      POSTGRES_PASSWORD: bol_kisan_password
+      POSTGRES_DB: bol_kisan_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bol_kisan_user -d bol_kisan_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    container_name: bol_kisan_api
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql://bol_kisan_user:bol_kisan_password@db:5432/bol_kisan_db
+      - USE_PGVECTOR=true
+      - ENV=production
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../storage:/app/storage
+
+volumes:
+  postgres_data:

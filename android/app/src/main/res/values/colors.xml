@@ -1,0 +1,21 @@
+<resources>
+    <!-- Natural Green Primary Palette -->
+    <color name="green_primary">#2E7D32</color>
+    <color name="green_dark">#1B5E20</color>
+    <color name="green_light">#81C784</color>
+    <color name="green_accent">#4CAF50</color>
+
+    <!-- Subtle Earthy Tones -->
+    <color name="earth_brown">#4E342E</color>
+    <color name="earth_light">#D7CCC8</color>
+    <color name="warm_cream">#F9FBE7</color>
+
+    <!-- Pure & Neutral -->
+    <color name="white">#FFFFFF</color>
+    <color name="slate_dark">#1E293B</color>
+    <color name="slate_light">#F1F5F9</color>
+
+    <!-- Status Colors -->
+    <color name="status_amber">#F57C00</color>
+    <color name="status_red">#D32F2F</color>
+</resources>

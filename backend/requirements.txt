@@ -1,0 +1,12 @@
+fastapi==0.133.1
+uvicorn==0.41.0
+pydantic==2.12.5
+pydantic-settings==2.16.2
+sqlalchemy==2.0.51
+pgvector==0.5.1
+psycopg2-binary==2.9.13
+pypdfium2==5.13.0
+python-multipart==0.0.32
+requests==2.34.2
+pytest==9.2.0
+pytest-asyncio==1.4.1

@@ -1,0 +1,189 @@
+{
+  "pack_name": "Telangana Special Crops Pack (Maize, Soybean, Turmeric, Vegetables)",
+  "version": "2026.1",
+  "target_crop": "Special Crops",
+  "target_region": "Telangana",
+  "created_at": "2026-11-05T17:45:23.971834",
+  "documents_count": 8,
+  "documents": [
+    {
+      "id": "doc_pjtsau_maize_te_2025",
+      "title": "PJTSAU మొక్కజొన్న సమగ్ర సస్యరక్షణ మరియు యాజమాన్య దర్శిని 2025-26",
+      "crop": "Maize",
+      "language": "te",
+      "issuing_authority": "Professor Jayashankar Telangana State Agricultural University (PJTSAU)",
+      "chunks": [
+        {
+          "id": "ch_doc_pjtsau_maize_te_2025_6_0",
+          "page_number": 6,
+          "chunk_index": 0,
+          "content": "మొక్కజొన్నలో కత్తెర పురుగు నివారణ (Maize Fall Armyworm - Spodoptera frugiperda Control): మొలక దశ నుండి కత్తెర పురుగు ఆకులను, సుడులను కొరికి నష్టపరుస్తుంది. నివారణకు: విత్తన శుద్ధికి సయాంట్రానిలీప్రోల్ 19.8% + థయామిథాక్సమ్ 19.8% FS 6 మి.లీ కిలో విత్తనానికి కలపాలి. పంట తొలిదశలో ఎకరాకు 4 లింగాకర్షక బుట్టలు అమర్చాలి. పిచికారీకి: ఎమామెక్టిన్ బెంజోయేట్ 5% SG 80 గ్రాములు లేదా క్లోరాంట్రానిలీప్రోల్ 18.5% SC 80 మి.లీ ఎకరాకు 200 లీటర్ల నీటిలో కలిపి సుడులలో పడేలా పిచికారీ చేయాలి.",
+          "crop_tag": "Maize",
+          "topic_tag": "pest_management"
+        },
+        {
+          "id": "ch_doc_pjtsau_maize_te_2025_11_1",
+          "page_number": 11,
+          "chunk_index": 1,
+          "content": "మొక్కజొన్నలో జింక్ లోపం (తెల్ల మొగ్గ / White Bud) మరియు ఎరువుల యాజమాన్యం: లేత ఆకులు పసుపు లేదా తెల్లగా మారితే జింక్ లోపంగా గుర్తించాలి. నివారణకు ఎకరాకు 10-15 కిలోల జింక్ సల్ఫేట్ 21% ఆఖరి దుక్కిలో వేయాలి. పంటలో లోపం కనిపిస్తే 2 గ్రాముల జింక్ సల్ఫేట్ లీటరు నీటికి కలిపి వారం వ్యవధిలో రెండుసార్లు పిచికారీ చేయాలి. నత్రజనిని విత్తినప్పుడు, మోకాలి లోతు దశలో మరియు పూత దశలో మూడు భాగాలుగా సమతుల్యంగా వేయాలి.",
+          "crop_tag": "Maize",
+          "topic_tag": "nutrient_management"
+        }
+      ]
+    },
+    {
+      "id": "doc_icar_maize_en_2025",
+      "title": "ICAR-IIMR Maize Fall Armyworm & Crop Management Guide 2025",
+      "crop": "Maize",
+      "language": "en",
+      "issuing_authority": "ICAR - Indian Institute of Maize Research (IIMR)",
+      "chunks": [
+        {
+          "id": "ch_doc_icar_maize_en_2025_5_0",
+          "page_number": 5,
+          "chunk_index": 0,
+          "content": "Maize Fall Armyworm (FAW - Spodoptera frugiperda) Integrated Management: Larvae cause extensive defoliation and bore into plant whorls. Practice seed treatment with Cyantraniliprole 19.8% + Thiamethoxam 19.8% FS at 6 ml/kg seed. Install 4 pheromone traps per acre. For chemical control, direct spray into plant whorls using Emamectin Benzoate 5% SG at 80 g/acre or Chlorantraniliprole 18.5% SC at 80 ml/acre in 200 liters of water.",
+          "crop_tag": "Maize",
+          "topic_tag": "pest_management"
+        }
+      ]
+    },
+    {
+      "id": "doc_pjtsau_soybean_te_2025",
+      "title": "PJTSAU సోయాబీన్ సమగ్ర సాగు మరియు సస్యరక్షణ దర్శిని 2025-26",
+      "crop": "Soybean",
+      "language": "te",
+      "issuing_authority": "Professor Jayashankar Telangana State Agricultural University (PJTSAU)",
+      "chunks": [
+        {
+          "id": "ch_doc_pjtsau_soybean_te_2025_7_0",
+          "page_number": 7,
+          "chunk_index": 0,
+          "content": "సోయాబీన్‌లో రింగ్ కట్టర్ / గిర్డిల్ బీటిల్ (Girdle Beetle) మరియు పొగాకు లద్దెపురుగు నివారణ: గిర్డిల్ బీటిల్ కాండం చుట్టూ రెండు రింగుల వంటి గాట్లు పెట్టి గుడ్లు పెడుతుంది, దాంతో ఆకులు, కొమ్మలు వాడిపోతాయి. నివారణకు: క్లోరాంట్రానిలీప్రోల్ 18.5% SC 60 మి.లీ లేదా థయామిథాక్సమ్ 12.6% + లాంబ్డా సైహలోథ్రిన్ 9.5% ZC 50 మి.లీ ఎకరాకు 200 లీటర్ల నీటిలో కలిపి పిచికారీ చేయాలి. ఆరంభ దశలోనే ఎండిన కొమ్మలను తుంచి నాశనం చేయాలి.",
+          "crop_tag": "Soybean",
+          "topic_tag": "pest_management"
+        },
+        {
+          "id": "ch_doc_pjtsau_soybean_te_2025_10_1",
+          "page_number": 10,
+          "chunk_index": 1,
+          "content": "సోయాబీన్ విత్తన శుద్ధి మరియు రైజోబియం కల్చర్: నాణ్యమైన మొలకశాతం మరియు నత్రజని స్థిరీకరణ కోసం కిలో విత్తనానికి 5 గ్రాముల కార్బాక్సిన్ + థైరామ్ కలిపి విత్తన శుద్ధి చేయాలి. ఆ తరువాత 200 గ్రాముల రైజోబియం జపానికమ్ (Rhizobium japonicum) మరియు 200 గ్రాముల PSB కల్చర్‌ను బెల్లం పాకంతో కలిపి 10-15 కిలోల విత్తనానికి పట్టి నీడలో ఆరబెట్టి విత్తుకోవాలి.",
+          "crop_tag": "Soybean",
+          "topic_tag": "seed_treatment"
+        }
+      ]
+    },
+    {
+      "id": "doc_icar_soybean_en_2025",
+      "title": "ICAR-IISR Integrated Crop Management for Soybean in Central India 2025",
+      "crop": "Soybean",
+      "language": "en",
+      "issuing_authority": "ICAR - Indian Institute of Soybean Research (IISR)",
+      "chunks": [
+        {
+          "id": "ch_doc_icar_soybean_en_2025_8_0",
+          "page_number": 8,
+          "chunk_index": 0,
+          "content": "Soybean Girdle Beetle (Obereopsis brevis) and defoliator management: Female beetles cut two parallel circular rings on petiole or stem, causing upper foliage to wither. Control by foliar application of Chlorantraniliprole 18.5% SC at 60 ml/acre or Thiamethoxam 12.6% + Lambda Cyhalothrin 9.5% ZC at 50 ml/acre in 200 liters of water.",
+          "crop_tag": "Soybean",
+          "topic_tag": "pest_management"
+        }
+      ]
+    },
+    {
+      "id": "doc_pjtsau_turmeric_te_2025",
+      "title": "PJTSAU పసుపు సమగ్ర సాగు మరియు తెగుళ్ల నివారణ దర్శిని (నిజామాబాద్ ప్రత్యేక సంచిక) 2025-26",
+      "crop": "Turmeric",
+      "language": "te",
+      "issuing_authority": "Professor Jayashankar Telangana State Agricultural University (PJTSAU)",
+      "chunks": [
+        {
+          "id": "ch_doc_pjtsau_turmeric_te_2025_9_0",
+          "page_number": 9,
+          "chunk_index": 0,
+          "content": "పసుపులో దుంప కుళ్లు తెగులు (Turmeric Rhizome Rot - Pythium aphanidermatum) నివారణ: మురుగు నీరు నిలవడం వల్ల దుంపలు కుళ్ళిపోయి మొక్కలు పసుపుబారి చనిపోతాయి. నివారణకు: విత్తే ముందు విత్తన దుంపలను మాంకోజెబ్ 3 గ్రాములు + మెటలాక్సిల్ 2 గ్రాములు లీటరు నీటిలో కలిపి 30 నిమిషాలు నానబెట్టాలి. పొలంలో తెగులు కనిపించినప్పుడు కాపర్ ఆక్సీక్లోరైడ్ 3 గ్రాములు లేదా మెటలాక్సిల్-ఎం 2 గ్రాములు లీటరు నీటికి కలిపి దుంపల వద్ద నేల బాగా తడిసేలా డ్రెంచింగ్ చేయాలి.",
+          "crop_tag": "Turmeric",
+          "topic_tag": "disease_management"
+        },
+        {
+          "id": "ch_doc_pjtsau_turmeric_te_2025_14_1",
+          "page_number": 14,
+          "chunk_index": 1,
+          "content": "పసుపులో ఆకు మచ్చ తెగులు (Turmeric Leaf Blotch - Taphrina maculans) నివారణ: ఆకుల పైభాగంలో పసుపు మరియు గోధుమ రంగు చిన్న దీర్ఘచతురస్రాకార మచ్చలు ఏర్పడతాయి. నివారణకు మాంకోజెబ్ 2.5 గ్రాములు లేదా ప్రొపికొనజోల్ 1 మి.లీ లీటరు నీటికి కలిపి 15 రోజుల వ్యవధిలో రెండుసార్లు పిచికారీ చేయాలి.",
+          "crop_tag": "Turmeric",
+          "topic_tag": "disease_management"
+        }
+      ]
+    },
+    {
+      "id": "doc_icar_turmeric_en_2025",
+      "title": "ICAR-IISR Good Agricultural Practices for Turmeric Cultivation 2025",
+      "crop": "Turmeric",
+      "language": "en",
+      "issuing_authority": "ICAR - Indian Institute of Spices Research (IISR)",
+      "chunks": [
+        {
+          "id": "ch_doc_icar_turmeric_en_2025_12_0",
+          "page_number": 12,
+          "chunk_index": 0,
+          "content": "Turmeric Rhizome Rot and soft rot management: Caused by Pythium and Fusarium species under poorly drained soils. Practice seed rhizome treatment with Metalaxyl-Mancozeb (2 g/L) for 30 minutes before planting. In standing crops showing basal wilting, drench the root zone with Copper Oxychloride 50% WP at 3 g/L or Metalaxyl 8% + Mancozeb 64% WP at 2.5 g/L. Ensure raised bed cultivation.",
+          "crop_tag": "Turmeric",
+          "topic_tag": "disease_management"
+        }
+      ]
+    },
+    {
+      "id": "doc_iihr_vegetables_te_2025",
+      "title": "ICAR-IIHR & PJTSAU కూరగాయల సమగ్ర సస్యరక్షణ దర్శిని (టమాట, వంగ, బెండ) 2025-26",
+      "crop": "Vegetables",
+      "language": "te",
+      "issuing_authority": "ICAR - Indian Institute of Horticultural Research (IIHR) & PJTSAU",
+      "chunks": [
+        {
+          "id": "ch_doc_iihr_vegetables_te_2025_8_0",
+          "page_number": 8,
+          "chunk_index": 0,
+          "content": "టమాటలో ఆకుముడుత వైరస్ మరియు పినోవా పురుగు (Tomato Leaf Curl & Pinworm - Tuta absoluta): తెల్లదోమ ద్వారా వ్యాపించే ఆకుముడుత నివారణకు నర్సరీ చుట్టూ నైలాన్ నెట్ వాడాలి. తెల్లదోమ నివారణకు వేపనూనె 5 మి.లీ లీటరు నీటికి లేదా ఎసిటామైప్రిడ్ 20% SP 0.5 గ్రాములు లీటరు నీటికి పిచికారీ చేయాలి. టూటా అబ్సొల్యూటా నివారణకు ఎకరాకు 16 ఫెరోమోన్ ట్రాప్స్ అమర్చాలి మరియు క్లోరాంట్రానిలీప్రోల్ 60 మి.లీ ఎకరాకు పిచికారీ చేయాలి.",
+          "crop_tag": "Vegetables",
+          "topic_tag": "pest_management"
+        },
+        {
+          "id": "ch_doc_iihr_vegetables_te_2025_16_1",
+          "page_number": 16,
+          "chunk_index": 1,
+          "content": "వంగలో కాండం మరియు కాయ తొలుచు పురుగు (Brinjal Shoot & Fruit Borer - Leucinodes orbonalis): మొవ్వులు వాడిపోవడం మరియు కాయలపై రంధ్రాలు ఏర్పడతాయి. నివారణకు: విరిగిపోయిన మొవ్వులను తుంచి నాశనం చేయాలి. ఎకరానికి 10 లూసిల్యూర్ లింగాకర్షక బుట్టలు అమర్చాలి. పిచికారీకి: ఎమామెక్టిన్ బెంజోయేట్ 5% SG 80 గ్రాములు లేదా స్పినోసాడ్ 45% SC 60-70 మి.లీ ఎకరాకు 200 లీటర్ల నీటిలో కలిపి పిచికారీ చేయాలి.",
+          "crop_tag": "Vegetables",
+          "topic_tag": "pest_management"
+        },
+        {
+          "id": "ch_doc_iihr_vegetables_te_2025_22_2",
+          "page_number": 22,
+          "chunk_index": 2,
+          "content": "బెండలో పసుపు ఈనెల వైరస్ తెగులు (Bhendi Yellow Vein Mosaic Virus - YVMV): ఆకుల ఈనెలు పసుపు రంగులోకి మారి కాయలు గట్టిపడి పసుపు రంగులోకి మారతాయి. ఈ వైరస్ తెల్లదోమ ద్వారా వ్యాపిస్తుంది. నివారణకు తెల్లదోమ నివారణ చర్యలు చేపట్టాలి: పసుపు జిగురు అట్టలను ఎకరానికి 15 చొప్పున అమర్చాలి. వేపనూనె 5 మి.లీ లీటరు నీటికి లేదా డైమిథోయేట్ 30% EC 2 మి.లీ లీటరు నీటికి కలిపి పిచికారీ చేయాలి.",
+          "crop_tag": "Vegetables",
+          "topic_tag": "pest_management"
+        }
+      ]
+    },
+    {
+      "id": "doc_iihr_vegetables_en_2025",
+      "title": "ICAR-IIHR Vegetable Crop Health & Advisory Manual (Tomato, Brinjal, Okra) 2025",
+      "crop": "Vegetables",
+      "language": "en",
+      "issuing_authority": "ICAR - Indian Institute of Horticultural Research (IIHR)",
+      "chunks": [
+        {
+          "id": "ch_doc_iihr_vegetables_en_2025_10_0",
+          "page_number": 10,
+          "chunk_index": 0,
+          "content": "Brinjal shoot and fruit borer (Leucinodes orbonalis) integrated management: Caterpillars bore into tender terminal shoots causing wilting, and later into fruits leaving exit holes with frass. Clip and destroy wilting terminal shoots weekly. Install 10 Lucinlure pheromone traps per acre. For chemical control, alternate sprays of Emamectin Benzoate 5% SG at 80 g/acre or Spinosad 45% SC at 60 ml/acre in 200 liters of water.",
+          "crop_tag": "Vegetables",
+          "topic_tag": "pest_management"
+        }
+      ]
+    }
+  ],
+  "file_size_bytes": 77824,
+  "checksum_sha256": "0d1ac46d0f31e630451b34c1199d4be51bb301b2756a496b4b77592c5cea9caa",
+  "download_url": "/api/v1/knowledge-packs/download/knowledge_pack_telangana_special_2026.1.db"
+}

@@ -1,0 +1,80 @@
+{
+  "pack_name": "Chilli IPM & Crop Health Knowledge Pack",
+  "version": "2026.1",
+  "target_crop": "Chilli",
+  "target_region": "Telangana",
+  "created_at": "2026-11-05T17:45:23.883931",
+  "documents_count": 3,
+  "documents": [
+    {
+      "id": "doc_pjtsau_chilli_te_2025",
+      "title": "PJTSAU Chilli Integrated Pest & Disease Management Guide 2025-26",
+      "crop": "Chilli",
+      "language": "te",
+      "issuing_authority": "Professor Jayashankar Telangana State Agricultural University (PJTSAU)",
+      "chunks": [
+        {
+          "id": "ch_doc_pjtsau_chilli_te_2025_9_0",
+          "page_number": 9,
+          "chunk_index": 0,
+          "content": "మిరపలో తామర పురుగులు, నల్లి మరియు ఆకుముడుత నివారణ (Chilli Thrips & Mite Control): తామర పురుగుల వల్ల ఆకులు పైకి, నల్లి వల్ల ఆకులు క్రిందికి ముడుచుకుంటాయి. నివారణకు వేపనూనె 10,000 PPM ఎకరానికి 400-500 మి.లీ లేదా ఎకరాకు 80-100 గ్రాముల ఎమామెక్టిన్ బెంజోయేట్ 5% SG 200 లీటర్ల నీటిలో కలిపి పిచికారీ చేయాలి. ఎకరానికి 15-20 నీలి మరియు పసుపు జిగురు అట్టలను అమర్చాలి.",
+          "crop_tag": "Chilli",
+          "topic_tag": "pest_management"
+        },
+        {
+          "id": "ch_doc_pjtsau_chilli_te_2025_12_1",
+          "page_number": 12,
+          "chunk_index": 1,
+          "content": "మిరపలో ఆకులు పసుపు రంగులోకి మారడం మరియు కొమ్మ ఎండు తెగులు నివారణ: పోషక లోపాలు లేదా ఫంగస్ వల్ల మిరప ఆకులు పసుపుబారతాయి. నివారణకు కాపర్ ఆక్సీక్లోరైడ్ 3 గ్రాములు లేదా మాంకోజెబ్ 2.5 గ్రాములు లీటరు నీటికి కలిపి పిచికారీ చేయాలి.",
+          "crop_tag": "Chilli",
+          "topic_tag": "symptom_yellowing"
+        }
+      ]
+    },
+    {
+      "id": "doc_icar_chilli_hi_2025",
+      "title": "ICAR मिर्च में कीट एवं रोग नियंत्रण संदर्शिका 2025",
+      "crop": "Chilli",
+      "language": "hi",
+      "issuing_authority": "ICAR - Indian Institute of Horticultural Research (IIHR) / CRIDA",
+      "chunks": [
+        {
+          "id": "ch_doc_icar_chilli_hi_2025_10_0",
+          "page_number": 10,
+          "chunk_index": 0,
+          "content": "मिर्च में थ्रिप्स एवं माइट्स (मुरडिया रोग) की रोकथाम: थ्रिप्स से पत्तियां ऊपर की ओर नाव की तरह और माइट्स से नीचे की ओर मुड़ती हैं। नियंत्रण के लिए नीम तेल 10000 PPM 2-3 मिली प्रति लीटर या इमामेक्टिन बेंजोएट 5% SG 80-100 ग्राम प्रति एकड़ 200 लीटर पानी में छिड़कें। 15 नीले व पीले ट्रैप लगाएं।",
+          "crop_tag": "Chilli",
+          "topic_tag": "pest_management"
+        }
+      ]
+    },
+    {
+      "id": "doc_pjtsau_chilli_en_2025",
+      "title": "PJTSAU Chilli Production & IPM Advisory Bulletin 2025",
+      "crop": "Chilli",
+      "language": "en",
+      "issuing_authority": "Professor Jayashankar Telangana State Agricultural University (PJTSAU)",
+      "chunks": [
+        {
+          "id": "ch_doc_pjtsau_chilli_en_2025_11_0",
+          "page_number": 11,
+          "chunk_index": 0,
+          "content": "Chilli thrips, yellow mites, and leaf curl management: Upward curling is caused by thrips, while downward curling indicates yellow mites. Spray Neem oil 10,000 PPM at 2-3 ml per liter of water, or Emamectin Benzoate 5% SG at 80-100 grams per acre in 200 liters of water. Install 15-20 blue and yellow sticky traps per acre.",
+          "crop_tag": "Chilli",
+          "topic_tag": "pest_management"
+        },
+        {
+          "id": "ch_doc_pjtsau_chilli_en_2025_15_1",
+          "page_number": 15,
+          "chunk_index": 1,
+          "content": "Chilli leaves turning yellow and die-back anthracnose prevention: Yellowing of chilli foliage occurs from nutrient imbalance or early fungal infection. Spray Copper Oxychloride 50% WP at 3 g/L or Mancozeb 75% WP at 2.5 g/L of water. Ensure proper field drainage to avoid root rot.",
+          "crop_tag": "Chilli",
+          "topic_tag": "symptom_yellowing"
+        }
+      ]
+    }
+  ],
+  "file_size_bytes": 40960,
+  "checksum_sha256": "6f50a71ec76c21d9ca39217dbdd2230a4f7cd42521d4f0d238400878fd4babfd",
+  "download_url": "/api/v1/knowledge-packs/download/knowledge_pack_chilli_2026.1.db"
+}

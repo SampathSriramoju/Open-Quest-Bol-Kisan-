@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: bol-kisan-backend
+    env: python
+    region: singapore
+    plan: standard
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: bol-kisan-pgvector
+          property: connectionString
+      - key: USE_PGVECTOR
+        value: true
+
+databases:
+  - name: bol-kisan-pgvector
+    databaseName: bol_kisan_db
+    user: bol_kisan_admin
+    region: singapore
+    plan: standard
+    postgresMajorVersion: 16

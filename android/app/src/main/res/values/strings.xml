@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">Bol Kisan</string>
+    <string name="app_tagline">Trustworthy Offline Agricultural Voice Advisory</string>
+    <string name="app_subtitle">AI Agricultural Advisory</string>
+
+    <!-- 3-Language Selector -->
+    <string name="lang_telugu">తెలుగు</string>
+    <string name="lang_hindi">हिन्दी</string>
+    <string name="lang_english">English</string>
+
+    <!-- Multimodal Vision & Attachment -->
+    <string name="attach_crop_image">Attach Crop Photo</string>
+    <string name="take_photo_camera">Take Photo using Camera</string>
+    <string name="take_photo_desc">Capture leaf, disease, or pest symptoms</string>
+    <string name="upload_photo_gallery">Upload Image from Gallery</string>
+    <string name="upload_gallery_desc">Supports JPEG, PNG, WebP crop photos</string>
+    <string name="crop_photo_attached">Crop Photo Attached</string>
+    <string name="image_ready_desc">Ready for verified crop diagnosis</string>
+    <string name="replace_photo">Replace</string>
+    <string name="remove_photo">Remove</string>
+    <string name="input_placeholder">Ask crop question or tap microphone…</string>
+    <string name="input_placeholder_with_image">Describe crop problem in this photo…</string>
+
+    <!-- First Launch Bilingual Greeting -->
+    <string name="first_launch_greeting">Namaskaram! Namaste! Please speak in your preferred language.</string>
+    <string name="greeting_telugu">నమస్కారం! ఈరోజు మీకు వ్యవసాయంలో ఏ సహాయం కావాలి?</string>
+    <string name="greeting_hindi">नमस्ते! आज आपको खेती में किस तरह की सहायता चाहिए?</string>
+
+    <!-- Voice Pipeline States -->
+    <string name="state_idle">Tap microphone to speak</string>
+    <string name="state_listening">Listening to farmer…</string>
+    <string name="state_processing">Transcribing voice input…</string>
+    <string name="state_searching">Searching verified agricultural documents…</string>
+    <string name="state_preparing">Preparing grounded answer…</string>
+    <string name="state_speaking">Speaking verified advice…</string>
+
+    <!-- Offline Badges -->
+    <string name="status_offline">OFFLINE (Local Engine Active)</string>
+    <string name="status_online">ONLINE (Cloud Synchronized)</string>
+
+    <!-- Navigation Labels -->
+    <string name="nav_advisory">Voice Advisory</string>
+    <string name="nav_mandi">Mandi Prices</string>
+    <string name="nav_history">History</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Safety Warnings -->
+    <string name="chemical_warning_title">Chemical Safety Verification Required</string>
+    <string name="unsupported_refusal_te">క్షమించండి, ఆమోదించబడిన వ్యవసాయ నివేదికలలో ఈ సమాచారం అందుబాటులో లేదు. దయచేసి వ్యవసాయ అధికారిని సంప్రదించండి.</string>
+    <string name="unsupported_refusal_hi">क्षमा करें, अनुमोदित सरकारी कृषि दस्तावेजों में यह जानकारी उपलब्ध नहीं है। कृपया कृषि विशेषज्ञ से संपर्क करें।</string>
+</resources>

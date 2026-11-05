@@ -1,0 +1,80 @@
+{
+  "pack_name": "Groundnut Protection & Soil Health Knowledge Pack",
+  "version": "2026.1",
+  "target_crop": "Groundnut",
+  "target_region": "Telangana",
+  "created_at": "2026-11-05T17:45:23.921009",
+  "documents_count": 3,
+  "documents": [
+    {
+      "id": "doc_pjtsau_groundnut_te_2025",
+      "title": "PJTSAU వేరుశనగ సమగ్ర సస్యరక్షణ మరియు యాజమాన్య దర్శిని 2025-26",
+      "crop": "Groundnut",
+      "language": "te",
+      "issuing_authority": "Professor Jayashankar Telangana State Agricultural University (PJTSAU)",
+      "chunks": [
+        {
+          "id": "ch_doc_pjtsau_groundnut_te_2025_8_0",
+          "page_number": 8,
+          "chunk_index": 0,
+          "content": "వేరుశనగలో టిక్కా ఆకుమచ్చ తెగులు నివారణ (Groundnut Tikka Leaf Spot Control): ఆకులపై గోధుమ రంగు గుండ్రటి మచ్చలు ఏర్పడి ఆకులు రాలిపోతాయి. నివారణకు మాంకోజెబ్ (Mancozeb 75% WP) 2-2.5 గ్రాములు లేదా టెబుకొనజోల్ 1 మి.లీ లీటరు నీటికి కలిపి 10-12 రోజుల వ్యవధిలో రెండుసార్లు పిచికారీ చేయాలి. విత్తన శుద్ధి తప్పనిసరి.",
+          "crop_tag": "Groundnut",
+          "topic_tag": "pest_management"
+        },
+        {
+          "id": "ch_doc_pjtsau_groundnut_te_2025_11_1",
+          "page_number": 11,
+          "chunk_index": 1,
+          "content": "వేరుశనగలో ఆకులు పసుపు రంగులోకి మారడం మరియు ఇనుము లోపం నివారణ (Groundnut Iron Chlorosis): సున్నపు నేలల్లో లేత ఆకులు పసుపు రంగులోకి మారి ఈనెలు మాత్రమే పచ్చగా ఉంటాయి. నివారణకు అన్నభేది (ఫెర్రస్ సల్ఫేట్) 5 గ్రాములు మరియు నిమ్మ ఉప్పు (సిట్రిక్ యాసిడ్) 1 గ్రాము లీటరు నీటికి కలిపి వారం వ్యవధిలో రెండుసార్లు పిచికారీ చేయాలి.",
+          "crop_tag": "Groundnut",
+          "topic_tag": "symptom_yellowing"
+        }
+      ]
+    },
+    {
+      "id": "doc_icar_groundnut_hi_2025",
+      "title": "ICAR-DGR मूंगफली कीट एवं रोग प्रबंधन संदर्शिका 2025",
+      "crop": "Groundnut",
+      "language": "hi",
+      "issuing_authority": "ICAR - Directorate of Groundnut Research (DGR)",
+      "chunks": [
+        {
+          "id": "ch_doc_icar_groundnut_hi_2025_9_0",
+          "page_number": 9,
+          "chunk_index": 0,
+          "content": "मूंगफली में टिक्का पत्ती धब्बा रोग (Tikka Disease) का नियंत्रण: पत्तियों पर गहरे भूरे रंग के गोल धब्बे बनते हैं। रोकथाम हेतु मैनकोजेब 2-2.5 ग्राम प्रति लीटर पानी या टेबुकोनाजोल 1 मिली प्रति लीटर पानी में मिलाकर 12-15 दिन के अंतराल पर छिड़कें। बीजोपचार अवश्य करें।",
+          "crop_tag": "Groundnut",
+          "topic_tag": "pest_management"
+        }
+      ]
+    },
+    {
+      "id": "doc_icar_groundnut_en_2025",
+      "title": "ICAR-DGR Integrated Groundnut Crop Protection Manual 2025",
+      "crop": "Groundnut",
+      "language": "en",
+      "issuing_authority": "ICAR - Directorate of Groundnut Research (DGR)",
+      "chunks": [
+        {
+          "id": "ch_doc_icar_groundnut_en_2025_10_0",
+          "page_number": 10,
+          "chunk_index": 0,
+          "content": "Groundnut Tikka leaf spot (Cercospora leaf spot) and collar rot control: Early and late leaf spots cause circular dark brown necrotic spots leading to severe defoliation. Spray Mancozeb 75% WP at 2.5 g/L or Tebuconazole 25.9% EC at 1 ml/L of water at 12-14 day intervals.",
+          "crop_tag": "Groundnut",
+          "topic_tag": "pest_management"
+        },
+        {
+          "id": "ch_doc_icar_groundnut_en_2025_14_1",
+          "page_number": 14,
+          "chunk_index": 1,
+          "content": "Groundnut leaves turning yellow due to iron chlorosis: Interveinal chlorosis appears on young emerging leaves, turning them completely pale yellow in calcareous soils. Apply foliar spray of Ferrous Sulphate (FeSO4) at 5 g/L along with Citric Acid at 1 g/L twice at 7-day intervals.",
+          "crop_tag": "Groundnut",
+          "topic_tag": "symptom_yellowing"
+        }
+      ]
+    }
+  ],
+  "file_size_bytes": 40960,
+  "checksum_sha256": "63be394f7450449dca3585a7be0b9a8e23d7541eaac807efa2a244035234b2e5",
+  "download_url": "/api/v1/knowledge-packs/download/knowledge_pack_groundnut_2026.1.db"
+}

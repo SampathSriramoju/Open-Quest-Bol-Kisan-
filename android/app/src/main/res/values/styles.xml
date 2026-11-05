@@ -1,0 +1,7 @@
+<resources>
+    <style name="Theme.BolKisan" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/green_dark</item>
+        <item name="android:navigationBarColor">@color/green_dark</item>
+        <item name="android:windowBackground">@color/warm_cream</item>
+    </style>
+</resources>
