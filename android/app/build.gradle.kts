@@ -67,6 +67,8 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            // Exclude desktop-only binaries bundled in sherpa-onnx JAR (macOS dylib & Windows DLL)
+            excludes += "/sherpa-onnx/native/**"
         }
     }
 }
