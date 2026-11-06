@@ -48,7 +48,7 @@ class Settings(BaseSettings):
     # Zero-Cost & Safety Limits
     STRICT_ZERO_COST_ENFORCEMENT: bool = True  # Reject any non-free model invocation
     ENABLE_PRIVACY_REDACTION: bool = True      # Redact farmer PII before external requests
-    LLM_TIMEOUT_SECONDS: float = float(os.getenv("LLM_TIMEOUT_SECONDS", "8.0"))
+    LLM_TIMEOUT_SECONDS: float = float(os.getenv("LLM_TIMEOUT_SECONDS", "12.0"))
     LLM_MAX_OUTPUT_TOKENS: int = int(os.getenv("LLM_MAX_OUTPUT_TOKENS", "350"))
     
     model_config = SettingsConfigDict(
