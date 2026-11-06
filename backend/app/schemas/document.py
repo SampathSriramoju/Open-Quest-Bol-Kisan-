@@ -74,7 +74,10 @@ class RagQueryRequest(BaseModel):
     crop: Optional[str] = None
     region: Optional[str] = "Telangana"
     mode: Optional[str] = "online" # 'online' (Online AI LLM) or 'offline' (Extractive RAG)
-    provider: Optional[str] = None # Optional provider override ('gemini', 'groq', 'mock')
+    provider: Optional[str] = None # Optional provider override ('gemini', 'openrouter', 'groq', 'mock')
+    model: Optional[str] = None # Optional model override (e.g. 'nvidia/nemotron-3-ultra-550b-a55b:free')
+    image_base64: Optional[str] = None # Optional crop photo base64
+    image_mime_type: Optional[str] = "image/jpeg"
 
 class CitationResponse(BaseModel):
     document_title: str

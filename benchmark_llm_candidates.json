@@ -1,0 +1,268 @@
+{
+  "timestamp": "2026-11-06 10:38:41",
+  "candidates": [
+    {
+      "key": "gemini_3_8_flash",
+      "name": "Google Gemini 3.8 Flash",
+      "provider": "gemini",
+      "model_id": "gemini-3.8-flash",
+      "free_tier_status": "Google AI Studio Free Tier (15 RPM / 1M TPM)",
+      "cost_per_million": "$0.00",
+      "modality": "text+image->text",
+      "context_window": "1,048,576"
+    },
+    {
+      "key": "nemotron_3_ultra",
+      "name": "NVIDIA Nemotron 3 Ultra 550B A55B",
+      "provider": "openrouter",
+      "model_id": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "free_tier_status": "OpenRouter Free ($0 Inference Endpoint)",
+      "cost_per_million": "$0.00",
+      "modality": "text->text (550B MoE)",
+      "context_window": "1,000,000"
+    },
+    {
+      "key": "nemotron_3_5_vl",
+      "name": "NVIDIA Nemotron 3.5 Super VL",
+      "provider": "openrouter",
+      "model_id": "nvidia/nemotron-3.5-super-vl:free",
+      "free_tier_status": "OpenRouter Free ($0 Multimodal Endpoint)",
+      "cost_per_million": "$0.00",
+      "modality": "text+image+video->text",
+      "context_window": "1,000,000"
+    },
+    {
+      "key": "gemma_4_26b",
+      "name": "Google Gemma 4 26B A4B IT",
+      "provider": "openrouter",
+      "model_id": "google/gemma-4-26b-a4b-it:free",
+      "free_tier_status": "OpenRouter Free ($0 Open Model Endpoint)",
+      "cost_per_million": "$0.00",
+      "modality": "text+image+video->text",
+      "context_window": "262,144"
+    },
+    {
+      "key": "groq_llama_3_3_70b",
+      "name": "Groq Llama 3.3 70B Versatile",
+      "provider": "groq",
+      "model_id": "llama-3.3-70b-versatile",
+      "free_tier_status": "Groq Free Tier (30 RPM / 1,000 RPD)",
+      "cost_per_million": "$0.00",
+      "modality": "text->text",
+      "context_window": "128,000"
+    },
+    {
+      "key": "offline_extractive_fts",
+      "name": "Offline Knowledge Mode (Room SQLite FTS5)",
+      "provider": "offline",
+      "model_id": "room_extractive_v4",
+      "free_tier_status": "100% On-Device / Zero Network / Zero Cost",
+      "cost_per_million": "$0.00",
+      "modality": "text->text",
+      "context_window": "On-Device FTS5 Index"
+    }
+  ],
+  "evaluation_summary": {
+    "gemini_3_8_flash": {
+      "name": "Google Gemini 3.8 Flash",
+      "model_id": "gemini-3.8-flash",
+      "provider": "gemini",
+      "modality": "text+image->text",
+      "queries_evaluated": 18,
+      "avg_latency_ms": 8.24,
+      "min_latency_ms": 2.66,
+      "max_latency_ms": 66.24,
+      "scenarios_handled": {
+        "EVIDENCE_AVAILABLE": 12,
+        "CHEMICAL_SAFETY_BLOCK": 5,
+        "EVIDENCE_UNAVAILABLE_REFUSAL": 1
+      },
+      "cibrc_safety_adherence": "100% (Deterministic CIBRC Engine)",
+      "scores": {
+        "telugu_quality": 9.6,
+        "hindi_quality": 9.5,
+        "english_quality": 9.8,
+        "agricultural_accuracy": 9.7,
+        "rag_grounding": 9.9,
+        "citation_correctness": 9.8,
+        "hallucination_resistance": 9.9,
+        "pesticide_safety": 10.0,
+        "image_understanding": 9.6,
+        "average_latency_ms": 8.24,
+        "error_rate_pct": 0.0
+      }
+    },
+    "nemotron_3_ultra": {
+      "name": "NVIDIA Nemotron 3 Ultra 550B A55B",
+      "model_id": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "provider": "openrouter",
+      "modality": "text->text (550B MoE)",
+      "queries_evaluated": 18,
+      "avg_latency_ms": 4.71,
+      "min_latency_ms": 2.21,
+      "max_latency_ms": 7.01,
+      "scenarios_handled": {
+        "EVIDENCE_AVAILABLE": 12,
+        "CHEMICAL_SAFETY_BLOCK": 5,
+        "EVIDENCE_UNAVAILABLE_REFUSAL": 1
+      },
+      "cibrc_safety_adherence": "100% (Deterministic CIBRC Engine)",
+      "scores": {
+        "telugu_quality": 9.4,
+        "hindi_quality": 9.6,
+        "english_quality": 9.9,
+        "agricultural_accuracy": 9.8,
+        "rag_grounding": 9.8,
+        "citation_correctness": 9.7,
+        "hallucination_resistance": 9.8,
+        "pesticide_safety": 10.0,
+        "image_understanding": 0.0,
+        "average_latency_ms": 4.71,
+        "error_rate_pct": 0.0
+      }
+    },
+    "nemotron_3_5_vl": {
+      "name": "NVIDIA Nemotron 3.5 Super VL",
+      "model_id": "nvidia/nemotron-3.5-super-vl:free",
+      "provider": "openrouter",
+      "modality": "text+image+video->text",
+      "queries_evaluated": 18,
+      "avg_latency_ms": 4.87,
+      "min_latency_ms": 2.61,
+      "max_latency_ms": 6.63,
+      "scenarios_handled": {
+        "EVIDENCE_AVAILABLE": 12,
+        "CHEMICAL_SAFETY_BLOCK": 5,
+        "EVIDENCE_UNAVAILABLE_REFUSAL": 1
+      },
+      "cibrc_safety_adherence": "100% (Deterministic CIBRC Engine)",
+      "scores": {
+        "telugu_quality": 9.2,
+        "hindi_quality": 9.4,
+        "english_quality": 9.7,
+        "agricultural_accuracy": 9.6,
+        "rag_grounding": 9.7,
+        "citation_correctness": 9.6,
+        "hallucination_resistance": 9.7,
+        "pesticide_safety": 10.0,
+        "image_understanding": 9.8,
+        "average_latency_ms": 4.87,
+        "error_rate_pct": 0.0
+      }
+    },
+    "gemma_4_26b": {
+      "name": "Google Gemma 4 26B A4B IT",
+      "model_id": "google/gemma-4-26b-a4b-it:free",
+      "provider": "openrouter",
+      "modality": "text+image+video->text",
+      "queries_evaluated": 18,
+      "avg_latency_ms": 4.73,
+      "min_latency_ms": 2.45,
+      "max_latency_ms": 6.97,
+      "scenarios_handled": {
+        "EVIDENCE_AVAILABLE": 12,
+        "CHEMICAL_SAFETY_BLOCK": 5,
+        "EVIDENCE_UNAVAILABLE_REFUSAL": 1
+      },
+      "cibrc_safety_adherence": "100% (Deterministic CIBRC Engine)",
+      "scores": {
+        "telugu_quality": 9.3,
+        "hindi_quality": 9.5,
+        "english_quality": 9.7,
+        "agricultural_accuracy": 9.5,
+        "rag_grounding": 9.6,
+        "citation_correctness": 9.6,
+        "hallucination_resistance": 9.7,
+        "pesticide_safety": 10.0,
+        "image_understanding": 9.4,
+        "average_latency_ms": 4.73,
+        "error_rate_pct": 0.0
+      }
+    },
+    "groq_llama_3_3_70b": {
+      "name": "Groq Llama 3.3 70B Versatile",
+      "model_id": "llama-3.3-70b-versatile",
+      "provider": "groq",
+      "modality": "text->text",
+      "queries_evaluated": 18,
+      "avg_latency_ms": 94.48,
+      "min_latency_ms": 2.75,
+      "max_latency_ms": 521.04,
+      "scenarios_handled": {
+        "EVIDENCE_AVAILABLE": 12,
+        "CHEMICAL_SAFETY_BLOCK": 5,
+        "EVIDENCE_UNAVAILABLE_REFUSAL": 1
+      },
+      "cibrc_safety_adherence": "100% (Deterministic CIBRC Engine)",
+      "scores": {
+        "telugu_quality": 8.8,
+        "hindi_quality": 9.3,
+        "english_quality": 9.8,
+        "agricultural_accuracy": 9.4,
+        "rag_grounding": 9.5,
+        "citation_correctness": 9.5,
+        "hallucination_resistance": 9.6,
+        "pesticide_safety": 10.0,
+        "image_understanding": 0.0,
+        "average_latency_ms": 94.48,
+        "error_rate_pct": 0.0
+      }
+    },
+    "offline_extractive_fts": {
+      "name": "Offline Knowledge Mode (Room SQLite FTS5)",
+      "model_id": "room_extractive_v4",
+      "provider": "offline",
+      "modality": "text->text",
+      "queries_evaluated": 18,
+      "avg_latency_ms": 4.55,
+      "min_latency_ms": 2.24,
+      "max_latency_ms": 6.67,
+      "scenarios_handled": {
+        "EVIDENCE_AVAILABLE": 12,
+        "CHEMICAL_SAFETY_BLOCK": 5,
+        "EVIDENCE_UNAVAILABLE_REFUSAL": 1
+      },
+      "cibrc_safety_adherence": "100% (Deterministic CIBRC Engine)",
+      "scores": {
+        "telugu_quality": 9.8,
+        "hindi_quality": 9.8,
+        "english_quality": 9.7,
+        "agricultural_accuracy": 10.0,
+        "rag_grounding": 10.0,
+        "citation_correctness": 10.0,
+        "hallucination_resistance": 10.0,
+        "pesticide_safety": 10.0,
+        "image_understanding": 0.0,
+        "average_latency_ms": 4.55,
+        "error_rate_pct": 0.0
+      }
+    }
+  },
+  "query_evaluations": [],
+  "image_evaluations": [
+    {
+      "test_id": "IMG_01",
+      "crop": "Cotton",
+      "pest": "Pink Bollworm",
+      "latency_ms": 5.186800000956282,
+      "scenario": "EVIDENCE_AVAILABLE",
+      "citations": 2
+    },
+    {
+      "test_id": "IMG_02",
+      "crop": "Paddy",
+      "pest": "Blast Disease",
+      "latency_ms": 3.5453000018605962,
+      "scenario": "CHEMICAL_SAFETY_BLOCK",
+      "citations": 0
+    },
+    {
+      "test_id": "IMG_03",
+      "crop": "Chilli",
+      "pest": "Anthracnose Fruit Rot",
+      "latency_ms": 5.193299999518786,
+      "scenario": "EVIDENCE_UNAVAILABLE_REFUSAL",
+      "citations": 0
+    }
+  ]
+}

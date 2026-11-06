@@ -18,7 +18,10 @@ async def query_advisory(req: RagQueryRequest, db: Session = Depends(get_db)):
         crop=req.crop,
         region=req.region or "Telangana",
         mode=req.mode or "online",
-        provider=req.provider
+        provider=req.provider,
+        model=req.model,
+        image_base64=req.image_base64,
+        image_mime_type=req.image_mime_type
     )
     
     latency = int((time.time() - start_time) * 1000)

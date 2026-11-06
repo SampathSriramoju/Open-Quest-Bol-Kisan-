@@ -31,11 +31,21 @@ class Settings(BaseSettings):
     EMBEDDING_MODEL_NAME: str = os.getenv("EMBEDDING_MODEL_NAME", "intfloat/multilingual-e5-small")
     
     # Online LLM Provider Settings (Free-tier friendly, asynchronous)
-    LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "gemini")  # "gemini", "groq", or "mock"
+    LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "gemini")  # "gemini", "groq", "openrouter", or "mock"
     GEMINI_API_KEY: Optional[str] = os.getenv("GEMINI_API_KEY", os.getenv("GOOGLE_API_KEY", None))
     GROQ_API_KEY: Optional[str] = os.getenv("GROQ_API_KEY", None)
+    OPENROUTER_API_KEY: Optional[str] = os.getenv("OPENROUTER_API_KEY", None)
+    
+    # Model IDs (Verified $0 Free-Tier)
     GEMINI_MODEL_ID: str = os.getenv("GEMINI_MODEL_ID", "gemini-3.8-flash")
     GROQ_MODEL_ID: str = os.getenv("GROQ_MODEL_ID", "llama-3.3-70b-versatile")
+    OPENROUTER_MODEL_ID: str = os.getenv("OPENROUTER_MODEL_ID", "nvidia/nemotron-3-ultra-550b-a55b:free")
+    OPENROUTER_VISION_MODEL_ID: str = os.getenv("OPENROUTER_VISION_MODEL_ID", "nvidia/nemotron-3.5-super-vl:free")
+    OPENROUTER_REASONING_MODEL_ID: str = os.getenv("OPENROUTER_REASONING_MODEL_ID", "nvidia/nemotron-3-ultra-550b-a55b:free")
+    GEMMA_FREE_MODEL_ID: str = os.getenv("GEMMA_FREE_MODEL_ID", "google/gemma-4-26b-a4b-it:free")
+    
+    # Zero-Cost & Safety Limits
+    STRICT_ZERO_COST_ENFORCEMENT: bool = True  # Reject any non-free model invocation
     LLM_TIMEOUT_SECONDS: float = float(os.getenv("LLM_TIMEOUT_SECONDS", "8.0"))
     LLM_MAX_OUTPUT_TOKENS: int = int(os.getenv("LLM_MAX_OUTPUT_TOKENS", "350"))
     

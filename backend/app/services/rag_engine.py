@@ -66,7 +66,10 @@ class RagEngine:
         crop: Optional[str] = None,
         region: str = "Telangana",
         mode: str = "online",
-        provider: Optional[str] = None
+        provider: Optional[str] = None,
+        model: Optional[str] = None,
+        image_base64: Optional[str] = None,
+        image_mime_type: Optional[str] = "image/jpeg"
     ) -> Dict[str, Any]:
         """
         Asynchronous RAG query execution supporting both Online AI LLM synthesis
@@ -295,7 +298,10 @@ class RagEngine:
                 context_chunks=context_chunks_for_llm,
                 language=language,
                 crop=detected_crop,
-                provider_override=provider
+                provider_override=provider,
+                model_override=model,
+                image_base64=image_base64,
+                image_mime_type=image_mime_type
             )
 
             if llm_res.get("success"):
@@ -364,7 +370,10 @@ class RagEngine:
         crop: Optional[str] = None,
         region: str = "Telangana",
         mode: str = "online",
-        provider: Optional[str] = None
+        provider: Optional[str] = None,
+        model: Optional[str] = None,
+        image_base64: Optional[str] = None,
+        image_mime_type: Optional[str] = "image/jpeg"
     ) -> Dict[str, Any]:
         """
         Synchronous wrapper for query_async for backward compatibility.
@@ -377,14 +386,14 @@ class RagEngine:
                 with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
                     future = executor.submit(
                         asyncio.run,
-                        cls.query_async(db, query, language, crop, region, mode, provider)
+                        cls.query_async(db, query, language, crop, region, mode, provider, model, image_base64, image_mime_type)
                     )
                     return future.result(timeout=10.0)
             else:
                 return loop.run_until_complete(
-                    cls.query_async(db, query, language, crop, region, mode, provider)
+                    cls.query_async(db, query, language, crop, region, mode, provider, model, image_base64, image_mime_type)
                 )
         except Exception:
             return asyncio.run(
-                cls.query_async(db, query, language, crop, region, mode, provider)
+                cls.query_async(db, query, language, crop, region, mode, provider, model, image_base64, image_mime_type)
             )

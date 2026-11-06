@@ -52,10 +52,14 @@ class OnlineLLMService:
         context_chunks: List[Dict[str, Any]],
         language: str = "te",
         crop: Optional[str] = None,
-        provider_override: Optional[str] = None
+        provider_override: Optional[str] = None,
+        model_override: Optional[str] = None,
+        image_base64: Optional[str] = None,
+        image_mime_type: Optional[str] = "image/jpeg"
     ) -> Dict[str, Any]:
         """
         Synthesizes a conversational, verified answer using the configured online LLM.
+        Supports multimodal crop image inputs and model overrides.
         """
         start_time = time.time()
         lang_key = language if language in cls.SYSTEM_INSTRUCTIONS else "te"
@@ -72,21 +76,28 @@ class OnlineLLMService:
 
         context_block = "\n\n".join(formatted_context_list)
 
+        image_context_note = "\n(గమనిక: రైతు పంట సమస్య ఫోటోను కూడా జతపరిచారు, పరిశీలించండి.)" if image_base64 else ""
+
         user_prompt = (
             f"రైతు ప్రశ్న (Farmer Query): {query}\n"
-            f"పంట (Crop): {crop or 'గమనించిన పంట'}\n\n"
+            f"పంట (Crop): {crop or 'గమనించిన పంట'}{image_context_note}\n\n"
             f"ఆమోదించబడిన వ్యవసాయ ఆధారాలు (Verified Agricultural Context):\n"
             f"{context_block}\n\n"
             f"దయచేసి పై ఆధారాల ఆధారంగా మాత్రమే రైతుకు స్పష్టమైన సమాధానాన్ని అందించండి."
         )
 
-        provider = LLMProviderFactory.get_provider(provider_override)
+        provider = LLMProviderFactory.get_provider(
+            provider_type=provider_override,
+            model_override=model_override
+        )
         logger.info(f"[BOL_KISAN_ONLINE_LLM] Calling provider={provider.provider_name}, model={provider.model_id}")
 
         result = await provider.generate_response(
             prompt=user_prompt,
             system_instruction=system_prompt,
-            max_tokens=settings.LLM_MAX_OUTPUT_TOKENS
+            max_tokens=settings.LLM_MAX_OUTPUT_TOKENS,
+            image_base64=image_base64,
+            image_mime_type=image_mime_type
         )
 
         total_latency_ms = int((time.time() - start_time) * 1000)
