@@ -31,6 +31,11 @@ classes.jar
 out/
 *.log
 screen_emu*.png
+device_*.png
+offline_*.png
+emulator_screen.png
+test_crop_leaf.png
+optional_downloads/
 
 # OS
 Thumbs.db
