@@ -121,105 +121,129 @@ class GeminiProvider(BaseLLMProvider):
         }
 
         client = get_async_http_client()
-        try:
-            resp = await client.post(url, json=payload, timeout=settings.LLM_TIMEOUT_SECONDS)
-            latency_ms = int((time.time() - start_time) * 1000)
+        primary_model = self.model_id or "gemini-3.5-flash"
+        models_to_try = [primary_model]
+        
+        # Rule: Sequence 1: Call Gemini 3.5 Flash.
+        # Rule: Sequence 2: If retryable availability error occurs, try Gemini 3.8 Flash once.
+        # Rule: Maximum 1 alternate retry per request. No circular provider switching.
+        if primary_model == "gemini-3.5-flash":
+            models_to_try.append("gemini-3.8-flash")
+        
+        last_error = "Unknown error"
+        last_error_code = "UNKNOWN_ERROR"
 
-            # Bi-directional auto-retry resilience between gemini-3.5-flash and gemini-3.8-flash on 503 high demand
-            if resp.status_code in (503, 404):
-                alt_model = "gemini-3.8-flash" if self.model_id == "gemini-3.5-flash" else "gemini-3.5-flash"
-                logger.info(f"[BOL_KISAN_LLM] {self.model_id} returned {resp.status_code}. Retrying with resilient fallback {alt_model}...")
-                alt_url = f"https://generativelanguage.googleapis.com/v1beta/models/{alt_model}:generateContent?key={self.api_key}"
-                try:
-                    resp_alt = await client.post(alt_url, json=payload, timeout=settings.LLM_TIMEOUT_SECONDS)
-                    if resp_alt.status_code == 200:
-                        resp = resp_alt
-                        self.model_id = alt_model
-                        latency_ms = int((time.time() - start_time) * 1000)
-                except Exception as ex:
-                    logger.warning(f"[BOL_KISAN_LLM] Gemini {alt_model} fallback attempt failed: {ex}")
+        for attempt_idx, model_id in enumerate(models_to_try):
+            curr_url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_id}:generateContent?key={self.api_key}"
+            try:
+                resp = await client.post(curr_url, json=payload, timeout=settings.LLM_TIMEOUT_SECONDS)
+                latency_ms = int((time.time() - start_time) * 1000)
 
-            if resp.status_code == 200:
-                data = resp.json()
-                candidates = data.get("candidates", [])
-                if candidates and "content" in candidates[0]:
-                    parts = candidates[0]["content"].get("parts", [])
-                    generated_text = "".join(p.get("text", "") for p in parts).strip()
-                    return {
-                        "success": True,
-                        "text": generated_text,
-                        "error": None,
-                        "error_code": None,
-                        "provider": self.provider_name,
-                        "model": self.model_id,
-                        "latency_ms": latency_ms
-                    }
-                else:
+                if resp.status_code == 200:
+                    data = resp.json()
+                    candidates = data.get("candidates", [])
+                    if candidates and "content" in candidates[0]:
+                        parts_resp = candidates[0]["content"].get("parts", [])
+                        generated_text = "".join(p.get("text", "") for p in parts_resp).strip()
+                        return {
+                            "success": True,
+                            "text": generated_text,
+                            "error": None,
+                            "error_code": None,
+                            "provider": self.provider_name,
+                            "model": model_id,
+                            "latency_ms": latency_ms
+                        }
+                    else:
+                        return {
+                            "success": False,
+                            "text": "",
+                            "error": "Empty response candidates received from Gemini API.",
+                            "error_code": "EMPTY_RESPONSE",
+                            "provider": self.provider_name,
+                            "model": model_id,
+                            "latency_ms": latency_ms
+                        }
+
+                # Non-retryable authentication or client errors: Fail fast immediately!
+                if resp.status_code in (401, 403):
+                    logger.warning(f"[BOL_KISAN_LLM] Gemini Authentication Failed ({resp.status_code}). Not retrying alternate model.")
                     return {
                         "success": False,
                         "text": "",
-                        "error": "Empty response candidates received from Gemini API.",
-                        "error_code": "EMPTY_RESPONSE",
+                        "error": f"Gemini API authentication failed ({resp.status_code}). Check backend API key.",
+                        "error_code": "AUTH_ERROR",
                         "provider": self.provider_name,
-                        "model": self.model_id,
+                        "model": model_id,
                         "latency_ms": latency_ms
                     }
-            elif resp.status_code == 429:
-                logger.warning(f"[BOL_KISAN_LLM] Gemini Rate Limit / Quota Exceeded (HTTP 429)")
-                return {
-                    "success": False,
-                    "text": "",
-                    "error": "Gemini free-tier quota limit reached. Falling back to verified extractive RAG.",
-                    "error_code": "QUOTA_EXHAUSTED",
-                    "provider": self.provider_name,
-                    "model": self.model_id,
-                    "latency_ms": latency_ms
-                }
-            elif resp.status_code in (401, 403):
-                logger.warning(f"[BOL_KISAN_LLM] Gemini Authentication Failed ({resp.status_code})")
-                return {
-                    "success": False,
-                    "text": "",
-                    "error": f"Gemini API authentication failed ({resp.status_code}). Check backend API key.",
-                    "error_code": "AUTH_ERROR",
-                    "provider": self.provider_name,
-                    "model": self.model_id,
-                    "latency_ms": latency_ms
-                }
-            else:
-                return {
-                    "success": False,
-                    "text": "",
-                    "error": f"Gemini API returned error status {resp.status_code}: {resp.text[:120]}",
-                    "error_code": f"HTTP_{resp.status_code}",
-                    "provider": self.provider_name,
-                    "model": self.model_id,
-                    "latency_ms": latency_ms
-                }
-        except httpx.TimeoutException:
-            latency_ms = int((time.time() - start_time) * 1000)
-            logger.warning(f"[BOL_KISAN_LLM] Gemini API timed out after {settings.LLM_TIMEOUT_SECONDS}s")
-            return {
-                "success": False,
-                "text": "",
-                "error": f"Gemini API request timed out after {settings.LLM_TIMEOUT_SECONDS}s.",
-                "error_code": "TIMEOUT",
-                "provider": self.provider_name,
-                "model": self.model_id,
-                "latency_ms": latency_ms
-            }
-        except Exception as e:
-            latency_ms = int((time.time() - start_time) * 1000)
-            logger.error(f"[BOL_KISAN_LLM] Gemini request exception: {e}")
-            return {
-                "success": False,
-                "text": "",
-                "error": f"Gemini connection error: {str(e)}",
-                "error_code": "NETWORK_ERROR",
-                "provider": self.provider_name,
-                "model": self.model_id,
-                "latency_ms": latency_ms
-            }
+
+                if resp.status_code == 400:
+                    logger.warning(f"[BOL_KISAN_LLM] Gemini Bad Request (HTTP 400). Not retrying.")
+                    return {
+                        "success": False,
+                        "text": "",
+                        "error": f"Gemini API bad request (HTTP 400): {resp.text[:120]}",
+                        "error_code": "BAD_REQUEST",
+                        "provider": self.provider_name,
+                        "model": model_id,
+                        "latency_ms": latency_ms
+                    }
+
+                if resp.status_code == 429:
+                    retry_after = resp.headers.get("Retry-After", "unknown")
+                    logger.warning(f"[BOL_KISAN_LLM] Gemini Rate Limit / Quota Exceeded (HTTP 429). Retry-After: {retry_after}. Fail fast.")
+                    return {
+                        "success": False,
+                        "text": "",
+                        "error": f"Gemini free-tier quota limit reached (Retry-After: {retry_after}). Falling back to verified extractive RAG.",
+                        "error_code": "QUOTA_EXHAUSTED",
+                        "provider": self.provider_name,
+                        "model": model_id,
+                        "latency_ms": latency_ms
+                    }
+
+                # Retryable server availability errors (500, 502, 503, 504)
+                if resp.status_code in (500, 502, 503, 504):
+                    last_error = f"Gemini availability error HTTP {resp.status_code}: {resp.text[:100]}"
+                    last_error_code = f"HTTP_{resp.status_code}"
+                    if attempt_idx == 0 and len(models_to_try) > 1:
+                        logger.info(f"[BOL_KISAN_LLM] {model_id} returned {resp.status_code}. Retrying ONCE with alternate model {models_to_try[1]}...")
+                        continue
+                    else:
+                        break
+
+                last_error = f"Gemini API returned unhandled status {resp.status_code}: {resp.text[:100]}"
+                last_error_code = f"HTTP_{resp.status_code}"
+                break
+
+            except (httpx.TimeoutException, httpx.NetworkError) as net_err:
+                latency_ms = int((time.time() - start_time) * 1000)
+                last_error = f"Gemini network/timeout error: {str(net_err)}"
+                last_error_code = "NETWORK_TIMEOUT"
+                if attempt_idx == 0 and len(models_to_try) > 1:
+                    logger.info(f"[BOL_KISAN_LLM] {model_id} encountered {net_err.__class__.__name__}. Retrying ONCE with alternate model {models_to_try[1]}...")
+                    continue
+                else:
+                    break
+            except Exception as e:
+                latency_ms = int((time.time() - start_time) * 1000)
+                logger.error(f"[BOL_KISAN_LLM] Unhandled Gemini request exception: {e}")
+                last_error = f"Gemini connection error: {str(e)}"
+                last_error_code = "UNHANDLED_EXCEPTION"
+                break
+
+        # Fallback reached
+        latency_ms = int((time.time() - start_time) * 1000)
+        return {
+            "success": False,
+            "text": "",
+            "error": last_error,
+            "error_code": last_error_code,
+            "provider": self.provider_name,
+            "model": self.model_id,
+            "latency_ms": latency_ms
+        }
 
 class GroqProvider(BaseLLMProvider):
     """

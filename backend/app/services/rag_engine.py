@@ -150,6 +150,54 @@ class RagEngine:
                 "is_fallback": False
             }
 
+        # Check for vague symptoms even if crop is present (e.g., leaf yellowing or spots without specific pest/disease)
+        vague_symptom_triggers = [
+            "ఆకులు పసుపు", "పసుపు రంగులోకి", "పచ్చబడ్డాయి", "పీలే पत्ते", "पीले धब्बे", "yellowing", "yellow", 
+            "some spots", "spots on leaves", "మచ్చలు వచ్చాయి", "మచ్చలు కనిపిస్తున్నాయి", "వాడిపోతున్నాయి"
+        ]
+        has_vague_symptom = any(vs in query_low for vs in vague_symptom_triggers)
+        specific_pests = [
+            "గులాబీ", "pink bollworm", "తామర", "thrips", "నల్లి", "mites", "తెల్లదోమ", "whitefly", "పచ్చదోమ", "jassid",
+            "కాండం తొలుచు", "stem borer", "ఆకు చుట్టు", "leaf folder", "సుడిదోమ", "bph", "కాయకుళ్ళు", "fruit rot",
+            "కొమ్మ ఎండు", "die back", "టిక్కా", "tikka", "ఆకుమచ్చ", "leaf spot", "బ్లాస్ట్", "blast", "మగ్నీషియం", "magnesium",
+            "ఇనుము", "iron chlorosis", "ఫెరమోన్", "pheromone", "వేప నూనె", "neem oil", "క్లోరాంట్రాని", "chlorantraniliprole"
+        ]
+        has_specific_pest = any(sp in query_low for sp in specific_pests)
+        if has_vague_symptom and not has_specific_pest:
+            crop_name_te = f"{detected_crop} పంటలో " if detected_crop else ""
+            crop_name_hi = f"{detected_crop} फसल में " if detected_crop else ""
+            crop_name_en = f" in {detected_crop}" if detected_crop else ""
+            clarify_te = (
+                f"మీరు {crop_name_te}ఆకులు పసుపుబారడం లేదా మచ్చల సాధారణ లక్షణాలను పేర్కొన్నారు. "
+                f"ఇది పోషకాల లోపం వల్లనా లేదా రసం పీల్చే పురుగుల వల్లనా నిర్ధారించడానికి, "
+                f"దయచేసి ఇది పై ఆకులా లేదా కింది ఆకులా మరియు ఆకుల అడుగున పురుగులు ఉన్నాయా అనేది స్పష్టంగా తెలియజేయండి."
+            )
+            clarify_hi = (
+                f"आपने {crop_name_hi}पत्तों के पीले होने या धब्बों के सामान्य लक्षण बताए हैं। "
+                f"सही पहचान के लिए कृपया बताएं कि क्या यह ऊपरी पत्तों पर है या निचली पर, और क्या पत्तों के नीचे कीट मौजूद हैं?"
+            )
+            clarify_en = (
+                f"You described general leaf yellowing or spotting symptoms{crop_name_en}. "
+                f"To determine whether this is due to nutrient deficiency or sucking pests, "
+                f"please clarify if symptoms appear on upper or lower leaves, and if insects are visible underneath."
+            )
+            clarify_msg = clarify_te if language == "te" else (clarify_hi if language == "hi" else clarify_en)
+            return {
+                "query": query,
+                "detected_language": language,
+                "scenario": "INCOMPLETE_EVIDENCE",
+                "answer": clarify_msg,
+                "spoken_answer": clarify_msg,
+                "clarification_question": clarify_msg,
+                "citations": [],
+                "chemical_safety_warning": None,
+                "escalation_needed": False,
+                "mode": mode,
+                "model_provider": "smart_clarification",
+                "model_name": "symptom_clarification_rule",
+                "is_fallback": False
+            }
+
         # Step 3: Extract Substantive Query Terms
         all_terms = re.findall(r'[\w\u0C00-\u0C7F\u0900-\u097F]+', query_low)
         query_terms = [t for t in all_terms if len(t) > 2 and t not in cls.STOPWORDS]
@@ -196,17 +244,24 @@ class RagEngine:
                 "is_fallback": False
             }
 
-        # Search matching chunks with strict threshold
+        # Search matching chunks with strict threshold and language alignment bonus
         doc_ids = [d.id for d in approved_docs]
+        doc_map = {d.id: d for d in approved_docs}
         matched_chunks = []
         chunks = db.query(DocumentChunk).filter(DocumentChunk.document_id.in_(doc_ids)).all()
 
         for ch in chunks:
             content_low = ch.content.lower()
             matches = [term for term in query_terms if term in content_low]
-            score = len(matches)
-            if score >= 2 or (len(query_terms) == 1 and score == 1 and any(c.lower() in content_low for c in cls.CROPS)):
-                matched_chunks.append((ch, score))
+            match_count = len(matches)
+
+            # Strict relevance threshold: requires genuine agricultural query term matches
+            if match_count >= 2 or (len(query_terms) == 1 and match_count == 1 and any(c.lower() in content_low for c in cls.CROPS)):
+                rank_score = match_count
+                p_doc = doc_map.get(ch.document_id)
+                if p_doc and p_doc.language == language:
+                    rank_score += 3
+                matched_chunks.append((ch, rank_score))
 
         if not matched_chunks:
             refusal = cls.get_refusal(language)

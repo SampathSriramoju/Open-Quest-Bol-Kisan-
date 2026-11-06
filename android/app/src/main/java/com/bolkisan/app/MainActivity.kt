@@ -271,10 +271,10 @@ class MainActivity : ComponentActivity() {
                                     Log.i(TAG, "[BOL_KISAN] TEST_VOICE_FILE: Reading audio from ${file.absolutePath} (${file.length()} bytes)")
                                     voiceState = VoiceState.PROCESSING
                                     val asr = asrEngine.transcribeWavFile(file, lang)
-                                    val detectedLang = if (asr.detectedLanguage in listOf("te", "hi", "en")) asr.detectedLanguage else lang
-                                    selectedLanguage = detectedLang
+                                    val resolvedTestLang = if (lang.isNotBlank() && lang in listOf("te", "hi", "en")) lang else (if (asr.detectedLanguage in listOf("te", "hi", "en")) asr.detectedLanguage else "te")
+                                    selectedLanguage = resolvedTestLang
                                     currentTranscript = asr.transcript
-                                    handleCommonQuestionSubmission(asr.transcript, testBitmap, detectedLang, interactionId, "TEST_VOICE")
+                                    handleCommonQuestionSubmission(asr.transcript, testBitmap, resolvedTestLang, interactionId, "TEST_VOICE")
                                 } catch (e: Throwable) {
                                     if (e is kotlinx.coroutines.CancellationException) throw e
                                     Log.e(TAG, "[BOL_KISAN] PIPELINE_ERROR: Test wav query failed: ${e.message}", e)
@@ -397,7 +397,8 @@ class MainActivity : ComponentActivity() {
                                             }
 
                                             currentTranscript = asr.transcript
-                                            val resolvedLang = if (asr.detectedLanguage in listOf("te", "hi", "en")) asr.detectedLanguage else selectedLanguage
+                                            // The user's selected language is authoritative. Do not override with ASR inference.
+                                            val resolvedLang = if (selectedLanguage.isNotBlank() && selectedLanguage in listOf("te", "hi", "en")) selectedLanguage else (if (asr.detectedLanguage in listOf("te", "hi", "en")) asr.detectedLanguage else "te")
                                             selectedLanguage = resolvedLang
 
                                             // Clear attached image from input dock now that submission is underway

@@ -22,7 +22,7 @@ class OfflineChemicalSafetyValidator:
     OFFLINE_CIBRC_TABLE = {
         "chlorantraniliprole": {
             "approved_formulation": "18.5% SC",
-            "aliases": ["chlorantraniliprole", "క్లోరాంట్రానిలీప్రోల్", "क्लोरांट्रानिलीप्रोल", "coragen", "కొరాజెన్", "కోరాజెన్", "कोराजन", "vesticor"],
+            "aliases": ["chlorantraniliprole", "క్లోరాంట్రానిలీప్రోల్", "క్లోరాంట్రానిలిప్రోల్", "क्लोरांट्रानिलीप्रोल", "coragen", "కొరాజెన్", "కోరాజెన్", "कोराजन", "vesticor"],
             "type": "insecticide",
             "document_year": 2024,
             "document_status": "ACTIVE_CIBRC",
@@ -140,7 +140,7 @@ class OfflineChemicalSafetyValidator:
         },
         "endosulfan": {
             "approved_formulation": "35% EC",
-            "aliases": ["endosulfan", "ఎండోసల్ఫాన్", "इंडोसल्फान"],
+            "aliases": ["endosulfan", "ఎండోసల్ఫాన్", "इंडोसल्फान", "एंडोसल्फान"],
             "banned": True,
             "ban_order": "Supreme Court of India Nationwide Complete Prohibition Order"
         },
@@ -177,7 +177,8 @@ class OfflineChemicalSafetyValidator:
 
     AMBIGUOUS_UNIT_PATTERNS = [
         r"చెంచా", r"చెంచాలు", r"స్పూన్", r"స్పూన్లు", r"కప్పు", r"కప్పులు", r"ప్యాకెట్", r"ప్యాకెట్లు", r"డబ్బా", r"డ్రాప్స్",
-        r"चम्मच", r"कप", r"पैकेट", r"डिब्बा", r"बूंद", r"spoon", r"spoons", r"cup", r"cups", r"packet", r"handful", r"drops"
+        r"चम्मच", r"(?:^|\s)कप(?:$|\s|[।,])", r"पैकेट", r"डिब्बा", r"बूंद",
+        r"\bspoon\b", r"\bspoons\b", r"\bcup\b", r"\bcups\b", r"\bpacket\b", r"\bpackets\b", r"\bhandful\b", r"\bdrops\b"
     ]
 
     TANK_MIX_INCOMPATIBILITIES = [
@@ -219,6 +220,22 @@ class OfflineChemicalSafetyValidator:
 
         return False
 
+    @staticmethod
+    def _format_pest(pest_str: str, lang: str) -> str:
+        if lang == "en":
+            return re.sub(r"\s*\([^)]*[\u0C00-\u0C7F\u0900-\u097F]+[^)]*\)", "", pest_str).strip()
+        elif lang == "hi":
+            return re.sub(r"\s*\([^)]*[\u0C00-\u0C7F]+[^)]*\)", "", pest_str).strip()
+        return pest_str
+
+    @staticmethod
+    def _select_lang(msg_te: str, msg_hi: str, msg_en: str, lang: str) -> str:
+        if lang == "hi":
+            return msg_hi
+        elif lang == "en":
+            return msg_en
+        return msg_te
+
     @classmethod
     def validate(cls, query: str, crop: Optional[str] = None, language: str = "te") -> Dict[str, Any]:
         low = query.lower()
@@ -227,11 +244,12 @@ class OfflineChemicalSafetyValidator:
         if any(trig in low for trig in cls.BANNED_KEYWORD_TRIGGERS):
             msg_te = "హెచ్చరిక: నిషేధించబడిన లేదా పేరు తెలియని అజ్ఞాత రసాయనాలను పంటలపై వాడటం చట్టరీత్యా నేరం మరియు పంటలకు ప్రాణాంతక ప్రమాదం. దయచేసి వ్యవసాయ అధికారిని సంప్రదించండి."
             msg_hi = "चेतावनी: प्रतिबंधित अथवा अज्ञात रसायनों का फसलों पर उपयोग अवैध एवं अत्यंत खतरनाक है। कृपया तुरंत कृषि अधिकारी से संपर्क करें।"
+            msg_en = "Warning: The use of banned, prohibited, or unknown chemical substances on crops is illegal and hazardous to crop health and human safety. Please contact an Agricultural Officer or KVK specialist."
             return {
                 "is_safe": False,
                 "parameter_failed": "BANNED_CHEMICAL",
                 "scenario": "CHEMICAL_SAFETY_BLOCK",
-                "response": msg_te if language == "te" else msg_hi,
+                "response": cls._select_lang(msg_te, msg_hi, msg_en, language),
                 "escalate": True
             }
 
@@ -249,11 +267,15 @@ class OfflineChemicalSafetyValidator:
                         f"चेतावनी: {chem_key.title()} भारत सरकार एवं CIBRC द्वारा पूर्णतः प्रतिबंधित कीटनाशक है ({ban_order})। "
                         f"फसलों पर इसका उपयोग अवैध और जानलेवा है। कृपया तुरंत कृषि अधिकारी या KVK विशेषज्ञ से संपर्क करें।"
                     )
+                    msg_en = (
+                        f"Warning: {chem_key.title()} is completely banned in India by CIBRC ({ban_order}). "
+                        f"Its application on crops is strictly prohibited and illegal. Please consult your local Agricultural Extension Officer or KVK specialist."
+                    )
                     return {
                         "is_safe": False,
                         "parameter_failed": "BANNED_CHEMICAL",
                         "scenario": "CHEMICAL_SAFETY_BLOCK",
-                        "response": msg_te if language == "te" else msg_hi,
+                        "response": cls._select_lang(msg_te, msg_hi, msg_en, language),
                         "escalate": True
                     }
 
@@ -278,16 +300,20 @@ class OfflineChemicalSafetyValidator:
                 "फसल सुरक्षा हेतु अपुष्ट रसायनों की खुराक नहीं दी जा सकती। "
                 "कृपया सही तकनीकी नाम बताएं या KVK कृषि विशेषज्ञ से संपर्क करें।"
             )
+            refusal_en = (
+                "Details for this chemical product or formulation were not found in our verified CIBRC approved label database. "
+                "To protect crop and consumer safety, uncertified pesticide dosages cannot be recommended. "
+                "Please specify the registered technical name or consult an official KVK agricultural scientist."
+            )
             return {
                 "is_safe": False,
                 "parameter_failed": "MISSING_OR_UNVERIFIED_PRODUCT_LABEL",
                 "scenario": "CHEMICAL_SAFETY_BLOCK",
-                "response": refusal_te if language == "te" else refusal_hi,
+                "response": cls._select_lang(refusal_te, refusal_hi, refusal_en, language),
                 "escalate": True
             }
 
         # Parameter 4: Formulation Mismatch Verification
-        # Example: Chlorantraniliprole approved is 18.5% SC. If user mentions 50% EC or 25% EC, flag mismatch.
         approved_form = matched_data.get("approved_formulation", "")
         formulation_patterns = [r"(\d+(\.\d+)?\s*%\s*(ec|sc|sg|wp|sl|sp|fs|wdg))"]
         for pattern in formulation_patterns:
@@ -305,13 +331,113 @@ class OfflineChemicalSafetyValidator:
                         f"फॉर्मूलेशन चेतावनी: {matched_name.title()} केवल '{approved_form}' फॉर्मूलेशन में CIBRC द्वारा स्वीकृत है। "
                         f"आपके द्वारा उल्लेखित '{m[0]}' स्वीकृत नहीं है। गलत फॉर्मूलेशन से फसल जलने का जोखिम है।"
                     )
+                    msg_en = (
+                        f"Formulation Alert: {matched_name.title()} is officially approved by CIBRC only in '{approved_form}' formulation. "
+                        f"The formulation '{m[0]}' you mentioned is not approved. Using unapproved formulations may cause severe crop scorch."
+                    )
                     return {
                         "is_safe": False,
                         "parameter_failed": "INCORRECT_FORMULATION",
                         "scenario": "CHEMICAL_SAFETY_BLOCK",
-                        "response": msg_te if language == "te" else msg_hi,
+                        "response": cls._select_lang(msg_te, msg_hi, msg_en, language),
                         "escalate": True
                     }
+
+        # Parameter 10: Tank Mix Incompatibility Check
+        alkaline_triggers = ["సున్నం", "బోర్డో", "బోర్డాక్స్", "కాపర్", "చూనా", "lime", "bordeaux", "copper"]
+        if matched_name in ["neem oil", "emamectin benzoate"] and any(alt in low for alt in alkaline_triggers):
+            msg_te = (
+                f"ట్యాంక్ మిక్సింగ్ వ్యతిరేకత (Incompatible Tank Mix): {matched_name.title()} మందును "
+                f"సున్నం, బోర్డో మిశ్రమం లేదా క్షార పదార్థాలతో కలపరాదు. ఇది రసాయన చర్య జరిగి మందు పనితీరును నాశనం చేస్తుంది."
+            )
+            msg_hi = (
+                f"टैंक मिक्सिंग चेतावनी: {matched_name.title()} को चूना या बोर्डो मिश्रण के साथ कभी न मिलाएं। यह रासायनिक प्रभाव को नष्ट कर देता है।"
+            )
+            msg_en = (
+                f"Tank Mix Incompatibility: {matched_name.title()} must not be mixed with lime, Bordeaux mixture, or alkaline substances. "
+                f"Chemical reaction neutralizes active efficacy and damages crop foliage."
+            )
+            return {
+                "is_safe": False,
+                "parameter_failed": "INCOMPATIBLE_TANK_MIX",
+                "scenario": "CHEMICAL_SAFETY_BLOCK",
+                "response": cls._select_lang(msg_te, msg_hi, msg_en, language),
+                "escalate": True
+            }
+
+        # Parameter 9: Document Status & Expiry Check
+        doc_status = matched_data.get("document_status", "ACTIVE_CIBRC")
+        doc_year = matched_data.get("document_year", 2024)
+        if doc_status == "EXPIRED" or doc_year < 2019:
+            msg_te = "క్షమించండి, ఈ రసాయన పత్రం కాలపరిమితి ముగిసింది (Expired Document). అప్‌డేట్ చేసిన లేబుల్ కోసం వ్యవసాయ అధికారిని సంప్రదించండి."
+            msg_hi = "क्षमा करें, इस रसायन का अनुमोदित दस्तावेज पुराना हो चुका है। कृपया नए दिशानिर्देश हेतु अधिकारी से मिलें।"
+            msg_en = "Sorry, the regulatory approval document for this chemical formulation has expired. Please contact an Agricultural Extension Officer for the latest updated label."
+            return {
+                "is_safe": False,
+                "parameter_failed": "EXPIRED_SUPERSEDED_DOCUMENTS",
+                "scenario": "CHEMICAL_SAFETY_BLOCK",
+                "response": cls._select_lang(msg_te, msg_hi, msg_en, language),
+                "escalate": True
+            }
+
+        # Parameter 8: Ambiguous Units Detection
+        has_ambiguous_unit = any(re.search(pat, low) for pat in cls.AMBIGUOUS_UNIT_PATTERNS)
+        if has_ambiguous_unit:
+            msg_te = (
+                f"అస్పష్టమైన కొలత ప్రమాదం (Ambiguous Units Warning): పురుగుమందులను ఇళ్లలోని చెంచాలు, కప్పులు లేదా పిడికిళ్లతో ఎప్పుడూ కొలవరాదు. "
+                f"ఇలా కొలవడం వల్ల తీవ్రమైన విషప్రభావం మరియు పంట మాడిపోయే ప్రమాదం ఉంది. "
+                f"కేవలం మిల్లీలీటర్లు (ml) లేదా గ్రాములు (g) కొలిచే అధికారిక కొలపాత్రను మాత్రమే వాడాలి."
+            )
+            msg_hi = (
+                f"अस्पष्ट मापक चेतावनी (Ambiguous Units Alert): कीटनाशकों को कभी भी घरेलू चम्मच, कप या डिब्बों से न नापें। "
+                f"इससे फसल जलने तथा गंभीर विषाक्तता का खतरा होता है। "
+                f"केवल मिलीलीटर (ml) या ग्राम (g) के प्रमाणित मापक का प्रयोग करें।"
+            )
+            msg_en = (
+                f"Ambiguous Measuring Unit Hazard: Never measure agricultural pesticides using household spoons, cups, or handfuls. "
+                f"Inaccurate household measures cause severe chemical crop burn and lethal poisoning. "
+                f"Always use calibrated measuring cylinders in milliliters (ml) or grams (g)."
+            )
+            return {
+                "is_safe": False,
+                "parameter_failed": "AMBIGUOUS_UNITS",
+                "scenario": "CHEMICAL_SAFETY_BLOCK",
+                "response": cls._select_lang(msg_te, msg_hi, msg_en, language),
+                "citation_doc": f"CIBRC Safety Guidelines ({matched_name.title()})",
+                "citation_page": 1,
+                "escalate": True
+            }
+
+        # Parameter 7: Overdose Hazard Detection
+        dose_nums = re.findall(r"(\d+)\s*(ml|మి.లీ|గ్రా|గ్రాములు|gm|g|లీటర్|litre|లీ)", low)
+        max_safe_ml = matched_data.get("max_safe_dose_ml_per_acre", 500)
+        max_safe_g = matched_data.get("max_safe_dose_g_per_acre", 500)
+        for num_str, unit in dose_nums:
+            val = float(num_str)
+            if "లీ" in unit or "litre" in unit:
+                val *= 1000 # convert to ml
+            if (val > max_safe_ml * 2.5 and "g" not in unit and "గ్రా" not in unit) or (val > max_safe_g * 2.5 and ("g" in unit or "గ్రా" in unit)):
+                msg_te = (
+                    f"అధిక మోతాదు ప్రమాదం (Overdose Hazard): మీరు పేర్కొన్న {num_str} {unit} మోతాదు అత్యంత ప్రమాదకరమైనది! "
+                    f"CIBRC అధికారిక అనుమతి ప్రకారం {matched_name.title()} ఎకరాకు సిఫార్సు చేసిన మోతాదు మాత్రమే వాడాలి. "
+                    f"అదనపు మోతాదు పిచికారీ చేస్తే పంట విషపూరితమై మాడిపోతుంది."
+                )
+                msg_hi = (
+                    f"अत्यधिक खुराक चेतावनी (Overdose Alert): {num_str} {unit} की मात्रा अत्यधिक खतरनाक है! "
+                    f"CIBRC अनुसार {matched_name.title()} की अनुशंसित मात्रा प्रति एकड़ सीमित है।"
+                )
+                msg_en = (
+                    f"Overdose Alert: The dosage of {num_str} {unit} you specified is extremely hazardous! "
+                    f"According to CIBRC official label, {matched_name.title()} must only be applied at approved dosage per acre. "
+                    f"Excessive chemical application causes severe crop burn and lethal toxicity."
+                )
+                return {
+                    "is_safe": False,
+                    "parameter_failed": "OVERDOSE_HAZARD",
+                    "scenario": "CHEMICAL_SAFETY_BLOCK",
+                    "response": cls._select_lang(msg_te, msg_hi, msg_en, language),
+                    "escalate": True
+                }
 
         # Parameter 5: Unapproved Crop Application
         norm_crop = (crop or "").lower().strip()
@@ -334,22 +460,29 @@ class OfflineChemicalSafetyValidator:
                     f"यह दवा ({matched_name.title()}) केवल {crops_str} फसलों के लिए CIBRC द्वारा अनुमोदित है। "
                     f"कृपया अपनी मान्य फसल का नाम स्पष्ट करें।"
                 )
+                msg_en = (
+                    f"This chemical ({matched_name.title()}) is officially registered by CIBRC only for {crops_str} crops. "
+                    f"There is no approved label claim for your requested crop. Please specify an approved crop name."
+                )
                 return {
                     "is_safe": False,
                     "parameter_failed": "UNAPPROVED_CROP",
                     "scenario": "INCOMPLETE_EVIDENCE",
-                    "response": msg_te if language == "te" else msg_hi,
+                    "response": cls._select_lang(msg_te, msg_hi, msg_en, language),
                     "escalate": False
                 }
 
             # General dose across registered crops when no specific crop was named
             crop_details_te = []
             crop_details_hi = []
+            crop_details_en = []
             for cn, ci in approved_crops.items():
                 crop_details_te.append(f"{cn.title()}: ఎకరాకు {ci['dose']} ({ci['water']} నీరు)")
                 crop_details_hi.append(f"{cn.title()}: प्रति एकड़ {ci['dose']} ({ci['water']} पानी)")
+                crop_details_en.append(f"{cn.title()}: {ci['dose']} per acre in {ci['water']} water")
             details_str_te = "; ".join(crop_details_te)
             details_str_hi = "; ".join(crop_details_hi)
+            details_str_en = "; ".join(crop_details_en)
 
             resp_te = (
                 f"CIBRC ఆమోదిత లేబుల్ ప్రకారం {matched_name.title()} ({matched_data.get('approved_formulation', '')}) మోతాదు వివరాలు: "
@@ -359,11 +492,15 @@ class OfflineChemicalSafetyValidator:
                 f"CIBRC अनुमोदित उत्पाद लेबल अनुसार {matched_name.title()} ({matched_data.get('approved_formulation', '')}) की अनुशंसित खुराक: "
                 f"{details_str_hi}। [स्रोत: CIBRC Approved Product Label]"
             )
+            resp_en = (
+                f"According to CIBRC approved label, recommended dosage for {matched_name.title()} ({matched_data.get('approved_formulation', '')}): "
+                f"{details_str_en}. [Source: CIBRC Approved Product Label]"
+            )
             return {
                 "is_safe": True,
                 "scenario": "EVIDENCE_AVAILABLE",
                 "parameter_failed": None,
-                "response": resp_te if language == "te" else resp_hi,
+                "response": cls._select_lang(resp_te, resp_hi, resp_en, language),
                 "citation_doc": f"CIBRC Approved Product Label ({matched_name.title()} {matched_data.get('approved_formulation', '')})",
                 "citation_page": 1,
                 "escalate": False
@@ -372,7 +509,6 @@ class OfflineChemicalSafetyValidator:
         c_name, c_info = target_info
 
         # Parameter 6: Target Pest Class Mismatch
-        # E.g. Using Insecticide for Fungal Wilt/Blast or Fungicide for Bollworm/Stem borer
         fungal_triggers = ["తెగులు", "ఆకుమచ్చ", "బూడిద", "కుళ్ళు", "ఎండు", "फफूंद", "झुलसा", "फंगस", "fungus", "wilt", "blast", "rot", "blight"]
         insect_triggers = ["పురుగు", "తొలుచు", "దోమ", "నల్లి", "కీటకం", "कीड़ा", "इल्ली", "सूंडी", "माहू", "worm", "borer", "caterpillar", "fly"]
         
@@ -386,11 +522,15 @@ class OfflineChemicalSafetyValidator:
                 f"लक्षित कीट असंगति: {matched_name.title()} एक कीटनाशक (Insecticide) है। "
                 f"यह फफूंद जनित रोगों (Fungal Diseases) पर प्रभावी नहीं है। फफूंद नाशक का उपयोग करें।"
             )
+            msg_en = (
+                f"Target Pest Class Mismatch: {matched_name.title()} is an insecticide. "
+                f"It is ineffective against fungal diseases. For fungal diseases, an approved fungicide must be applied."
+            )
             return {
                 "is_safe": False,
                 "parameter_failed": "TARGET_PEST_MISMATCH",
                 "scenario": "CHEMICAL_SAFETY_BLOCK",
-                "response": msg_te if language == "te" else msg_hi,
+                "response": cls._select_lang(msg_te, msg_hi, msg_en, language),
                 "escalate": True
             }
         elif chem_type == "fungicide" and any(it in low for it in insect_triggers) and not any(ft in low for ft in fungal_triggers):
@@ -402,107 +542,54 @@ class OfflineChemicalSafetyValidator:
                 f"लक्षित कीट असंगति: {matched_name.title()} एक फफूंदनाशक (Fungicide) है। "
                 f"यह इल्ली या कीटों पर काम नहीं करेगा।"
             )
+            msg_en = (
+                f"Target Pest Class Mismatch: {matched_name.title()} is a fungicide. "
+                f"It does not control insects or caterpillars. For insect pests, an approved insecticide must be applied."
+            )
             return {
                 "is_safe": False,
                 "parameter_failed": "TARGET_PEST_MISMATCH",
                 "scenario": "CHEMICAL_SAFETY_BLOCK",
-                "response": msg_te if language == "te" else msg_hi,
-                "escalate": True
-            }
-
-        # Parameter 7: Overdose Hazard Detection
-        # Check if user query mentions specific numbers far exceeding max safe dose per acre
-        dose_nums = re.findall(r"(\d+)\s*(ml|మి.లీ|గ్రా|గ్రాములు|gm|g|లీటర్|litre|లీ)", low)
-        max_safe_ml = matched_data.get("max_safe_dose_ml_per_acre", 500)
-        max_safe_g = matched_data.get("max_safe_dose_g_per_acre", 500)
-        for num_str, unit in dose_nums:
-            val = float(num_str)
-            if "లీ" in unit or "litre" in unit:
-                val *= 1000 # convert to ml
-            if (val > max_safe_ml * 2.5 and "g" not in unit and "గ్రా" not in unit) or (val > max_safe_g * 2.5 and ("g" in unit or "గ్రా" in unit)):
-                msg_te = (
-                    f"అధిక మోతాదు ప్రమాదం (Overdose Hazard): మీరు పేర్కొన్న {num_str} {unit} మోతాదు అత్యంత ప్రమాదకరమైనది! "
-                    f"CIBRC అధికారిక అనుమతి ప్రకారం {matched_name.title()} ఎకరాకు కేవలం {c_info['dose']} మాత్రమే వాడాలి. "
-                    f"అదనపు మోతాదు పిచికారీ చేస్తే పంట విషపూరితమై మాడిపోతుంది."
-                )
-                msg_hi = (
-                    f"अत्यधिक खुराक चेतावनी (Overdose Alert): {num_str} {unit} की मात्रा अत्यधिक खतरनाक है! "
-                    f"CIBRC अनुसार {matched_name.title()} की अनुशंसित मात्रा केवल {c_info['dose']} प्रति एकड़ है।"
-                )
-                return {
-                    "is_safe": False,
-                    "parameter_failed": "OVERDOSE_HAZARD",
-                    "scenario": "CHEMICAL_SAFETY_BLOCK",
-                    "response": msg_te if language == "te" else msg_hi,
-                    "escalate": True
-                }
-
-        # Parameter 8: Ambiguous Units Detection
-        # Detect household utensil terms: spoons, cups, packets
-        has_ambiguous_unit = any(re.search(pat, low) for pat in cls.AMBIGUOUS_UNIT_PATTERNS)
-        ambiguous_warning_te = ""
-        ambiguous_warning_hi = ""
-        if has_ambiguous_unit:
-            ambiguous_warning_te = "గమనిక: పురుగుమందులను ఇళ్లలోని చెంచాలు లేదా కప్పులతో ఎప్పుడూ కొలవరాదు. ఖచ్చితమైన కొలత పాత్రను మాత్రమే వాడాలి. "
-            ambiguous_warning_hi = "नोट: कीटनाशकों को कभी भी घरेलू चम्मच या कप से न नापें। केवल सटीक मापक उपकरण का उपयोग करें। "
-
-        # Parameter 9: Document Status & Expiry Check
-        doc_status = matched_data.get("document_status", "ACTIVE_CIBRC")
-        doc_year = matched_data.get("document_year", 2024)
-        if doc_status == "EXPIRED" or doc_year < 2019:
-            msg_te = "క్షమించండి, ఈ రసాయన పత్రం కాలపరిమితి ముగిసింది (Expired Document). అప్‌డేట్ చేసిన లేబుల్ కోసం వ్యవసాయ అధికారిని సంప్రదించండి."
-            msg_hi = "क्षमा करें, इस रसायन का अनुमोदित दस्तावेज पुराना हो चुका है। कृपया नए दिशानिर्देश हेतु अधिकारी से मिलें।"
-            return {
-                "is_safe": False,
-                "parameter_failed": "EXPIRED_SUPERSEDED_DOCUMENTS",
-                "scenario": "CHEMICAL_SAFETY_BLOCK",
-                "response": msg_te if language == "te" else msg_hi,
-                "escalate": True
-            }
-
-        # Parameter 10: Tank Mix Incompatibility Check
-        alkaline_triggers = ["సున్నం", "బోర్డో", "బోర్డాక్స్", "కాపర్", "చూనా", "lime", "bordeaux", "copper"]
-        if matched_name in ["neem oil", "emamectin benzoate"] and any(alt in low for alt in alkaline_triggers):
-            msg_te = (
-                f"ట్యాంక్ మిక్సింగ్ వ్యతిరేకత (Incompatible Tank Mix): {matched_name.title()} మందును "
-                f"సున్నం, బోర్డో మిశ్రమం లేదా క్షార పదార్థాలతో కలపరాదు. ఇది రసాయన చర్య జరిగి మందు పనితీరును నాశనం చేస్తుంది."
-            )
-            msg_hi = (
-                f"टैंक मिक्सिंग चेतावनी: {matched_name.title()} को चूना या बोर्डो मिश्रण के साथ कभी न मिलाएं। यह रासायनिक प्रभाव को नष्ट कर देता है।"
-            )
-            return {
-                "is_safe": False,
-                "parameter_failed": "INCOMPATIBLE_TANK_MIX",
-                "scenario": "CHEMICAL_SAFETY_BLOCK",
-                "response": msg_te if language == "te" else msg_hi,
+                "response": cls._select_lang(msg_te, msg_hi, msg_en, language),
                 "escalate": True
             }
 
         # Safe Verified Recommendation
+        doc_year = matched_data.get("document_year", 2024)
+        pest_te = c_info['pest']
+        pest_hi = cls._format_pest(c_info['pest'], 'hi')
+        pest_en = cls._format_pest(c_info['pest'], 'en')
+
         resp_te = (
-            f"{ambiguous_warning_te}"
             f"సిఫార్సు చేసిన మోతాదు ({matched_name.title()} {matched_data['approved_formulation']}): "
             f"ఎకరాకు {c_info['dose']}ను {c_info['water']} నీటిలో కలిపి పిచికారీ చేయాలి. "
-            f"లక్ష్యం: {c_info['pest']}. "
+            f"లక్ష్యం: {pest_te}. "
             f"కోతకు ముందు నిరీక్షణ వ్యవధి: {c_info['waiting_period']} రోజులు. "
             f"హెచ్చరిక: {c_info['warnings']} "
             f"[ఆధారం: CIBRC అధికారిక లేబుల్ & PJTSAU రికార్డులు {doc_year}]"
         )
         resp_hi = (
-            f"{ambiguous_warning_hi}"
             f"अनुशंसित खुराक ({matched_name.title()} {matched_data['approved_formulation']}): "
             f"प्रति एकड़ {c_info['dose']} को {c_info['water']} पानी में मिलाकर छिड़कें। "
-            f"लक्षित कीट: {c_info['pest']}। "
+            f"लक्षित कीट: {pest_hi}। "
             f"प्रतीक्षा अवधि: {c_info['waiting_period']} दिन। "
             f"चेतावनी: {c_info['warnings']} "
             f"[स्रोत: CIBRC अनुमोदित उत्पाद लेबल एवं PJTSAU रिकॉर्ड {doc_year}]"
+        )
+        resp_en = (
+            f"Recommended dosage ({matched_name.title()} {matched_data['approved_formulation']}): "
+            f"Apply {c_info['dose']} diluted in {c_info['water']} water per acre. "
+            f"Target pest: {pest_en}. "
+            f"Pre-harvest waiting period: {c_info['waiting_period']} days. "
+            f"Precautions: {c_info['warnings']} "
+            f"[Source: CIBRC Approved Product Label & PJTSAU Records {doc_year}]"
         )
 
         return {
             "is_safe": True,
             "scenario": "EVIDENCE_AVAILABLE",
             "parameter_failed": None,
-            "response": resp_te if language == "te" else resp_hi,
+            "response": cls._select_lang(resp_te, resp_hi, resp_en, language),
             "citation_doc": f"CIBRC Approved Product Label ({matched_name.title()} {matched_data['approved_formulation']})",
             "citation_page": 1,
             "escalate": False

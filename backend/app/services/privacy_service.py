@@ -81,3 +81,34 @@ class PrivacyRedactor:
             logger.info("[BOL_KISAN_PRIVACY] Sensitive PII detected and redacted before external LLM dispatch.")
 
         return sanitized, redacted
+
+    @classmethod
+    def strip_image_metadata(cls, base64_image_data: str, mime_type: str = "image/jpeg") -> str:
+        """
+        Strips EXIF, GPS coordinates, device serials, and camera metadata from
+        base64 crop photo data before sending to external multimodal LLM APIs.
+        """
+        if not base64_image_data:
+            return base64_image_data
+
+        try:
+            import io
+            import base64
+            from PIL import Image
+
+            raw_bytes = base64.b64decode(base64_image_data)
+            img = Image.open(io.BytesIO(raw_bytes))
+
+            out_buf = io.BytesIO()
+            fmt = "PNG" if "png" in (mime_type or "").lower() or img.format in ("PNG", "RGBA") else "JPEG"
+            if fmt == "JPEG" and img.mode in ("RGBA", "P"):
+                img = img.convert("RGB")
+
+            # Saving without 'exif' parameter completely strips GPS and camera metadata
+            img.save(out_buf, format=fmt, quality=85)
+            clean_base64 = base64.b64encode(out_buf.getvalue()).decode("utf-8")
+            logger.info("[BOL_KISAN_PRIVACY] Successfully stripped image EXIF and camera metadata before external dispatch.")
+            return clean_base64
+        except Exception as ex:
+            logger.warning(f"[BOL_KISAN_PRIVACY] Metadata stripping non-fatal warning: {ex}. Proceeding safely.")
+            return base64_image_data
