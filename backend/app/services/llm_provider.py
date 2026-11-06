@@ -125,18 +125,19 @@ class GeminiProvider(BaseLLMProvider):
             resp = await client.post(url, json=payload, timeout=settings.LLM_TIMEOUT_SECONDS)
             latency_ms = int((time.time() - start_time) * 1000)
 
-            # Auto-retry with gemini-3.5-flash if gemini-3.8-flash reports temporary 503 high demand
-            if resp.status_code in (503, 404) and self.model_id == "gemini-3.8-flash":
-                logger.info(f"[BOL_KISAN_LLM] Gemini 3.8 Flash returned {resp.status_code} (high demand). Retrying with gemini-3.5-flash...")
-                alt_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key={self.api_key}"
+            # Bi-directional auto-retry resilience between gemini-3.5-flash and gemini-3.8-flash on 503 high demand
+            if resp.status_code in (503, 404):
+                alt_model = "gemini-3.8-flash" if self.model_id == "gemini-3.5-flash" else "gemini-3.5-flash"
+                logger.info(f"[BOL_KISAN_LLM] {self.model_id} returned {resp.status_code}. Retrying with resilient fallback {alt_model}...")
+                alt_url = f"https://generativelanguage.googleapis.com/v1beta/models/{alt_model}:generateContent?key={self.api_key}"
                 try:
                     resp_alt = await client.post(alt_url, json=payload, timeout=settings.LLM_TIMEOUT_SECONDS)
                     if resp_alt.status_code == 200:
                         resp = resp_alt
-                        self.model_id = "gemini-3.5-flash"
+                        self.model_id = alt_model
                         latency_ms = int((time.time() - start_time) * 1000)
                 except Exception as ex:
-                    logger.warning(f"[BOL_KISAN_LLM] Gemini 3.5 Flash fallback attempt failed: {ex}")
+                    logger.warning(f"[BOL_KISAN_LLM] Gemini {alt_model} fallback attempt failed: {ex}")
 
             if resp.status_code == 200:
                 data = resp.json()

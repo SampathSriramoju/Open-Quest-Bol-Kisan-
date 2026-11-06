@@ -37,7 +37,8 @@ class Settings(BaseSettings):
     GROQ_API_KEY: Optional[str] = os.getenv("GROQ_API_KEY", None)
     
     # Model IDs (Verified $0 Free-Tier)
-    GEMINI_MODEL_ID: str = os.getenv("GEMINI_MODEL_ID", "gemini-3.8-flash")
+    # Default to fast, stable gemini-3.5-flash (~2.3s latency); gemini-3.8-flash supported
+    GEMINI_MODEL_ID: str = os.getenv("GEMINI_MODEL_ID", "gemini-3.5-flash")
     OPENROUTER_MODEL_ID: str = os.getenv("OPENROUTER_MODEL_ID", "nvidia/nemotron-3-ultra-550b-a55b:free")
     OPENROUTER_VISION_MODEL_ID: str = os.getenv("OPENROUTER_VISION_MODEL_ID", "nvidia/nemotron-3.5-super-vl:free")
     OPENROUTER_REASONING_MODEL_ID: str = os.getenv("OPENROUTER_REASONING_MODEL_ID", "nvidia/nemotron-3-ultra-550b-a55b:free")
