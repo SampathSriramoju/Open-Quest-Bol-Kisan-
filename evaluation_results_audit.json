@@ -1,0 +1,115 @@
+{
+  "timestamp": "2026-11-06 10:47:24",
+  "network_latencies": {
+    "generativelanguage.googleapis.com": {
+      "name": "Google Gemini Endpoint",
+      "trials": 20,
+      "dns_avg_ms": 1.22,
+      "tcp_avg_ms": 257.6,
+      "tls_avg_ms": 344.51,
+      "handshake_avg_ms": 603.33,
+      "handshake_p50_ms": 315.49,
+      "handshake_p95_ms": 2980.42
+    },
+    "openrouter.ai": {
+      "name": "OpenRouter Endpoint",
+      "trials": 20,
+      "dns_avg_ms": 0.59,
+      "tcp_avg_ms": 31.7,
+      "tls_avg_ms": 19.82,
+      "handshake_avg_ms": 52.11,
+      "handshake_p50_ms": 31.82,
+      "handshake_p95_ms": 254.42
+    }
+  },
+  "local_rag_latencies": {
+    "trials": 20,
+    "rag_retrieval_avg_ms": 4.15,
+    "rag_retrieval_p50_ms": 2.96,
+    "rag_retrieval_p95_ms": 29.08,
+    "backend_prep_avg_ms": 2.77,
+    "backend_prep_p50_ms": 1.97,
+    "backend_prep_p95_ms": 19.38,
+    "total_local_avg_ms": 6.92,
+    "total_local_p50_ms": 4.93,
+    "total_local_p95_ms": 48.46
+  },
+  "live_provider_audit": [
+    {
+      "model_id": "gemini-3.8-flash",
+      "provider": "gemini",
+      "live_status": "BLOCKED",
+      "http_status": null,
+      "reason": "GEMINI_API_KEY not configured in backend environment",
+      "fallback_engaged": true,
+      "fallback_latency_ms": 7.4
+    },
+    {
+      "model_id": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "provider": "openrouter",
+      "live_status": "BLOCKED",
+      "http_status": 401,
+      "reason": "OPENROUTER_API_KEY not configured in backend environment",
+      "fallback_engaged": true,
+      "fallback_latency_ms": 4.8
+    },
+    {
+      "model_id": "nvidia/nemotron-3.5-super-vl:free",
+      "provider": "openrouter",
+      "live_status": "BLOCKED",
+      "http_status": 401,
+      "reason": "OPENROUTER_API_KEY not configured in backend environment",
+      "fallback_engaged": true,
+      "fallback_latency_ms": 4.8
+    },
+    {
+      "model_id": "google/gemma-4-26b-a4b-it:free",
+      "provider": "openrouter",
+      "live_status": "BLOCKED",
+      "http_status": 401,
+      "reason": "OPENROUTER_API_KEY not configured in backend environment",
+      "fallback_engaged": true,
+      "fallback_latency_ms": 4.8
+    },
+    {
+      "model_id": "llama-3.3-70b-versatile",
+      "provider": "groq",
+      "live_status": "FAILED / DEPRECATED",
+      "http_status": 401,
+      "reason": "Model decommissioned by Groq on Aug 16, 2026. Removed from recommended configuration.",
+      "fallback_engaged": true,
+      "fallback_latency_ms": 94.5
+    },
+    {
+      "model_id": "room_extractive_v4",
+      "provider": "offline",
+      "live_status": "OPERATIONAL",
+      "http_status": 200,
+      "reason": "100% on-device SQLite FTS5 engine, zero network dependency",
+      "fallback_engaged": false,
+      "average_latency_ms": 6.92
+    }
+  ],
+  "pii_redaction_audit": [
+    {
+      "id": "TE_01",
+      "original": "నా పేరు రామయ్య, ఫోన్ 9848012345. పత్తిలో గులాబీ రంగు పురుగు నివారణ పద్ధతులు ఏమిటి?",
+      "sanitized": "నా పేరు [REDACTED_NAME], ఫోన్ [REDACTED_PHONE]. పత్తిలో గులాబీ రంగు పురుగు నివారణ పద్ధతులు ఏమిటి?",
+      "redaction_verified": true
+    },
+    {
+      "id": "HI_01",
+      "original": "किसान: रमेश कुमार, आधार 1234 5678 9012। धान में तना छेदक (Stem Borer) कीट का प्रबंधन कैसे करें?",
+      "sanitized": "किसान: रमेश कुमार, आधार [REDACTED_AADHAAR]। धान में तना छेदक (Stem Borer) कीट का प्रबंधन कैसे करें?",
+      "redaction_verified": true
+    },
+    {
+      "id": "EN_01",
+      "original": "Farmer email: kisan@farm.com. How to install pheromone traps for pink bollworm management in cotton?",
+      "sanitized": "Farmer email: [REDACTED_EMAIL]. How to install pheromone traps for pink bollworm management in cotton?",
+      "redaction_verified": true
+    }
+  ],
+  "gold_dataset_count": 20,
+  "image_cases_count": 3
+}

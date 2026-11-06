@@ -2,6 +2,7 @@ import time
 import logging
 from typing import Dict, Any, List, Optional
 from backend.app.services.llm_provider import LLMProviderFactory, BaseLLMProvider
+from backend.app.services.privacy_service import PrivacyRedactor
 from backend.app.core.config import settings
 
 logger = logging.getLogger("bolkisan.online_llm")
@@ -78,8 +79,11 @@ class OnlineLLMService:
 
         image_context_note = "\n(గమనిక: రైతు పంట సమస్య ఫోటోను కూడా జతపరిచారు, పరిశీలించండి.)" if image_base64 else ""
 
+        # Sanitize query of any identifiable farmer information before external dispatch
+        clean_query, was_redacted = PrivacyRedactor.redact_pii(query)
+
         user_prompt = (
-            f"రైతు ప్రశ్న (Farmer Query): {query}\n"
+            f"రైతు ప్రశ్న (Farmer Query): {clean_query}\n"
             f"పంట (Crop): {crop or 'గమనించిన పంట'}{image_context_note}\n\n"
             f"ఆమోదించబడిన వ్యవసాయ ఆధారాలు (Verified Agricultural Context):\n"
             f"{context_block}\n\n"
