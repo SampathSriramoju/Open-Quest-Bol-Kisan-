@@ -16,6 +16,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.bolkisan.app.data.AppMode
+import com.bolkisan.app.data.ModePreferences
 import com.bolkisan.app.data.local.AppDatabase
 import com.bolkisan.app.data.local.entities.InteractionEntity
 import com.bolkisan.app.data.packs.KnowledgePackManager
@@ -23,6 +25,7 @@ import com.bolkisan.app.pipeline.*
 import com.bolkisan.app.ui.components.VoiceState
 import com.bolkisan.app.ui.screens.*
 import com.bolkisan.app.ui.theme.BolKisanTheme
+import com.bolkisan.app.util.NetworkMonitor
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -39,6 +42,8 @@ class MainActivity : ComponentActivity() {
     private lateinit var retrievalEngine: LocalKnowledgeRetrievalEngine
     private lateinit var ttsEngine: OfflineTextToSpeechEngine
     private lateinit var visionEngine: OfflineAgriculturalVisionEngine
+    private lateinit var modePreferences: ModePreferences
+    private val onlineApiClient = OnlineAdvisoryApiClient()
 
     private var hasAudioPermission by mutableStateOf(false)
     private var recordingJob: Job? = null
@@ -66,6 +71,7 @@ class MainActivity : ComponentActivity() {
         retrievalEngine = LocalKnowledgeRetrievalEngine(database, packManager)
         ttsEngine = OfflineTextToSpeechEngine(this)
         visionEngine = OfflineAgriculturalVisionEngine(this, retrievalEngine)
+        modePreferences = ModePreferences(this)
 
         checkAudioPermission()
 
@@ -81,7 +87,9 @@ class MainActivity : ComponentActivity() {
                 var currentAnswer by remember { mutableStateOf("") }
                 var currentCitationDoc by remember { mutableStateOf<String?>(null) }
                 var currentCitationPage by remember { mutableStateOf(1) }
-                var isOffline by remember { mutableStateOf(true) } // Verified Offline by default
+                var currentAppMode by remember { mutableStateOf(modePreferences.appMode) }
+                var isConnectedToInternet by remember { mutableStateOf(NetworkMonitor.isOnline(this@MainActivity)) }
+                var isOffline by remember { mutableStateOf(!isConnectedToInternet) }
                 var hasAudioConsent by remember { mutableStateOf(false) }
 
                 // Multimodal State
@@ -164,31 +172,67 @@ class MainActivity : ComponentActivity() {
                             currentTranscript = queryText
                             voiceState = VoiceState.SEARCHING_DOCUMENTS
 
-                            val advisory = retrievalEngine.getAdvisory(
-                                query = queryText,
-                                crop = profileFlow?.primaryCrop ?: "Cotton",
-                                language = targetLang,
-                                interactionId = interactionId
-                            )
+                            var resolvedAdvisory: LocalAdvisoryResult? = null
+                            var usedOnline = false
+
+                            if (currentAppMode == AppMode.ONLINE_AI) {
+                                isConnectedToInternet = NetworkMonitor.isOnline(this@MainActivity)
+                                isOffline = !isConnectedToInternet
+                                if (isConnectedToInternet) {
+                                    Log.i(TAG, "[BOL_KISAN] Mode=ONLINE_AI: Querying FastAPI backend for '$queryText'")
+                                    val onlineRes = onlineApiClient.fetchAdvisory(
+                                        baseUrl = modePreferences.backendUrl,
+                                        query = queryText,
+                                        language = targetLang,
+                                        crop = profileFlow?.primaryCrop ?: "Cotton"
+                                    )
+                                    if (onlineRes.isSuccess) {
+                                        val data = onlineRes.getOrThrow()
+                                        resolvedAdvisory = LocalAdvisoryResult(
+                                            scenario = data.scenario,
+                                            answer = data.answer,
+                                            spokenAnswer = data.spokenAnswer,
+                                            citationDoc = data.citationDoc,
+                                            citationPage = data.citationPage
+                                        )
+                                        usedOnline = true
+                                        Log.i(TAG, "[BOL_KISAN] Online AI advisory received successfully (Scenario=${data.scenario}, Provider=${data.modelProvider})")
+                                    } else {
+                                        Log.w(TAG, "[BOL_KISAN] Online query failed: ${onlineRes.exceptionOrNull()?.message}. Falling back to local offline RAG.")
+                                    }
+                                } else {
+                                    Log.i(TAG, "[BOL_KISAN] Device offline while in ONLINE_AI mode. Falling back to local offline RAG.")
+                                }
+                            }
+
+                            if (resolvedAdvisory == null) {
+                                Log.i(TAG, "[BOL_KISAN] Executing Local Room DB FTS5 Retrieval (Mode=${currentAppMode.name})")
+                                resolvedAdvisory = retrievalEngine.getAdvisory(
+                                    query = queryText,
+                                    crop = profileFlow?.primaryCrop ?: "Cotton",
+                                    language = targetLang,
+                                    interactionId = interactionId
+                                )
+                            }
 
                             voiceState = VoiceState.PREPARING_RESPONSE
-                            delay(100)
-                            currentScenario = advisory.scenario
-                            currentAnswer = advisory.answer
-                            currentCitationDoc = advisory.citationDoc
-                            currentCitationPage = advisory.citationPage
+                            delay(50)
+                            currentScenario = resolvedAdvisory.scenario
+                            currentAnswer = resolvedAdvisory.answer
+                            currentCitationDoc = resolvedAdvisory.citationDoc
+                            currentCitationPage = resolvedAdvisory.citationPage
 
-                            Log.i(TAG, "[BOL_KISAN] ANSWER_GENERATED: interactionId=$interactionId, Scenario=${advisory.scenario}, AnswerLength=${advisory.answer.length}")
-                            Log.i(TAG, "[BOL_KISAN] RESPONSE_DISPLAYED: interactionId=$interactionId, Scenario=${advisory.scenario}")
+                            Log.i(TAG, "[BOL_KISAN] ANSWER_GENERATED: interactionId=$interactionId, UsedOnline=$usedOnline, Scenario=${resolvedAdvisory.scenario}, AnswerLength=${resolvedAdvisory.answer.length}")
+                            Log.i(TAG, "[BOL_KISAN] RESPONSE_DISPLAYED: interactionId=$interactionId, Scenario=${resolvedAdvisory.scenario}")
 
                             retrievalEngine.persistAdvisoryInteraction(
                                 query = queryText,
-                                result = advisory,
+                                result = resolvedAdvisory,
                                 language = targetLang
                             )
 
                             voiceState = VoiceState.SPEAKING
-                            ttsEngine.speak(advisory.spokenAnswer, targetLang, interactionId) {
+                            ttsEngine.speak(resolvedAdvisory.spokenAnswer, targetLang, interactionId) {
                                 voiceState = VoiceState.IDLE
                             }
                         }
@@ -255,7 +299,19 @@ class MainActivity : ComponentActivity() {
                     composable("home") {
                         HomeScreen(
                             selectedLanguage = selectedLanguage,
-                            isOffline = isOffline,
+                            isOffline = !isConnectedToInternet,
+                            currentAppMode = currentAppMode,
+                            onModeToggle = {
+                                val nextMode = if (currentAppMode == AppMode.ONLINE_AI) AppMode.OFFLINE_KNOWLEDGE else AppMode.ONLINE_AI
+                                currentAppMode = nextMode
+                                modePreferences.appMode = nextMode
+                                val banner = if (nextMode == AppMode.ONLINE_AI) {
+                                    "🌐 Switched to Online AI Mode"
+                                } else {
+                                    "🌾 Switched to Offline Knowledge Mode"
+                                }
+                                Toast.makeText(this@MainActivity, banner, Toast.LENGTH_SHORT).show()
+                            },
                             voiceState = voiceState,
                             currentTranscript = currentTranscript,
                             currentScenario = currentScenario,
@@ -266,6 +322,7 @@ class MainActivity : ComponentActivity() {
                             selectedImageBitmap = selectedImageBitmap,
                             lastSubmittedImage = lastSubmittedImageBitmap,
                             isImageProcessing = isImageProcessing,
+                            interactions = interactionsFlow,
                             onMicClick = {
                                 Log.i(TAG, "[BOL_KISAN] MIC_CLICKED: Current state=$voiceState, HasPerm=$hasAudioPermission")
 

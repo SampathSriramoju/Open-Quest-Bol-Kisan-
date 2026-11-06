@@ -16,6 +16,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -34,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import com.bolkisan.app.data.local.entities.InteractionEntity
 import com.bolkisan.app.ui.components.*
 import com.bolkisan.app.ui.theme.*
 import java.io.File
@@ -53,6 +57,9 @@ fun HomeScreen(
     selectedImageBitmap: Bitmap? = null,
     lastSubmittedImage: Bitmap? = null,
     isImageProcessing: Boolean = false,
+    interactions: List<InteractionEntity> = emptyList(),
+    currentAppMode: com.bolkisan.app.data.AppMode = com.bolkisan.app.data.AppMode.ONLINE_AI,
+    onModeToggle: () -> Unit = {},
     onMicClick: () -> Unit,
     onLanguageSwitch: (String) -> Unit,
     onImageSelected: (Uri?, Bitmap?) -> Unit = { _, _ -> },
@@ -63,12 +70,52 @@ fun HomeScreen(
     onNavigateToSettings: () -> Unit
 ) {
     val context = LocalContext.current
-    val scrollState = rememberScrollState()
+    val listState = rememberLazyListState()
 
     var textInput by remember { mutableStateOf("") }
     var showAttachmentSheet by remember { mutableStateOf(false) }
     var tempCameraUri by remember { mutableStateOf<Uri?>(null) }
     var isLangMenuExpanded by remember { mutableStateOf(false) }
+
+    // Track user-initiated actions to auto-scroll to latest response
+    var userInitiatedAction by remember { mutableStateOf(false) }
+    var previousAnswer by remember { mutableStateOf("") }
+    var previousInteractionsCount by remember { mutableStateOf(0) }
+
+    // Detect if the user is currently at or near the bottom of the chat list
+    val isScrolledToBottom by remember {
+        derivedStateOf {
+            val layoutInfo = listState.layoutInfo
+            val visibleItems = layoutInfo.visibleItemsInfo
+            if (visibleItems.isEmpty()) {
+                true
+            } else {
+                val lastVisibleIndex = visibleItems.last().index
+                val totalCount = layoutInfo.totalItemsCount
+                lastVisibleIndex >= totalCount - 2
+            }
+        }
+    }
+
+    // Automatically scroll to latest response when an answer arrives,
+    // but DO NOT force-scroll if the user scrolled up to read older messages
+    LaunchedEffect(currentAnswer, interactions.size, currentTranscript) {
+        val isNewAnswer = currentAnswer.isNotBlank() && currentAnswer != previousAnswer
+        val isNewInteraction = interactions.size > previousInteractionsCount
+        val isNewQuestion = currentTranscript.isNotBlank()
+
+        if (userInitiatedAction || isScrolledToBottom) {
+            if (isNewAnswer || isNewInteraction || isNewQuestion) {
+                val total = listState.layoutInfo.totalItemsCount
+                if (total > 0) {
+                    listState.animateScrollToItem(total - 1)
+                }
+            }
+        }
+        previousAnswer = currentAnswer
+        previousInteractionsCount = interactions.size
+        userInitiatedAction = false
+    }
 
     // Modern PickVisualMedia Launcher for Gallery (JPEG, PNG, WebP)
     val pickMediaLauncher = rememberLauncherForActivityResult(
@@ -136,13 +183,18 @@ fun HomeScreen(
     }
 
     Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(WarmCream),
         bottomBar = {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(CardBackground)
+                    .navigationBarsPadding()
+                    .imePadding()
             ) {
-                // Multimodal Input Dock (Input bar with '+' attachment, text field, Send & Mic)
+                // Multimodal Input Dock (Input bar with '+' attachment, text field, Send & Mic fixed at bottom)
                 MultimodalInputDock(
                     textInput = textInput,
                     onTextInputChange = { textInput = it },
@@ -154,10 +206,14 @@ fun HomeScreen(
                     onAttachClick = { showAttachmentSheet = true },
                     onReplaceImage = { showAttachmentSheet = true },
                     onRemoveImage = onImageRemoved,
-                    onMicClick = onMicClick,
+                    onMicClick = {
+                        userInitiatedAction = true
+                        onMicClick()
+                    },
                     onSendClick = {
                         val trimmed = textInput.trim()
                         if (trimmed.isNotBlank() || selectedImageUri != null || selectedImageBitmap != null) {
+                            userInitiatedAction = true
                             onSendQuery(trimmed, selectedImageUri, selectedImageBitmap)
                             textInput = ""
                         }
@@ -197,266 +253,331 @@ fun HomeScreen(
             }
         }
     ) { paddingValues ->
-        Column(
+        // Vertically scrollable chat conversation view with LazyColumn
+        LazyColumn(
+            state = listState,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(WarmCream)
-                .verticalScroll(scrollState),
+                .background(WarmCream),
+            contentPadding = PaddingValues(bottom = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Header Bar
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 14.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Filled.Grass,
-                        contentDescription = "Logo",
-                        tint = GreenPrimary,
-                        modifier = Modifier.size(28.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Column {
-                        Text(
-                            text = "Bol Kisan",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp,
-                            color = GreenDark
+            item(key = "header_bar") {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp, vertical = 14.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Filled.Grass,
+                            contentDescription = "Logo",
+                            tint = GreenPrimary,
+                            modifier = Modifier.size(28.dp)
                         )
-                        Text(
-                            text = "AI Agricultural Advisory",
-                            fontSize = 10.sp,
-                            color = SlateTextMuted
-                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Column {
+                            Text(
+                                text = "Bol Kisan",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 20.sp,
+                                color = GreenDark
+                            )
+                            Text(
+                                text = "AI Agricultural Advisory",
+                                fontSize = 10.sp,
+                                color = SlateTextMuted
+                            )
+                        }
                     }
-                }
 
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    OfflineStatusPill(isOffline = isOffline)
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        AppModeSelectorPill(
+                            currentMode = currentAppMode,
+                            isInternetAvailable = !isOffline,
+                            onModeToggle = onModeToggle
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
 
-                    // Clean 3-Language Selector Dropdown Pill
-                    Box {
-                        Surface(
-                            shape = RoundedCornerShape(14.dp),
-                            color = CardBackground,
-                            border = BorderStroke(1.dp, GreenPrimary.copy(alpha = 0.4f)),
-                            modifier = Modifier.clickable { isLangMenuExpanded = true }
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                        // Clean 3-Language Selector Dropdown Pill
+                        Box {
+                            Surface(
+                                shape = RoundedCornerShape(14.dp),
+                                color = CardBackground,
+                                border = BorderStroke(1.dp, GreenPrimary.copy(alpha = 0.4f)),
+                                modifier = Modifier.clickable { isLangMenuExpanded = true }
                             ) {
-                                Icon(
-                                    imageVector = Icons.Filled.Translate,
-                                    contentDescription = "Language",
-                                    tint = GreenPrimary,
-                                    modifier = Modifier.size(15.dp)
-                                )
-                                Spacer(modifier = Modifier.width(5.dp))
-                                val activeLangLabel = when (selectedLanguage) {
-                                    "te" -> "తెలుగు"
-                                    "hi" -> "हिन्दी"
-                                    else -> "English"
+                                Row(
+                                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Translate,
+                                        contentDescription = "Language",
+                                        tint = GreenPrimary,
+                                        modifier = Modifier.size(15.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(5.dp))
+                                    val activeLangLabel = when (selectedLanguage) {
+                                        "te" -> "తెలుగు"
+                                        "hi" -> "हिन्दी"
+                                        else -> "English"
+                                    }
+                                    Text(
+                                        text = activeLangLabel,
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 12.sp,
+                                        color = GreenPrimary
+                                    )
+                                    Spacer(modifier = Modifier.width(2.dp))
+                                    Icon(
+                                        imageVector = Icons.Filled.ArrowDropDown,
+                                        contentDescription = null,
+                                        tint = GreenPrimary,
+                                        modifier = Modifier.size(16.dp)
+                                    )
                                 }
-                                Text(
-                                    text = activeLangLabel,
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 12.sp,
-                                    color = GreenPrimary
+                            }
+
+                            DropdownMenu(
+                                expanded = isLangMenuExpanded,
+                                onDismissRequest = { isLangMenuExpanded = false },
+                                modifier = Modifier.background(CardBackground)
+                            ) {
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            text = "తెలుగు (Telugu)",
+                                            fontWeight = if (selectedLanguage == "te") FontWeight.Bold else FontWeight.Normal,
+                                            color = if (selectedLanguage == "te") GreenPrimary else SlateTextDark
+                                        )
+                                    },
+                                    trailingIcon = {
+                                        if (selectedLanguage == "te") {
+                                            Icon(Icons.Filled.Check, contentDescription = "Active", tint = GreenPrimary)
+                                        }
+                                    },
+                                    onClick = {
+                                        onLanguageSwitch("te")
+                                        isLangMenuExpanded = false
+                                    }
                                 )
-                                Spacer(modifier = Modifier.width(2.dp))
-                                Icon(
-                                    imageVector = Icons.Filled.ArrowDropDown,
-                                    contentDescription = null,
-                                    tint = GreenPrimary,
-                                    modifier = Modifier.size(16.dp)
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            text = "हिन्दी (Hindi)",
+                                            fontWeight = if (selectedLanguage == "hi") FontWeight.Bold else FontWeight.Normal,
+                                            color = if (selectedLanguage == "hi") GreenPrimary else SlateTextDark
+                                        )
+                                    },
+                                    trailingIcon = {
+                                        if (selectedLanguage == "hi") {
+                                            Icon(Icons.Filled.Check, contentDescription = "Active", tint = GreenPrimary)
+                                        }
+                                    },
+                                    onClick = {
+                                        onLanguageSwitch("hi")
+                                        isLangMenuExpanded = false
+                                    }
+                                )
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            text = "English",
+                                            fontWeight = if (selectedLanguage == "en") FontWeight.Bold else FontWeight.Normal,
+                                            color = if (selectedLanguage == "en") GreenPrimary else SlateTextDark
+                                        )
+                                    },
+                                    trailingIcon = {
+                                        if (selectedLanguage == "en") {
+                                            Icon(Icons.Filled.Check, contentDescription = "Active", tint = GreenPrimary)
+                                        }
+                                    },
+                                    onClick = {
+                                        onLanguageSwitch("en")
+                                        isLangMenuExpanded = false
+                                    }
                                 )
                             }
                         }
-
-                        DropdownMenu(
-                            expanded = isLangMenuExpanded,
-                            onDismissRequest = { isLangMenuExpanded = false },
-                            modifier = Modifier.background(CardBackground)
-                        ) {
-                            DropdownMenuItem(
-                                text = {
-                                    Text(
-                                        text = "తెలుగు (Telugu)",
-                                        fontWeight = if (selectedLanguage == "te") FontWeight.Bold else FontWeight.Normal,
-                                        color = if (selectedLanguage == "te") GreenPrimary else SlateTextDark
-                                    )
-                                },
-                                trailingIcon = {
-                                    if (selectedLanguage == "te") {
-                                        Icon(Icons.Filled.Check, contentDescription = "Active", tint = GreenPrimary)
-                                    }
-                                },
-                                onClick = {
-                                    onLanguageSwitch("te")
-                                    isLangMenuExpanded = false
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = {
-                                    Text(
-                                        text = "हिन्दी (Hindi)",
-                                        fontWeight = if (selectedLanguage == "hi") FontWeight.Bold else FontWeight.Normal,
-                                        color = if (selectedLanguage == "hi") GreenPrimary else SlateTextDark
-                                    )
-                                },
-                                trailingIcon = {
-                                    if (selectedLanguage == "hi") {
-                                        Icon(Icons.Filled.Check, contentDescription = "Active", tint = GreenPrimary)
-                                    }
-                                },
-                                onClick = {
-                                    onLanguageSwitch("hi")
-                                    isLangMenuExpanded = false
-                                }
-                            )
-                            DropdownMenuItem(
-                                text = {
-                                    Text(
-                                        text = "English",
-                                        fontWeight = if (selectedLanguage == "en") FontWeight.Bold else FontWeight.Normal,
-                                        color = if (selectedLanguage == "en") GreenPrimary else SlateTextDark
-                                    )
-                                },
-                                trailingIcon = {
-                                    if (selectedLanguage == "en") {
-                                        Icon(Icons.Filled.Check, contentDescription = "Active", tint = GreenPrimary)
-                                    }
-                                },
-                                onClick = {
-                                    onLanguageSwitch("en")
-                                    isLangMenuExpanded = false
-                                }
-                            )
-                        }
                     }
                 }
             }
-
-            Spacer(modifier = Modifier.height(6.dp))
 
             // Greeting Card
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .background(CardBackground, RoundedCornerShape(20.dp))
-                    .padding(18.dp)
-            ) {
-                Text(
-                    text = greetingText,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = SlateTextDark,
-                    lineHeight = 26.sp
-                )
+            item(key = "greeting_card") {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp, vertical = 4.dp)
+                        .background(CardBackground, RoundedCornerShape(20.dp))
+                        .padding(18.dp)
+                ) {
+                    Text(
+                        text = greetingText,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = SlateTextDark,
+                        lineHeight = 26.sp
+                    )
+                }
             }
 
-            Spacer(modifier = Modifier.height(10.dp))
-
             // Dedicated 3-Language Segmented Chips Bar
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                val languages = listOf(
-                    "te" to "తెలుగు",
-                    "hi" to "हिन्दी",
-                    "en" to "English"
-                )
-                languages.forEach { (code, label) ->
-                    val isSelected = selectedLanguage == code
-                    Surface(
-                        shape = RoundedCornerShape(20.dp),
-                        color = if (isSelected) GreenPrimary else CardBackground,
-                        border = BorderStroke(1.dp, if (isSelected) GreenPrimary else EarthSand),
-                        modifier = Modifier
-                            .weight(1f)
-                            .clickable { onLanguageSwitch(code) },
-                        shadowElevation = if (isSelected) 2.dp else 0.dp
-                    ) {
-                        Box(
-                            modifier = Modifier.padding(vertical = 8.dp),
-                            contentAlignment = Alignment.Center
+            item(key = "language_chips_bar") {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    val languages = listOf(
+                        "te" to "తెలుగు",
+                        "hi" to "हिन्दी",
+                        "en" to "English"
+                    )
+                    languages.forEach { (code, label) ->
+                        val isSelected = selectedLanguage == code
+                        Surface(
+                            shape = RoundedCornerShape(20.dp),
+                            color = if (isSelected) GreenPrimary else CardBackground,
+                            border = BorderStroke(1.dp, if (isSelected) GreenPrimary else EarthSand),
+                            modifier = Modifier
+                                .weight(1f)
+                                .clickable { onLanguageSwitch(code) },
+                            shadowElevation = if (isSelected) 2.dp else 0.dp
                         ) {
-                            Text(
-                                text = label,
-                                color = if (isSelected) Color.White else SlateTextDark,
-                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                                fontSize = 13.sp
-                            )
+                            Box(
+                                modifier = Modifier.padding(vertical = 8.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = label,
+                                    color = if (isSelected) Color.White else SlateTextDark,
+                                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                                    fontSize = 13.sp
+                                )
+                            }
                         }
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(18.dp))
-
             // Large Animated Microphone Button (Center Primary Voice Touchpoint)
-            VoiceMicButton(
-                isListening = voiceState == VoiceState.LISTENING,
-                onClick = onMicClick
-            )
+            item(key = "center_voice_mic") {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 10.dp)
+                ) {
+                    VoiceMicButton(
+                        isListening = voiceState == VoiceState.LISTENING,
+                        onClick = {
+                            userInitiatedAction = true
+                            onMicClick()
+                        }
+                    )
 
-            Text(
-                text = if (voiceState == VoiceState.LISTENING) {
-                    when (selectedLanguage) {
-                        "te" -> "వినబడుతోంది... ఆపడానికి నొక్కండి"
-                        "hi" -> "सुन रहे हैं... रोकने के लिए टैप करें"
-                        else -> "Listening… Tap to Stop"
-                    }
-                } else {
-                    when (selectedLanguage) {
-                        "te" -> "మైక్రోఫోన్ నొక్కి మాట్లాడండి"
-                        "hi" -> "माइक दबाकर स्पष्ट बोलें"
-                        else -> "Tap Microphone & Speak naturally"
-                    }
-                },
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium,
-                color = if (voiceState == VoiceState.LISTENING) GreenDark else SlateTextMuted,
-                modifier = Modifier.padding(top = 8.dp)
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = if (voiceState == VoiceState.LISTENING) {
+                            when (selectedLanguage) {
+                                "te" -> "వినబడుతోంది... ఆపడానికి నొక్కండి"
+                                "hi" -> "सुन रहे हैं... रोकने के लिए टैप करें"
+                                else -> "Listening… Tap to Stop"
+                            }
+                        } else {
+                            when (selectedLanguage) {
+                                "te" -> "మైక్రోఫోన్ నొక్కి మాట్లాడండి"
+                                "hi" -> "माइक दबाकर स्पष्ट बोलें"
+                                else -> "Tap Microphone & Speak naturally"
+                            }
+                        },
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = if (voiceState == VoiceState.LISTENING) GreenDark else SlateTextMuted,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                }
+            }
 
             // Voice Pipeline State Badge
-            VoiceStateIndicator(state = voiceState)
+            if (voiceState != VoiceState.IDLE) {
+                item(key = "voice_state_badge") {
+                    Box(modifier = Modifier.padding(bottom = 12.dp)) {
+                        VoiceStateIndicator(state = voiceState)
+                    }
+                }
+            }
 
-            // Transcript Card (Displays user question & optional attached photo thumbnail)
-            TranscriptCard(
-                transcript = currentTranscript,
-                languageLabel = when (selectedLanguage) {
-                    "te" -> "Telugu"
-                    "hi" -> "Hindi"
-                    "en" -> "English"
-                    else -> "Telugu"
-                },
-                imageBitmap = lastSubmittedImage ?: selectedImageBitmap
-            )
+            // Conversation History (Chronological Order: older conversations above newer ones)
+            val chronologicalInteractions = interactions.sortedBy { it.timestamp }
+            items(
+                items = chronologicalInteractions,
+                key = { "chat_interaction_${it.id}" }
+            ) { item ->
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    TranscriptCard(
+                        transcript = item.rawTranscript,
+                        languageLabel = when (item.detectedLanguage) {
+                            "te" -> "Telugu"
+                            "hi" -> "Hindi"
+                            "en" -> "English"
+                            else -> item.detectedLanguage
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    AdvisoryResultCard(
+                        scenario = item.responseScenario,
+                        answerText = item.responseText,
+                        citationDoc = item.citationDoc,
+                        citationPage = item.citationPage,
+                        modeLabel = if (item.isSynced) "🌐 Online AI" else "🌾 Offline Knowledge"
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                }
+            }
 
-            // Grounded Advisory Card
-            AdvisoryResultCard(
-                scenario = currentScenario,
-                answerText = currentAnswer,
-                citationDoc = currentCitationDoc,
-                citationPage = currentCitationPage
-            )
+            // Current In-flight Transcript and Answer (if not already recorded in Room)
+            val isCurrentAlreadyRecorded = chronologicalInteractions.any {
+                it.rawTranscript == currentTranscript && it.responseText == currentAnswer
+            }
+            if (!isCurrentAlreadyRecorded) {
+                if (currentTranscript.isNotBlank() || lastSubmittedImage != null || selectedImageBitmap != null) {
+                    item(key = "active_transcript_card") {
+                        TranscriptCard(
+                            transcript = currentTranscript,
+                            languageLabel = when (selectedLanguage) {
+                                "te" -> "Telugu"
+                                "hi" -> "Hindi"
+                                "en" -> "English"
+                                else -> "Telugu"
+                            },
+                            imageBitmap = lastSubmittedImage ?: selectedImageBitmap
+                        )
+                    }
+                }
 
-            Spacer(modifier = Modifier.height(24.dp))
+                if (currentAnswer.isNotBlank()) {
+                    item(key = "active_advisory_card") {
+                        AdvisoryResultCard(
+                            scenario = currentScenario,
+                            answerText = currentAnswer,
+                            citationDoc = currentCitationDoc,
+                            citationPage = currentCitationPage,
+                            modeLabel = if (currentAppMode == com.bolkisan.app.data.AppMode.ONLINE_AI) "🌐 Online AI" else "🌾 Offline Knowledge"
+                        )
+                    }
+                }
+            }
+
+            item(key = "bottom_list_spacer") {
+                Spacer(modifier = Modifier.height(24.dp))
+            }
         }
     }
 

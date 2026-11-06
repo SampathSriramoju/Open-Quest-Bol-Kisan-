@@ -39,7 +39,7 @@ class LocalKnowledgeRetrievalEngine(
         "ట్రాక్టర్", "ట్రాక్టరు", "ట్రాక్టర్లు", "ట్రాక్టర్ల", "సినిమా", "క్రికెట్", "రాజకీయాలు", "బ్యాంక్ లోన్", "ఆధార్", "పాస్‌పోర్ట్",
         "कैंसर", "कोरोना", "वैक्सीन", "शेयर मार्केट", "सोना", "मुख्यमंत्री", "गाड़ी", "ट्रैक्टर", "मोटर कार", "क्रिकेट", "सिनेमा", "आधार", "राशन कार्ड",
         "cancer", "vaccine", "corona", "covid", "gold", "share market", "minister", "gear box", "tractor", "tractors", "cricket", "cinema", "politics",
-        "loan", "bank loan", "election", "aadhaar", "passport", "crypto", "bitcoin", "bollywood", "tollywood"
+        "loan", "bank loan", "election", "aadhaar", "passport", "crypto", "bitcoin", "bollywood", "tollywood", "visa", "laptop", "company", "driving license", "pan card", "electric car"
     )
 
     private val stopWords = setOf(
@@ -99,6 +99,16 @@ class LocalKnowledgeRetrievalEngine(
         setOf("yellowing", "yellow", "chlorosis", "zinc", "పసుపు రంగులోకి", "పసుపుబారడం", "పసుపు రంగు", "పసుపు", "ఆకులు పసుపు", "జింక్", "पीलापन", "पीली", "पीले", "पीला", "पत्तियां", "पत्ते", "जिंक", "పీలాपन", "పీలీ", "పీలా"),
         // Soil testing
         setOf("soil test", "soil health", "soil sampling", "నేల పరీక్ష", "భూసార పరీక్ష", "మట్టి నమూనా", "మట్టి పరీక్ష", "मृदा परीक्षण"),
+        // Cultivation / Sowing / Spacing
+        setOf("sowing", "spacing", "geometry", "cultivation", "విత్తే", "సాగు", "దూరం", "సాళ్ల", "బువ్వాయి", "దమ్ము", "నాట్లు", "బుवाई", "दूरी", "कतार", "रोपाई"),
+        // Fertilizer / Nutrients / Gypsum
+        setOf("fertilizer", "nutrition", "deficiency", "npk", "gypsum", "zinc", "urea", "potash", "ఎరువుల", "ఎరువులు", "పోషక", "జిప్సం", "నత్రజని", "భాస్వరం", "పొటాష్", "జింక్", "खाद", "उर्वरक", "नाइट्रोजन", "जिप्सम", "पोटाश"),
+        // Irrigation / Water Management
+        setOf("irrigation", "water", "watering", "drip", "నీరు", "నీటి", "తడులు", "తడి", "డ్రిప్", "మురుగునీరు", "సిరింపు", "సిंचाई", "पानी"),
+        // Seeds / Treatment / Storage
+        setOf("seed", "seeds", "seed treatment", "storage", "germination", "విత్తన", "విత్తనాలు", "శుద్ధి", "మొలక", "నిల్వ", "తీత", "ధాన్యం", "బీజ్", "बीज", "बीजोपचार", "अंकुरण", "भंडारण"),
+        // Diseases (Blast / Blight / Alternaria / Anthracnose)
+        setOf("blast", "blight", "alternaria", "anthracnose", "fruit rot", "ఆల్టర్నేరియా", "అగ్గి తెగులు", "కాయకుళ్లు", "ఆంత్రాక్నోస్", "మచ్చలు", "తెగులు", "झुलसा", "ब्लास्ट", "अल्टरनेरिया", "फल सड़न", "धब्बे"),
         // Weed management
         setOf("weed", "herbicides", "pendimethalin", "కలుపు", "కలుపు మందు", "కలుపు నివారణ", "खरपतवार"),
         // Weather advisory

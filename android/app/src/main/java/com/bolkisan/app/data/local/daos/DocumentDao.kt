@@ -23,7 +23,7 @@ interface DocumentDao {
         FROM local_chunks c
         JOIN local_documents d ON c.documentId = d.id
         WHERE c.content LIKE '%' || :keyword || '%'
-        LIMIT 5
+        LIMIT 15
     """)
     suspend fun searchChunksByKeyword(keyword: String): List<ChunkWithDoc>
 
@@ -32,7 +32,7 @@ interface DocumentDao {
         FROM local_chunks c
         JOIN local_documents d ON c.documentId = d.id
         WHERE c.cropTag = :crop
-        LIMIT 10
+        LIMIT 15
     """)
     suspend fun getChunksByCrop(crop: String): List<ChunkWithDoc>
 
@@ -44,4 +44,7 @@ interface DocumentDao {
 
     @Query("SELECT COUNT(*) FROM local_documents")
     suspend fun getDocumentCount(): Int
+
+    @Query("SELECT COUNT(*) FROM local_chunks")
+    suspend fun getChunkCount(): Int
 }

@@ -5,6 +5,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -98,6 +99,70 @@ fun OfflineStatusPill(isOffline: Boolean = true) {
             color = if (isOffline) WarningAmber else OnlineGreen,
             fontSize = 11.sp,
             fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+@Composable
+fun AppModeSelectorPill(
+    currentMode: com.bolkisan.app.data.AppMode,
+    isInternetAvailable: Boolean,
+    onModeToggle: () -> Unit
+) {
+    val isOnlineMode = currentMode == com.bolkisan.app.data.AppMode.ONLINE_AI
+    val pillBg = if (isOnlineMode) OnlineGreen.copy(alpha = 0.12f) else WarningAmber.copy(alpha = 0.12f)
+    val pillBorder = if (isOnlineMode) OnlineGreen else WarningAmber
+    val pillTextColor = if (isOnlineMode) OnlineGreen else WarningAmber
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .background(pillBg, RoundedCornerShape(14.dp))
+            .border(1.dp, pillBorder, RoundedCornerShape(14.dp))
+            .clickable { onModeToggle() }
+            .padding(horizontal = 10.dp, vertical = 5.dp)
+    ) {
+        Icon(
+            imageVector = if (isOnlineMode) Icons.Filled.CloudSync else Icons.Filled.MenuBook,
+            contentDescription = "App Mode",
+            tint = pillTextColor,
+            modifier = Modifier.size(15.dp)
+        )
+        Spacer(modifier = Modifier.width(5.dp))
+        Text(
+            text = if (isOnlineMode) "Online AI" else "Offline Knowledge",
+            color = pillTextColor,
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.width(3.dp))
+        Icon(
+            imageVector = Icons.Filled.SwapHoriz,
+            contentDescription = "Switch Mode",
+            tint = pillTextColor.copy(alpha = 0.7f),
+            modifier = Modifier.size(13.dp)
+        )
+    }
+}
+
+@Composable
+fun InteractionOriginBadge(isOnline: Boolean) {
+    val bgColor = if (isOnline) OnlineGreen.copy(alpha = 0.10f) else WarningAmber.copy(alpha = 0.10f)
+    val textColor = if (isOnline) OnlineGreen else WarningAmber
+    val text = if (isOnline) "🌐 Online AI" else "🌾 Offline Knowledge"
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .background(bgColor, RoundedCornerShape(6.dp))
+            .border(0.5.dp, textColor.copy(alpha = 0.4f), RoundedCornerShape(6.dp))
+            .padding(horizontal = 6.dp, vertical = 2.dp)
+    ) {
+        Text(
+            text = text,
+            fontSize = 10.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = textColor
         )
     }
 }

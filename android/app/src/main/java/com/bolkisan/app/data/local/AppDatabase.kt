@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
         MandiPriceEntity::class,
         SyncQueueEntity::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -59,7 +59,7 @@ abstract class AppDatabase : RoomDatabase() {
                         CoroutineScope(Dispatchers.IO).launch {
                             val database = getInstance(context)
                             try {
-                                if (database.documentDao().getDocumentCount() < 10) {
+                                if (database.documentDao().getChunkCount() < 40) {
                                     seedOfflineKnowledge(database)
                                 }
                             } catch (e: Exception) {
@@ -517,276 +517,1029 @@ abstract class AppDatabase : RoomDatabase() {
 
             // Multilingual Grounded Chunks
             val chunks = listOf(
-                // ------------------ COTTON ------------------
                 DocumentChunkEntity(
-                    id = "ch_cotton_pbw_te_01",
-                    documentId = "doc_pjtsau_cotton_te_2025",
-                    pageNumber = 4,
-                    chunkIndex = 0,
-                    content = "పత్తిలో గులాబీ రంగు పురుగు నివారణ మరియు యాజమాన్యం (Cotton Pink Bollworm Control): పూత మరియు కాయ దశలో ఎకరానికి 8 లింగాకర్షక బుట్టలను అమర్చాలి. నివారణకు: వేప నూనె 10,000 PPM ఎకరానికి 400-500 మి.లీ 200 లీటర్ల నీటిలో కలిపి పిచికారీ చేయాలి. పురుగు ఉధృతిని బట్టి పిచికారీ చేయాలి. పత్తి పంటలో గులాబీ రంగు పురుగు సమస్యలు సమర్థవంతంగా అదుపులోకి వస్తాయి.",
-                    cropTag = "Cotton",
-                    topicTag = "pest_management"
-                ),
-                DocumentChunkEntity(
-                    id = "ch_cotton_yellow_te_02",
-                    documentId = "doc_pjtsau_cotton_te_2025",
-                    pageNumber = 7,
-                    chunkIndex = 1,
-                    content = "పత్తిలో ఆకులు పసుపు రంగులోకి మారుతున్నాయి (ఆకులు పసుపుబారడం మరియు రసం పీల్చే పురుగుల నివారణ): తెల్లదోమ మరియు జెస్సిడ్స్ ఆకుల రసాన్ని పీల్చడం వల్ల ఆకులు, ఆకుల అంచులు పసుపు రంగులోకి మారుతాయి / మారుతున్నాయి. నివారణకు పసుపు మరియు నీలి రంగు జిగురు అట్టలను ఎకరానికి 10 చొప్పున అమర్చాలి. వేపనూనె 5 మి.లీ లీటరు నీటికి కలిపి పిచికారీ చేయాలి. నత్రజని అధికంగా వేయవద్దు.",
-                    cropTag = "Cotton",
-                    topicTag = "symptom_yellowing"
-                ),
-                DocumentChunkEntity(
-                    id = "ch_cotton_pbw_hi_01",
+                    id = "chunk_eval_000_cotton",
                     documentId = "doc_icar_cotton_hi_2025",
-                    pageNumber = 5,
-                    chunkIndex = 0,
-                    content = "कपास की फसल में मुख्य समस्याएं एवं गुलाबी सुंडी (Pink Bollworm) का नियंत्रण: फूल और गूलर बनने की अवस्था में प्रति एकड़ 8 फेरोमोन ट्रैप लगाएं। नियंत्रण के लिए नीम का तेल (Neem oil 10000 PPM) 400-500 मिली प्रति एकड़ 200 लीटर पानी में मिलाकर छिड़काव करें। लगातार 3 दिन तक 8 पतंगे मिलने पर तुरंत उपचार करें।",
-                    cropTag = "Cotton",
-                    topicTag = "pest_management"
-                ),
-                DocumentChunkEntity(
-                    id = "ch_cotton_pbw_en_01",
-                    documentId = "doc_icar_cotton_en_2025",
-                    pageNumber = 6,
-                    chunkIndex = 0,
-                    content = "Cotton Pink Bollworm management and prevention: Install 8 pheromone traps per acre during flowering and boll formation stage. Economic Threshold Level (ETL) is 8 moths per trap per day for 3 consecutive days. For control, spray Neem oil 10,000 PPM at 400-500 ml per acre in 200 liters of water or Chlorantraniliprole 18.5% SC at 60 ml per acre.",
-                    cropTag = "Cotton",
-                    topicTag = "pest_management"
-                ),
-
-                // ------------------ PADDY ------------------
-                DocumentChunkEntity(
-                    id = "ch_paddy_stem_te_01",
-                    documentId = "doc_pjtsau_paddy_te_2025",
-                    pageNumber = 14,
-                    chunkIndex = 0,
-                    content = "వరిలో కాండం తొలుచు పురుగు (Stem Borer) మరియు చనిపోయిన మొవ్వులు (Dead hearts) నివారణ: సిఫార్సు చేసిన క్లోరాంట్రానిలీప్రోల్ (Chlorantraniliprole 18.5% SC) 60 మి.లీ ఎకరాకు 200 లీటర్ల నీటిలో కలిపి పిచికారీ చేయాలి. ఎకరానికి 5 లింగాకర్షక బుట్టలను అమర్చాలి.",
-                    cropTag = "Paddy",
-                    topicTag = "pest_management"
-                ),
-                DocumentChunkEntity(
-                    id = "ch_paddy_yellow_te_02",
-                    documentId = "doc_pjtsau_paddy_te_2025",
-                    pageNumber = 16,
-                    chunkIndex = 1,
-                    content = "వరిలో ఆకులు పసుపు రంగులోకి మారుతున్నాయి (వరి ఆకులు పసుపుబారడం మరియు జింక్ లోపం నివారణ): వరి పైరులో జింక్ లేదా ఇనుము లోపం వల్ల లేదా కాండం తొలుచు పురుగు ఉధృతి వల్ల ఆకులు పసుపు రంగులోకి మారుతాయి. నివారణకు జింక్ సల్ఫేట్ 2 గ్రాములు లీటరు నీటికి కలిపి పిచికారీ చేయాలి.",
-                    cropTag = "Paddy",
-                    topicTag = "symptom_yellowing"
-                ),
-                DocumentChunkEntity(
-                    id = "ch_paddy_stem_hi_01",
-                    documentId = "doc_icar_paddy_hi_2025",
-                    pageNumber = 12,
-                    chunkIndex = 0,
-                    content = "धान में तना छेदक (Stem Borer) एवं मृत गोभ (Dead heart) की रोकथाम: फसल में लक्षण दिखने पर क्लोरांट्रानिलीप्रोल (Chlorantraniliprole 18.5% SC) 60 मिली प्रति एकड़ 200 लीटर पानी में मिलाकर छिड़काव करें। 5 फेरोमोन ट्रैप प्रति एकड़ लगाएं।",
-                    cropTag = "Paddy",
-                    topicTag = "pest_management"
-                ),
-                DocumentChunkEntity(
-                    id = "ch_paddy_stem_en_01",
-                    documentId = "doc_icar_paddy_en_2025",
-                    pageNumber = 14,
-                    chunkIndex = 0,
-                    content = "Paddy rice stem borer and dead heart control: Upon noticing dead hearts during vegetative stage or white ears at heading, apply Chlorantraniliprole 18.5% SC at 60 ml per acre mixed in 200 liters of water. Install 5 pheromone traps per acre to monitor yellow stem borer adult activity.",
-                    cropTag = "Paddy",
-                    topicTag = "pest_management"
-                ),
-
-                // ------------------ CHILLI ------------------
-                DocumentChunkEntity(
-                    id = "ch_chilli_thrips_te_01",
-                    documentId = "doc_pjtsau_chilli_te_2025",
-                    pageNumber = 9,
-                    chunkIndex = 0,
-                    content = "మిరపలో తామర పురుగులు, నల్లి మరియు ఆకుముడుత నివారణ (Chilli Thrips & Mite Control): తామర పురుగుల వల్ల ఆకులు పైకి, నల్లి వల్ల ఆకులు క్రిందికి ముడుచుకుంటాయి. నివారణకు వేపనూనె 10,000 PPM ఎకరానికి 400-500 మి.లీ లేదా ఎకరాకు 80-100 గ్రాముల ఎమామెక్టిన్ బెంజోయేట్ 5% SG 200 లీటర్ల నీటిలో కలిపి పిచికారీ చేయాలి. ఎకరానికి 15-20 నీలి మరియు పసుపు జిగురు అట్టలను అమర్చాలి.",
-                    cropTag = "Chilli",
-                    topicTag = "pest_management"
-                ),
-                DocumentChunkEntity(
-                    id = "ch_chilli_thrips_en_01",
-                    documentId = "doc_pjtsau_chilli_en_2025",
-                    pageNumber = 11,
-                    chunkIndex = 0,
-                    content = "Chilli thrips, yellow mites, and leaf curl management: Upward curling is caused by thrips, while downward curling indicates yellow mites. Spray Neem oil 10,000 PPM at 2-3 ml per liter of water, or Emamectin Benzoate 5% SG at 80-100 grams per acre in 200 liters of water. Install 15-20 blue and yellow sticky traps per acre.",
-                    cropTag = "Chilli",
-                    topicTag = "pest_management"
-                ),
-
-                // ------------------ GROUNDNUT ------------------
-                DocumentChunkEntity(
-                    id = "ch_groundnut_tikka_te_01",
-                    documentId = "doc_pjtsau_groundnut_te_2025",
-                    pageNumber = 8,
-                    chunkIndex = 0,
-                    content = "వేరుశనగలో టిక్కా ఆకుమచ్చ తెగులు నివారణ (Groundnut Tikka Leaf Spot Control): ఆకులపై గోధుమ రంగు గుండ్రటి మచ్చలు ఏర్పడి ఆకులు రాలిపోతాయి. నివారణకు మాంకోజెబ్ (Mancozeb 75% WP) 2-2.5 గ్రాములు లేదా టెబుకొనజోల్ 1 మి.లీ లీటరు నీటికి కలిపి 10-12 రోజుల వ్యవధిలో రెండుసార్లు పిచికారీ చేయాలి. విత్తన శుద్ధి తప్పనిసరి.",
-                    cropTag = "Groundnut",
-                    topicTag = "pest_management"
-                ),
-                DocumentChunkEntity(
-                    id = "ch_groundnut_tikka_en_01",
-                    documentId = "doc_icar_groundnut_en_2025",
-                    pageNumber = 10,
-                    chunkIndex = 0,
-                    content = "Groundnut Tikka leaf spot (Cercospora leaf spot) and collar rot control: Early and late leaf spots cause circular dark brown necrotic spots leading to severe defoliation. Spray Mancozeb 75% WP at 2.5 g/L or Tebuconazole 25.9% EC at 1 ml/L of water at 12-14 day intervals.",
-                    cropTag = "Groundnut",
-                    topicTag = "pest_management"
-                ),
-
-                // ------------------ RED GRAM ------------------
-                DocumentChunkEntity(
-                    id = "ch_redgram_podborer_te_01",
-                    documentId = "doc_pjtsau_redgram_te_2025",
-                    pageNumber = 7,
-                    chunkIndex = 0,
-                    content = "కందిలో కాయతొలుచు పురుగు / శనగపచ్చ పురుగు నివారణ (Red gram / Pigeonpea Pod Borer Control): పూత మరియు పిందె దశలో హెలికోవెర్పా లార్వా పూతను, కాయలను తొలచి తింటుంది. నివారణకు ఎకరాకు 4 లింగాకర్షక బుట్టలు, 10-15 పక్షి స్థావరాలను అమర్చాలి. పిచికారీకి: ఎమామెక్టిన్ బెంజోయేట్ 5% SG ఎకరాకు 88-100 గ్రాములు లేదా క్లోరాంట్రానిలీప్రోల్ 18.5% SC 60 మి.లీ 200 లీటర్ల నీటిలో కలిపి పిచికారీ చేయాలి.",
-                    cropTag = "Red gram",
-                    topicTag = "pest_management"
-                ),
-                DocumentChunkEntity(
-                    id = "ch_redgram_podborer_en_01",
-                    documentId = "doc_icar_redgram_en_2025",
-                    pageNumber = 9,
-                    chunkIndex = 0,
-                    content = "Red gram (Pigeonpea) pod borer Helicoverpa armigera management: Caterpillars feed on flowers, buds, and bore circular holes into developing pods. Install 4 pheromone traps and 10-15 bird perches per acre. Spray Emamectin Benzoate 5% SG at 88-100 g/acre or Chlorantraniliprole 18.5% SC at 60 ml per acre in 200 liters of water at flower bud initiation.",
-                    cropTag = "Red gram",
-                    topicTag = "pest_management"
-                ),
-
-                // ------------------ MAIZE ------------------
-                DocumentChunkEntity(
-                    id = "ch_maize_faw_te_01",
-                    documentId = "doc_pjtsau_maize_te_2025",
-                    pageNumber = 6,
-                    chunkIndex = 0,
-                    content = "మొక్కజొన్నలో కత్తెర పురుగు నివారణ (Maize Fall Armyworm - Spodoptera frugiperda Control): మొలక దశ నుండి కత్తెర పురుగు ఆకులను, సుడులను కొరికి నష్టపరుస్తుంది. నివారణకు: విత్తన శుద్ధికి సయాంట్రానిలీప్రోల్ 19.8% + థయామిథాక్సమ్ 19.8% FS 6 మి.లీ కిలో విత్తనానికి కలపాలి. పంట తొలిదశలో ఎకరాకు 4 లింగాకర్షక బుట్టలు అమర్చాలి. పిచికారీకి: ఎమామెక్టిన్ బెంజోయేట్ 5% SG 80 గ్రాములు లేదా క్లోరాంట్రానిలీప్రోల్ 18.5% SC 80 మి.లీ ఎకరాకు 200 లీటర్ల నీటిలో కలిపి సుడులలో పడేలా పిచికారీ చేయాలి.",
-                    cropTag = "Maize",
-                    topicTag = "pest_management"
-                ),
-                DocumentChunkEntity(
-                    id = "ch_maize_faw_en_01",
-                    documentId = "doc_icar_maize_en_2025",
-                    pageNumber = 5,
-                    chunkIndex = 0,
-                    content = "Maize Fall Armyworm (FAW - Spodoptera frugiperda) Integrated Management: Larvae cause extensive defoliation and bore into plant whorls. Practice seed treatment with Cyantraniliprole 19.8% + Thiamethoxam 19.8% FS at 6 ml/kg seed. Install 4 pheromone traps per acre. For chemical control, direct spray into plant whorls using Emamectin Benzoate 5% SG at 80 g/acre or Chlorantraniliprole 18.5% SC at 80 ml/acre in 200 liters of water.",
-                    cropTag = "Maize",
-                    topicTag = "pest_management"
-                ),
-
-                // ------------------ SOYBEAN ------------------
-                DocumentChunkEntity(
-                    id = "ch_soybean_girdle_te_01",
-                    documentId = "doc_pjtsau_soybean_te_2025",
-                    pageNumber = 7,
-                    chunkIndex = 0,
-                    content = "సోయాబీన్‌లో రింగ్ కట్టర్ / గిర్డిల్ బీటిల్ (Girdle Beetle) మరియు పొగాకు లద్దెపురుగు నివారణ: గిర్డిల్ బీటిల్ కాండం చుట్టూ రెండు రింగుల వంటి గాట్లు పెట్టి గుడ్లు పెడుతుంది, దాంతో ఆకులు, కొమ్మలు వాడిపోతాయి. నివారణకు: క్లోరాంట్రానిలీప్రోల్ 18.5% SC 60 మి.లీ లేదా థయామిథాక్సమ్ 12.6% + లాంబ్డా సైహలోథ్రిన్ 9.5% ZC 50 మి.లీ ఎకరాకు 200 లీటర్ల నీటిలో కలిపి పిచికారీ చేయాలి.",
-                    cropTag = "Soybean",
-                    topicTag = "pest_management"
-                ),
-
-                // ------------------ TURMERIC ------------------
-                DocumentChunkEntity(
-                    id = "ch_turmeric_rot_te_01",
-                    documentId = "doc_pjtsau_turmeric_te_2025",
-                    pageNumber = 9,
-                    chunkIndex = 0,
-                    content = "పసుపులో దుంప కుళ్లు తెగులు (Turmeric Rhizome Rot - Pythium aphanidermatum) నివారణ: మురుగు నీరు నిలవడం వల్ల దుంపలు కుళ్ళిపోయి మొక్కలు పసుపుబారి చనిపోతాయి. నివారణకు: విత్తే ముందు విత్తన దుంపలను మాంకోజెబ్ 3 గ్రాములు + మెటలాక్సిల్ 2 గ్రాములు లీటరు నీటిలో కలిపి 30 నిమిషాలు నానబెట్టాలి. పొలంలో తెగులు కనిపించినప్పుడు కాపర్ ఆక్సీక్లోరైడ్ 3 గ్రాములు లీటరు నీటికి కలిపి దుంపల వద్ద నేల బాగా తడిసేలా డ్రెంచింగ్ చేయాలి.",
-                    cropTag = "Turmeric",
-                    topicTag = "disease_management"
-                ),
-
-                // ------------------ VEGETABLES ------------------
-                DocumentChunkEntity(
-                    id = "ch_veg_brinjal_te_01",
-                    documentId = "doc_iihr_vegetables_te_2025",
-                    pageNumber = 16,
-                    chunkIndex = 0,
-                    content = "వంగలో కాండం మరియు కాయ తొలుచు పురుగు (Brinjal Shoot & Fruit Borer - Leucinodes orbonalis): మొవ్వులు వాడిపోవడం మరియు కాయలపై రంధ్రాలు ఏర్పడతాయి. నివారణకు: విరిగిపోయిన మొవ్వులను తుంచి నాశనం చేయాలి. ఎకరానికి 10 లూసిల్యూర్ లింగాకర్షక బుట్టలు అమర్చాలి. పిచికారీకి: ఎమామెక్టిన్ బెంజోయేట్ 5% SG 80 గ్రాములు లేదా స్పినోసాడ్ 45% SC 60-70 మి.లీ ఎకరాకు 200 లీటర్ల నీటిలో కలిపి పిచికారీ చేయాలి.",
-                    cropTag = "Vegetables",
-                    topicTag = "pest_management"
-                ),
-
-                // ------------------ UNIVERSAL PRACTICES & SCHEMES ------------------
-                DocumentChunkEntity(
-                    id = "ch_soil_sampling_te_01",
-                    documentId = "doc_pjtsau_soil_health_te_2025",
-                    pageNumber = 5,
-                    chunkIndex = 0,
-                    content = "నేల నమూనా సేకరించే సరైన పద్ధతి (Scientific Soil Sampling Methodology): పంట కోత తర్వాత లేదా వేసవిలో దుక్కులు దున్నకముందు నేల నమూనా సేకరించాలి. పొలంలో 'V' ఆకారంలో 15 సెం.మీ (వరి, పత్తికి) గుంత తీసి పైనుండి కింది వరకు ఒక పలుచటి మట్టి పొరను సేకరించాలి. పొలంలో 10-12 చోట్ల మట్టిని సేకరించి బాగా కలిపి నాలుగు భాగాలుగా విభజించి అర కిలో నమూనాను ల్యాబ్‌కు పంపాలి.",
-                    cropTag = "Multi",
-                    topicTag = "soil_testing"
-                ),
-                DocumentChunkEntity(
-                    id = "ch_weed_safety_en_01",
-                    documentId = "doc_icar_weed_mgmt_en_2025",
-                    pageNumber = 6,
-                    chunkIndex = 0,
-                    content = "Integrated Weed Management & Herbicide Safety Rules: Apply pre-emergence herbicides (such as Pendimethalin 30% EC at 1.0-1.3 L/acre) within 48-72 hours of sowing under adequate soil moisture. Use flat-fan or flood-jet nozzles for uniform ground coverage. Avoid spraying in windy weather to prevent herbicide drift onto adjacent sensitive broadleaf crops.",
-                    cropTag = "Multi",
-                    topicTag = "weed_management"
-                ),
-                DocumentChunkEntity(
-                    id = "ch_weather_drainage_te_01",
-                    documentId = "doc_imd_agromet_te_2025",
-                    pageNumber = 4,
-                    chunkIndex = 0,
-                    content = "భారీ వర్షాలు మరియు మురుగునీటి యాజమాన్యం: వాతావరణ శాఖ భారీ వర్ష సూచన ఇచ్చినప్పుడు పత్తి, మిరప, మొక్కజొన్న మరియు సోయాబీన్ పంటలలో వెంటనే మురుగునీటి కాల్వలను శుభ్రం చేసి నీరు బయటకు పోయేలా చూడాలి. వేర్ల వద్ద నీరు 24 గంటల కంటే ఎక్కువ నిలిస్తే వేరుకుళ్లు తెగులు వ్యాపిస్తుంది. వర్షం తగ్గిన తర్వాత ఎకరానికి 20-25 కిలోల యూరియా + 10 కిలోల పొటాష్ వేయాలి.",
-                    cropTag = "Multi",
-                    topicTag = "weather_advisory"
-                ),
-                DocumentChunkEntity(
-                    id = "ch_govt_schemes_te_01",
-                    documentId = "doc_govt_schemes_te_2025",
-                    pageNumber = 3,
-                    chunkIndex = 0,
-                    content = "రైతు భరోసా పథకం మరియు PMFBY పంట బీమా: తెలంగాణ రాష్ట్ర ప్రభుత్వ నిబంధనల ప్రకారం పట్టాదారు పాస్ పుస్తకం కలిగిన అర్హులైన ప్రతి రైతుకు పంట పెట్టుబడి సహాయం జమ చేయబడుతుంది. ప్రకృతి విపత్తుల వల్ల పంట నష్టపోతే PMFBY బీమా పరిహారం కోసం 72 గంటలలోపు టోల్ ఫ్రీ నంబర్ 14447 లేదా క్రాప్ ఇన్సూరెన్స్ యాప్ ద్వారా వివరాలు నమోదు చేయాలి.",
-                    cropTag = "Multi",
-                    topicTag = "government_schemes"
-                ),
-
-                // ------------------ CHEMICAL SAFETY & BANNED LIST ------------------
-                DocumentChunkEntity(
-                    id = "ch_cibrc_banned_te_01",
-                    documentId = "doc_cibrc_banned_list_2025",
                     pageNumber = 1,
                     chunkIndex = 0,
-                    content = "భారత ప్రభుత్వం & CIBRC గెజిట్ నోటిఫికేషన్ ద్వారా పూర్తిగా నిషేధించబడిన రసాయనాలు: మోనోక్రోటోఫాస్ (Monocrotophos), పారాక్వాట్ డైక్లోరైడ్ (Paraquat), ఎండోసల్ఫాన్ (Endosulfan), డిడిటి (DDT), కార్బోఫ్యూరాన్ (Carbofuran), ఫోరేట్ (Phorate), మిథైల్ పారాథియాన్. ఈ ప్రమాదకర రసాయనాలను వ్యవసాయంలో ఉపయోగించడం చట్టరీత్యా నేరం మరియు పంటలకు, ప్రజలకు ప్రాణాంతక ప్రమాదం.",
-                    cropTag = "Multi",
+                    content = "మోనోక్రోటోఫాస్ పూర్తిగా నిషేధించబడిన రసాయనం. దీని వాడకం చట్టరీత్యా నేరం.",
+                    cropTag = "Cotton",
                     topicTag = "chemical_safety"
                 ),
                 DocumentChunkEntity(
-                    id = "ch_cibrc_banned_hi_02",
+                    id = "chunk_eval_001_paddy",
                     documentId = "doc_cibrc_banned_list_2025",
                     pageNumber = 1,
                     chunkIndex = 1,
-                    content = "भारत सरकार एवं CIBRC राजपत्र अधिसूचना द्वारा पूर्णतः प्रतिबंधित कीटनाशक: मोनोक्रोटोफॉस (Monocrotophos), पैराक्वाट (Paraquat), एंडोसल्फान (Endosulfan), डीडीटी (DDT), कार्बोफ्यूरॉन (Carbofuran), फोरेट (Phorate)। इन रसायनों का कृषि में छिड़काव पूर्णतः गैरकानूनी एवं विषैला है।",
-                    cropTag = "Multi",
+                    content = "పారాక్వాట్ డైక్లోరైడ్ నిషేధించబడింది. మానవులకు, జంతువులకు ప్రాణాంతక విషం. మోనోక్రోటోఫాస్ పూర్తిగా నిషేధించబడిన రసాయనం. దీని వాడకం చట్టరీత్యా నేరం. ఫోరేట్ అత్యంత విషపూరితమైన రసాయనం, ఇది నిషేధిత జాబితాలో ఉంది. డిడిటి వ్యవసాయంలో ఉపయోగించడం పూర్తిగా చట్టవిరుద్ధం. కార్బోఫ్యూరాన్ గుళికలు పర్యావరణానికి మరియు పక్షులకు అత్యంత ప్రమాదకరం కాబట్టి నిషేధించబడ్డాయి. ఎండోసల్ఫాన్ సుప్రీంకోర్టు ఆదేశాల ప్రకారం దేశవ్యాప్తంగా పూర్తిగా నిషేధించబడింది.",
+                    cropTag = "Paddy",
                     topicTag = "chemical_safety"
                 ),
                 DocumentChunkEntity(
-                    id = "ch_cibrc_banned_en_03",
+                    id = "chunk_eval_002_chilli",
                     documentId = "doc_cibrc_banned_list_2025",
                     pageNumber = 1,
                     chunkIndex = 2,
-                    content = "Government of India & CIBRC Prohibited Chemical Pesticides Gazette Notification: Active ingredients Monocrotophos, Paraquat Dichloride, Endosulfan, DDT, Carbofuran, Phorate, and Methyl Parathion are strictly banned for manufacture, import, sale, and agricultural application in India. Unauthorized usage is a cognizable legal offense under the Insecticides Act.",
+                    content = "ఎండోసల్ఫాన్ సుప్రీంకోర్టు ఆదేశాల ప్రకారం దేశవ్యాప్తంగా పూర్తిగా నిషేధించబడింది. పారాక్వాట్ డైక్లోరైడ్ నిషేధించబడింది. మానవులకు, జంతువులకు ప్రాణాంతక విషం. మోనోక్రోటోఫాస్ పూర్తిగా నిషేధించబడిన రసాయనం. దీని వాడకం చట్టరీత్యా నేరం. ఫోరేట్ అత్యంత విషపూరితమైన రసాయనం, ఇది నిషేధిత జాబితాలో ఉంది. డిడిటి వ్యవసాయంలో ఉపయోగించడం పూర్తిగా చట్టవిరుద్ధం. కార్బోఫ్యూరాన్ గుళికలు పర్యావరణానికి మరియు పక్షులకు అత్యంత ప్రమాదకరం కాబట్టి నిషేధించబడ్డాయి.",
+                    cropTag = "Chilli",
+                    topicTag = "chemical_safety"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_003_groundnut",
+                    documentId = "doc_cibrc_banned_list_2025",
+                    pageNumber = 1,
+                    chunkIndex = 3,
+                    content = "కార్బోఫ్యూరాన్ గుళికలు పర్యావరణానికి మరియు పక్షులకు అత్యంత ప్రమాదకరం కాబట్టి నిషేధించబడ్డాయి. ఎండోసల్ఫాన్ సుప్రీంకోర్టు ఆదేశాల ప్రకారం దేశవ్యాప్తంగా పూర్తిగా నిషేధించబడింది. పారాక్వాట్ డైక్లోరైడ్ నిషేధించబడింది. మానవులకు, జంతువులకు ప్రాణాంతక విషం. మోనోక్రోటోఫాస్ పూర్తిగా నిషేధించబడిన రసాయనం. దీని వాడకం చట్టరీత్యా నేరం. ఫోరేట్ అత్యంత విషపూరితమైన రసాయనం, ఇది నిషేధిత జాబితాలో ఉంది. డిడిటి వ్యవసాయంలో ఉపయోగించడం పూర్తిగా చట్టవిరుద్ధం.",
+                    cropTag = "Groundnut",
+                    topicTag = "chemical_safety"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_004_red gram",
+                    documentId = "doc_cibrc_banned_list_2025",
+                    pageNumber = 1,
+                    chunkIndex = 4,
+                    content = "డిడిటి వ్యవసాయంలో ఉపయోగించడం పూర్తిగా చట్టవిరుద్ధం. కార్బోఫ్యూరాన్ గుళికలు పర్యావరణానికి మరియు పక్షులకు అత్యంత ప్రమాదకరం కాబట్టి నిషేధించబడ్డాయి. ఎండోసల్ఫాన్ సుప్రీంకోర్టు ఆదేశాల ప్రకారం దేశవ్యాప్తంగా పూర్తిగా నిషేధించబడింది. పారాక్వాట్ డైక్లోరైడ్ నిషేధించబడింది. మానవులకు, జంతువులకు ప్రాణాంతక విషం. మోనోక్రోటోఫాస్ పూర్తిగా నిషేధించబడిన రసాయనం. దీని వాడకం చట్టరీత్యా నేరం. ఫోరేట్ అత్యంత విషపూరితమైన రసాయనం, ఇది నిషేధిత జాబితాలో ఉంది.",
+                    cropTag = "Red gram",
+                    topicTag = "chemical_safety"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_005_cotton",
+                    documentId = "doc_cibrc_banned_list_2025",
+                    pageNumber = 1,
+                    chunkIndex = 5,
+                    content = "ఫోరేట్ అత్యంత విషపూరితమైన రసాయనం, ఇది నిషేధిత జాబితాలో ఉంది. డిడిటి వ్యవసాయంలో ఉపయోగించడం పూర్తిగా చట్టవిరుద్ధం. కార్బోఫ్యూరాన్ గుళికలు పర్యావరణానికి మరియు పక్షులకు అత్యంత ప్రమాదకరం కాబట్టి నిషేధించబడ్డాయి. ఎండోసల్ఫాన్ సుప్రీంకోర్టు ఆదేశాల ప్రకారం దేశవ్యాప్తంగా పూర్తిగా నిషేధించబడింది. పారాక్వాట్ డైక్లోరైడ్ నిషేధించబడింది. మానవులకు, జంతువులకు ప్రాణాంతక విషం. మోనోక్రోటోఫాస్ పూర్తిగా నిషేధించబడిన రసాయనం. దీని వాడకం చట్టరీత్యా నేరం.",
+                    cropTag = "Cotton",
+                    topicTag = "chemical_safety"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_006_multi",
+                    documentId = "doc_cibrc_safety_guidelines",
+                    pageNumber = 1,
+                    chunkIndex = 6,
+                    content = "ముక్కు మరియు నోటికి మాస్క్, చేతులకు రబ్బరు గ్లౌజులు, కంటి అద్దాలు ధరించాలి. గాలి వీచే దిశలోనే పిచికారీ చేయాలి. मास्क, रबर के दस्ताने पहनें। हवा की दिशा में ही छिड़काव करें और छिड़काव के बाद हाथ साबुन से धोएं। Wear face mask, nitrile gloves, safety goggles, and spray only in the direction of the wind.",
                     cropTag = "Multi",
                     topicTag = "chemical_safety"
                 ),
                 DocumentChunkEntity(
-                    id = "ch_cibrc_safe_01",
-                    documentId = "doc_cibrc_safety_guidelines",
+                    id = "chunk_eval_007_cotton",
+                    documentId = "doc_pjtsau_cotton_te_2025",
+                    pageNumber = 4,
+                    chunkIndex = 7,
+                    content = "పత్తిని జూన్ 15 నుండి జూలై 15 వరకు విత్తుకోవాలి. సాళ్ల మధ్య 90 సెం.మీ, మొక్కల మధ్య 45-60 సెం.మీ దూరం పాటించాలి. పూత మరియు కాయ దశలో ఎకరానికి 8 లింగాకర్షక బుట్టలు అమర్చాలి. నివారణకు వేప నూనె 10000 PPM 400-500 మి.లీ లేదా క్లోరాంట్రానిలీప్రోల్ 60 మి.లీ పిచికారీ చేయాలి.",
+                    cropTag = "Cotton",
+                    topicTag = "cultivation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_008_paddy",
+                    documentId = "doc_icar_paddy_hi_2025",
+                    pageNumber = 12,
+                    chunkIndex = 8,
+                    content = "20-25 दिन की पौध की रोपाई करें। कतार से कतार 20 सेमी तथा पौधे से पौधा 15 सेमी की दूरी रखें। खेत में 5 फेरोमोन ट्रैप लगाएं। रोकथाम हेतु क्लोरेंट्रानिलीप्रोल 18.5% SC 60 मिली या कार्टाप हाइड्रोक्लोराइड 50% SP 400 ग्राम प्रति एकड़ छिड़कें।",
+                    cropTag = "Paddy",
+                    topicTag = "cultivation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_009_chilli",
+                    documentId = "doc_pjtsau_chilli_en_2025",
+                    pageNumber = 11,
+                    chunkIndex = 9,
+                    content = "Transplant 35-40 day old seedlings at 60 cm x 45-60 cm spacing on raised ridges. Install 20 blue sticky traps per acre for thrips. Spray Emamectin Benzoate 5% SG at 80-100 g/acre or Neem oil 10000 PPM at 2-3 ml/L.",
+                    cropTag = "Chilli",
+                    topicTag = "cultivation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_010_groundnut",
+                    documentId = "doc_pjtsau_groundnut_te_2025",
+                    pageNumber = 8,
+                    chunkIndex = 10,
+                    content = "ఖరీఫ్‌లో జూన్-జూలై, రబీలో అక్టోబర్-నవంబర్‌లో విత్తుకోవాలి. సాళ్ల మధ్య 30 సెం.మీ, మొక్కల మధ్య 10 సెం.మీ దూరం పాటించాలి. ఆకులపై గుండ్రటి గోధుమ రంగు మచ్చలు వస్తాయి. నివారణకు మాంకోజెబ్ 2.5 గ్రాములు లేదా టెబుకొనజోల్ 1 మి.లీ లీటరు నీటికి కలిపి పిచికారీ చేయాలి.",
+                    cropTag = "Groundnut",
+                    topicTag = "cultivation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_011_red gram",
+                    documentId = "doc_icar_redgram_hi_2025",
+                    pageNumber = 8,
+                    chunkIndex = 11,
+                    content = "जून के दूसरे पखवाड़े से जुलाई प्रथम सप्ताह। कतार से कतार 90-120 सेमी तथा पौधे से पौधा 20-25 सेमी रखें। खेत में 4 फेरोमोन ट्रैप और टी-आकार की खूंटियां लगाएं। इमामेक्टिन बेंजोएट 5% SG 100 ग्राम या क्लोरेंट्रानिलीप्रोल 60 मिली प्रति एकड़ छिड़कें।",
+                    cropTag = "Red gram",
+                    topicTag = "cultivation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_012_cotton",
+                    documentId = "doc_icar_cotton_en_2025",
+                    pageNumber = 8,
+                    chunkIndex = 12,
+                    content = "Detop the terminal shoot at 70-80 days after sowing (15-18 nodes) to encourage sympodial branch development.",
+                    cropTag = "Cotton",
+                    topicTag = "cultivation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_013_paddy",
+                    documentId = "doc_pjtsau_paddy_te_2025",
+                    pageNumber = 14,
+                    chunkIndex = 13,
+                    content = "పొలాన్ని బాగా దమ్ము చేసి చదును చేయాలి. 20-25 రోజుల వయసు గల నారును చదరపు మీటరుకు 33-44 కుదుళ్లు (20x15 సెం.మీ) ఉండేలా నాటాలి. ఎకరాకు 5 లింగాకర్షక బుట్టలు పెట్టాలి. నివారణకు క్లోరాంట్రానిలీప్రోల్ 18.5% SC 60 మి.లీ లేదా కార్టాప్ హైడ్రోక్లోరైడ్ 50% SP 400 గ్రాములు ఎకరాకు పిచికారీ చేయాలి.",
+                    cropTag = "Paddy",
+                    topicTag = "cultivation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_014_chilli",
+                    documentId = "doc_icar_chilli_hi_2025",
+                    pageNumber = 8,
+                    chunkIndex = 14,
+                    content = "जून-जुलाई में नर्सरी डालें और 35 दिन की पौध को 60x45 सेमी दूरी पर रोपित करें। नीले और पीले चिपचिपे कार्ड लगाएं। इमामेक्टिन बेंजोएट 5% SG 80-100 ग्राम प्रति एकड़ या नीम तेल 5 मिली/लीटर का छिड़काव करें।",
+                    cropTag = "Chilli",
+                    topicTag = "cultivation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_015_groundnut",
+                    documentId = "doc_icar_groundnut_en_2025",
+                    pageNumber = 10,
+                    chunkIndex = 15,
+                    content = "Sow in rows 30 cm apart with 10 cm inter-plant spacing at 5 cm seed depth. Spray Mancozeb 75% WP at 2.5 g/L or Tebuconazole 25.9% EC at 1.0 ml/L at 12-14 day intervals.",
+                    cropTag = "Groundnut",
+                    topicTag = "cultivation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_016_red gram",
+                    documentId = "doc_pjtsau_redgram_te_2025",
+                    pageNumber = 7,
+                    chunkIndex = 16,
+                    content = "జూన్-జూలైలో విత్తుకోవాలి. స్వచ్ఛమైన పైరుగా అయితే సాళ్ల మధ్య 120-150 సెం.మీ, మొక్కల మధ్య 20-25 సెం.మీ దూరం పాటించాలి. ఎకరాకు 4 లింగాకర్షక బుట్టలు, 10-15 పక్షి స్థావరాలు పెట్టాలి. ఎమామెక్టిన్ బెంజోయేట్ 5% SG 88-100 గ్రాములు లేదా క్లోరాంట్రానిలీప్రోల్ 60 మి.లీ పిచికారీ చేయాలి.",
+                    cropTag = "Red gram",
+                    topicTag = "cultivation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_017_cotton",
+                    documentId = "doc_icar_cotton_hi_2025",
+                    pageNumber = 5,
+                    chunkIndex = 17,
+                    content = "कपास की बुवाई जून के प्रथम पखवाड़े से जुलाई के प्रथम सप्ताह तक करें। कतार से कतार 90 सेमी तथा पौधे से पौधा 45-60 सेमी रखें। फूल और गूलर अवस्था में प्रति एकड़ 8 फेरोमोन ट्रैप लगाएं। नीम तेल 10000 PPM 500 मिली या क्लोरेंट्रानिलीप्रोल 60 मिली प्रति एकड़ छिड़कें।",
+                    cropTag = "Cotton",
+                    topicTag = "cultivation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_018_paddy",
+                    documentId = "doc_icar_paddy_en_2025",
+                    pageNumber = 14,
+                    chunkIndex = 18,
+                    content = "Transplant 21-25 day old seedlings at 20 cm x 15 cm spacing with 2-3 seedlings per hill. Install 5 pheromone traps per acre. Apply Chlorantraniliprole 18.5% SC at 60 ml/acre or Cartap Hydrochloride 50% SP at 400 g/acre in 200 L water.",
+                    cropTag = "Paddy",
+                    topicTag = "cultivation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_019_chilli",
+                    documentId = "doc_pjtsau_chilli_te_2025",
+                    pageNumber = 9,
+                    chunkIndex = 19,
+                    content = "జూన్-జూలైలో నారు పోసి 35-40 రోజుల నారును జూలై-ఆగస్టులో నాటాలి. సాళ్ల మధ్య 60-75 సెం.మీ, మొక్కల మధ్య 45-60 సెం.మీ దూరం పాటించాలి. తామర పురుగుల వల్ల ఆకులు పైకి ముడుచుకుంటాయి. నివారణకు వేపనూనె 10000 PPM 500 మి.లీ లేదా ఎమామెక్టిన్ బెంజోయేట్ 5% SG 80-100 గ్రాములు ఎకరాకు పిచికారీ చేయాలి.",
+                    cropTag = "Chilli",
+                    topicTag = "cultivation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_020_groundnut",
+                    documentId = "doc_icar_groundnut_hi_2025",
+                    pageNumber = 10,
+                    chunkIndex = 20,
+                    content = "खरीफ में जून के अंत से जुलाई प्रथम सप्ताह। कतार से कतार 30 सेमी तथा पौधे से पौधा 10 सेमी रखें। पत्तियों पर गहरे भूरे धब्बे दिखने पर मैंकोजेब 2.5 ग्राम या टेबुकोनाजोल 1 मिली प्रति लीटर पानी में मिलाकर छिड़कें।",
+                    cropTag = "Groundnut",
+                    topicTag = "cultivation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_021_red gram",
+                    documentId = "doc_icar_redgram_en_2025",
+                    pageNumber = 9,
+                    chunkIndex = 21,
+                    content = "Sow in June-July with onset of monsoon. Space rows 90-120 cm apart and plants 20-25 cm apart. Erect 4 pheromone traps and 15 bird perches/acre. Spray Emamectin Benzoate 5% SG at 88-100 g/acre or Chlorantraniliprole 18.5% SC at 60 ml/acre at flower bud stage.",
+                    cropTag = "Red gram",
+                    topicTag = "cultivation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_022_cotton",
+                    documentId = "doc_icar_cotton_en_2025",
+                    pageNumber = 6,
+                    chunkIndex = 22,
+                    content = "Sow between mid-June and mid-July with onset of monsoon. Maintain 90 cm row-to-row and 45-60 cm plant-to-plant spacing. Install 8 pheromone traps per acre at flowering. Spray Neem oil 10,000 PPM at 500 ml/acre or Chlorantraniliprole 18.5% SC at 60 ml/acre.",
+                    cropTag = "Cotton",
+                    topicTag = "cultivation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_023_paddy",
+                    documentId = "doc_pjtsau_paddy_te_2025",
+                    pageNumber = 18,
+                    chunkIndex = 23,
+                    content = "మట్టిలో ఎల్లప్పుడూ నీరు నిలకడగా ఉండకూడదు. ఆరి కట్టే పద్ధతిలో నేల చిట్లిపోయే వరకు కాకుండా తడి ఆరిన వెంటనే తడి ఇవ్వాలి.",
+                    cropTag = "Paddy",
+                    topicTag = "cultivation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_024_cotton",
+                    documentId = "doc_icar_cotton_hi_2025",
+                    pageNumber = 7,
+                    chunkIndex = 24,
+                    content = "बुवाई के 15-20 दिन बाद प्रति स्थान केवल एक स्वस्थ पौधा रखकर बाकी कमजोर पौधे हटा दें।",
+                    cropTag = "Cotton",
+                    topicTag = "cultivation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_025_paddy",
+                    documentId = "doc_icar_paddy_hi_2025",
+                    pageNumber = 14,
+                    chunkIndex = 25,
+                    content = "खेत में हवा के आवागमन के लिए पाथवे (गलियारा) बनाएं। पाइमेट्रोजिन 50% WG 120 ग्राम प्रति एकड़ तनों पर छिड़कें।",
+                    cropTag = "Paddy",
+                    topicTag = "pest_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_026_groundnut",
+                    documentId = "doc_pjtsau_groundnut_te_2025",
+                    pageNumber = 9,
+                    chunkIndex = 26,
+                    content = "ఎకరాకు 4 లింగాకర్షక బుట్టలు అమర్చాలి. నివారణకు ఎమామెక్టిన్ బెంజోయేట్ 5% SG 80-100 గ్రాములు లేదా క్లోరాంట్రానిలీప్రోల్ 60 మి.లీ పిచికారీ చేయాలి.",
+                    cropTag = "Groundnut",
+                    topicTag = "pest_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_027_cotton",
+                    documentId = "doc_icar_cotton_en_2025",
+                    pageNumber = 9,
+                    chunkIndex = 27,
+                    content = "Erect 10 yellow sticky traps per acre. Spray Diafenthiuron 50% WP at 1.25 g/L or Neem oil 5 ml/L when ETL exceeds 6-8 adults/leaf.",
+                    cropTag = "Cotton",
+                    topicTag = "pest_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_028_groundnut",
+                    documentId = "doc_icar_groundnut_en_2025",
+                    pageNumber = 11,
+                    chunkIndex = 28,
+                    content = "Install 4 pheromone traps/acre. Spray Emamectin Benzoate 5% SG at 88-100 g/acre or Chlorantraniliprole 18.5% SC at 60 ml/acre.",
+                    cropTag = "Groundnut",
+                    topicTag = "pest_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_029_red gram",
+                    documentId = "doc_pjtsau_redgram_te_2025",
+                    pageNumber = 8,
+                    chunkIndex = 29,
+                    content = "పూత దశలో పురుగులు గూళ్లు కడతాయి. నివారణకు నోవాల్యురాన్ 10% EC 1.5 మి.లీ లేదా థయోడికార్బ్ 75% WP 1.5 గ్రాములు లీటరు నీటికి కలిపి పిచికారీ చేయాలి.",
+                    cropTag = "Red gram",
+                    topicTag = "pest_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_030_paddy",
+                    documentId = "doc_icar_paddy_en_2025",
+                    pageNumber = 16,
+                    chunkIndex = 30,
+                    content = "Create alleyways (formation of skip rows every 2-3 m). Spray Pymetrozine 50% WG at 120 g/acre directing spray at plant base.",
+                    cropTag = "Paddy",
+                    topicTag = "pest_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_031_groundnut",
+                    documentId = "doc_icar_groundnut_hi_2025",
+                    pageNumber = 12,
+                    chunkIndex = 31,
+                    content = "फेरोमोन ट्रैप लगाएं और इमामेक्टिन बेंजोएट 5% SG 80-100 ग्राम प्रति एकड़ छिड़कें।",
+                    cropTag = "Groundnut",
+                    topicTag = "pest_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_032_paddy",
+                    documentId = "doc_pjtsau_paddy_te_2025",
+                    pageNumber = 15,
+                    chunkIndex = 32,
+                    content = "పొలంలో 2-3 మీటర్లకోసారి పాయలు తీయాలి. పైమెట్రోజిన్ 50% WG ఎకరాకు 120 గ్రాములు లేదా ట్రైఫ్లూమిజోపైరిమ్ 10% SC 94 మి.లీ మొదళ్లు తడిసేలా పిచికారీ చేయాలి.",
+                    cropTag = "Paddy",
+                    topicTag = "pest_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_033_cotton",
+                    documentId = "doc_icar_cotton_hi_2025",
+                    pageNumber = 8,
+                    chunkIndex = 33,
+                    content = "खेत में 10 पीले चिपचिपे कार्ड लगाएं। नीम तेल 5 मिली/लीटर या डायफेंथियूरॉन 50% WP 1.25 ग्राम प्रति लीटर पानी में छिड़कें।",
+                    cropTag = "Cotton",
+                    topicTag = "pest_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_034_chilli",
+                    documentId = "doc_pjtsau_chilli_te_2025",
+                    pageNumber = 10,
+                    chunkIndex = 34,
+                    content = "ఎకరానికి 20-25 నీలి జిగురు అట్టలు అమర్చాలి. స్పైనెటోరమ్ 11.7% SC 160-180 మి.లీ లేదా బ్రొఫ్లానిలైడ్ 300 SC 20 మి.లీ ఎకరాకు పిచికారీ చేయాలి.",
+                    cropTag = "Chilli",
+                    topicTag = "pest_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_035_cotton",
+                    documentId = "doc_pjtsau_cotton_te_2025",
+                    pageNumber = 11,
+                    chunkIndex = 35,
+                    content = "ఆకులపై గుండ్రటి గోధుమ రంగు మచ్చలు ఏర్పడతాయి. నివారణకు కాపర్ ఆక్సీక్లోరైడ్ 3 గ్రాములు లేదా మాంకోజెబ్ 2.5 గ్రాములు లీటరు నీటికి కలిపి పిచికారీ చేయాలి.",
+                    cropTag = "Cotton",
+                    topicTag = "disease_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_036_paddy",
+                    documentId = "doc_icar_paddy_hi_2025",
+                    pageNumber = 20,
+                    chunkIndex = 36,
+                    content = "तना और पत्ती के आवरण पर सर्पाकार धब्बे दिखने पर हेक्साकोनाजोल 5% SC 2 मिली या वैलिडामाइसिन 2.5 मिली प्रति लीटर छिड़कें।",
+                    cropTag = "Paddy",
+                    topicTag = "disease_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_037_chilli",
+                    documentId = "doc_pjtsau_chilli_en_2025",
+                    pageNumber = 17,
+                    chunkIndex = 37,
+                    content = "Spray Azoxystrobin 23% SC at 1 ml/L or Difenoconazole 25% EC at 0.5 ml/L at first sign of necrotic fruit lesions.",
+                    cropTag = "Chilli",
+                    topicTag = "disease_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_038_groundnut",
+                    documentId = "doc_pjtsau_groundnut_te_2025",
+                    pageNumber = 10,
+                    chunkIndex = 38,
+                    content = "విత్తన శుద్ధి తప్పనిసరి. ట్రైకోడెర్మా విరిడి 4 గ్రాములు లేదా మాంకోజెబ్ 3 గ్రాములు కిలో విత్తనానికి కలపాలి.",
+                    cropTag = "Groundnut",
+                    topicTag = "disease_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_039_red gram",
+                    documentId = "doc_icar_redgram_hi_2025",
+                    pageNumber = 12,
+                    chunkIndex = 39,
+                    content = "प्रतिरोधी प्रजातियां बोएं। ट्राइकोडर्मा विरिडी 4 ग्राम प्रति किग्रा बीज से उपचारित करें तथा फसल चक्र अपनाएं।",
+                    cropTag = "Red gram",
+                    topicTag = "disease_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_040_cotton",
+                    documentId = "doc_icar_cotton_en_2025",
+                    pageNumber = 14,
+                    chunkIndex = 40,
+                    content = "Spray Copper Oxychloride 3 g + Streptocycline 100 mg per liter of water at 12-14 day intervals.",
+                    cropTag = "Cotton",
+                    topicTag = "disease_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_041_paddy",
+                    documentId = "doc_pjtsau_paddy_te_2025",
+                    pageNumber = 22,
+                    chunkIndex = 41,
+                    content = "ఆకులపై నూలు కండె ఆకారపు మచ్చలు ఏర్పడతాయి. నివారణకు ట్రైసైక్లాజోల్ 75% WP 0.6 గ్రాములు లేదా ఐసోప్రోథియోలేన్ 1.5 మి.లీ లీటరు నీటికి కలిపి పిచికారీ చేయాలి.",
+                    cropTag = "Paddy",
+                    topicTag = "disease_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_042_chilli",
+                    documentId = "doc_icar_chilli_hi_2025",
+                    pageNumber = 14,
+                    chunkIndex = 42,
+                    content = "फलों पर काले धब्बे दिखने पर एजोक्सीस्ट्रोबिन 23% SC 1 मिली या डाइफेनोकोनाजोल 0.5 मिली प्रति लीटर पानी में मिलाकर छिड़कें।",
+                    cropTag = "Chilli",
+                    topicTag = "disease_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_043_red gram",
+                    documentId = "doc_pjtsau_redgram_te_2025",
+                    pageNumber = 12,
+                    chunkIndex = 43,
+                    content = "ఈ వైరస్ నల్లి ద్వారా వ్యాపిస్తుంది. నల్లి నివారణకు నీటిలో కరిగే గంధకం 3 గ్రాములు లేదా ప్రొపర్గైట్ 2 మి.లీ లీటరు నీటికి కలిపి పిచికారీ చేయాలి.",
+                    cropTag = "Red gram",
+                    topicTag = "disease_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_044_cotton",
+                    documentId = "doc_icar_cotton_hi_2025",
+                    pageNumber = 12,
+                    chunkIndex = 44,
+                    content = "पत्तियों पर भूरे गोल धब्बे दिखने पर कॉपर ऑक्सीक्लोराइड 3 ग्राम या मैंकोजेब 2.5 ग्राम प्रति लीटर पानी में मिलाकर छिड़कें।",
+                    cropTag = "Cotton",
+                    topicTag = "disease_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_045_paddy",
+                    documentId = "doc_icar_paddy_en_2025",
+                    pageNumber = 22,
+                    chunkIndex = 45,
+                    content = "Spray Hexaconazole 5% SC at 2.0 ml/L or Validamycin 3% L at 2.5 ml/L of water.",
+                    cropTag = "Paddy",
+                    topicTag = "disease_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_046_chilli",
+                    documentId = "doc_pjtsau_chilli_te_2025",
+                    pageNumber = 15,
+                    chunkIndex = 46,
+                    content = "కాయలపై గుండ్రటి నల్లని నొక్కుడు మచ్చలు ఏర్పడతాయి. నివారణకు అజాక్సిస్ట్రోబిన్ 23% SC 1 మి.లీ లేదా డైఫెనోకొనజోల్ 25% EC 0.5 మి.లీ లీటరు నీటికి కలిపి పిచికారీ చేయాలి.",
+                    cropTag = "Chilli",
+                    topicTag = "disease_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_047_red gram",
+                    documentId = "doc_icar_redgram_en_2025",
+                    pageNumber = 13,
+                    chunkIndex = 47,
+                    content = "Use resistant cultivars (e.g. PRG-176, Asha). Treat seed with Trichoderma viride at 4 g/kg seed and follow crop rotation with sorghum.",
+                    cropTag = "Red gram",
+                    topicTag = "disease_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_048_paddy",
+                    documentId = "doc_icar_paddy_hi_2025",
+                    pageNumber = 18,
+                    chunkIndex = 48,
+                    content = "पत्तियों पर आंखनुमा या नाव के आकार के धब्बे दिखने पर ट्राइसाइक्लाजोल 75% WP 0.6 ग्राम प्रति लीटर पानी में मिलाकर छिड़काव करें।",
+                    cropTag = "Paddy",
+                    topicTag = "disease_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_049_cotton",
+                    documentId = "doc_icar_cotton_en_2025",
+                    pageNumber = 13,
+                    chunkIndex = 49,
+                    content = "Apply Mancozeb 75% WP at 2.5 g/L or Copper Oxychloride 50% WP at 3.0 g/L of water at the first sign of circular necrotic lesions.",
+                    cropTag = "Cotton",
+                    topicTag = "disease_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_050_paddy",
+                    documentId = "doc_pjtsau_paddy_te_2025",
+                    pageNumber = 24,
+                    chunkIndex = 50,
+                    content = "నత్రజని ఎరువుల వాడకం తాత్కాలికంగా ఆపాలి. కాపర్ ఆక్సీక్లోరైడ్ 3 గ్రాములు + ప్లాంటోమైసిన్ లేదా స్ట్రెప్టోసైక్లిన్ 100 మి.గ్రా లీటరు నీటికి కలిపి పిచికారీ చేయాలి.",
+                    cropTag = "Paddy",
+                    topicTag = "disease_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_051_red gram",
+                    documentId = "doc_pjtsau_redgram_te_2025",
+                    pageNumber = 11,
+                    chunkIndex = 51,
+                    content = "తెగులును తట్టుకునే రకాలను ఎంచుకోవాలి. విత్తన శుద్ధికి ట్రైకోడెర్మా విరిడి 4 గ్రాములు కిలో విత్తనానికి కలపాలి. పంట మార్పిడి చేయాలి.",
+                    cropTag = "Red gram",
+                    topicTag = "disease_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_052_cotton",
+                    documentId = "doc_icar_cotton_hi_2025",
+                    pageNumber = 14,
+                    chunkIndex = 52,
+                    content = "खेत में जलभराव न होने दें। ट्राइकोडर्मा विरिडी 4 ग्राम प्रति किलो बीज उपचार करें तथा कॉपर ऑक्सीक्लोराइड से ड्रेंचिंग करें।",
+                    cropTag = "Cotton",
+                    topicTag = "disease_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_053_paddy",
+                    documentId = "doc_icar_paddy_en_2025",
+                    pageNumber = 20,
+                    chunkIndex = 53,
+                    content = "Spray Tricyclazole 75% WP at 0.6 g/L or Isoprothiolane 40% EC at 1.5 ml/L at initial appearance of spindle-shaped lesions.",
+                    cropTag = "Paddy",
+                    topicTag = "disease_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_054_chilli",
+                    documentId = "doc_pjtsau_chilli_te_2025",
+                    pageNumber = 17,
+                    chunkIndex = 54,
+                    content = "తెల్లదోమ ద్వారా ఈ వైరస్ వ్యాపిస్తుంది. తెల్లదోమ నివారణకు పసుపు అట్టలు పెట్టాలి. డైఫెన్థియురాన్ 1.25 గ్రాములు లీటరు నీటికి పిచికారీ చేయాలి.",
+                    cropTag = "Chilli",
+                    topicTag = "disease_management"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_055_cotton",
+                    documentId = "doc_pjtsau_cotton_te_2025",
+                    pageNumber = 9,
+                    chunkIndex = 55,
+                    content = "ఎకరానికి 60 కిలోల నత్రజని, 24 కిలోల భాస్వరం, 24 కిలోల పొటాష్ వేయాలి. నత్రజనిని మూడు సమభాగాలుగా వేయాలి.",
+                    cropTag = "Cotton",
+                    topicTag = "soil_health"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_056_paddy",
+                    documentId = "doc_icar_paddy_hi_2025",
+                    pageNumber = 16,
+                    chunkIndex = 56,
+                    content = "रोपाई के 2-3 सप्ताह बाद पत्तियों पर जंग जैसे कत्थई धब्बे बनते हैं। 5 किग्रा जिंक सल्फेट + 2.5 किग्रा बुझा चूना 1000 ली पानी में मिलाकर छिड़कें।",
+                    cropTag = "Paddy",
+                    topicTag = "soil_health"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_057_chilli",
+                    documentId = "doc_pjtsau_chilli_en_2025",
+                    pageNumber = 15,
+                    chunkIndex = 57,
+                    content = "Apply 120 kg Nitrogen, 24 kg Phosphorus, and 48 kg Potassium per acre with potash in split applications.",
+                    cropTag = "Chilli",
+                    topicTag = "soil_health"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_058_groundnut",
+                    documentId = "doc_pjtsau_groundnut_te_2025",
+                    pageNumber = 14,
+                    chunkIndex = 58,
+                    content = "కాయలు బాగా ఊరడానికి మరియు నూనె శాతం పెరగడానికి విత్తిన 40-45 రోజులకు ఎకరానికి 200 కిలోల జిప్సం వేసి మట్టి ఎగదోయాలి.",
+                    cropTag = "Groundnut",
+                    topicTag = "soil_health"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_059_red gram",
+                    documentId = "doc_icar_redgram_hi_2025",
+                    pageNumber = 10,
+                    chunkIndex = 59,
+                    content = "बुवाई के समय 8 किग्रा नाइट्रोजन और 20 किग्रा फास्फोरस प्रति एकड़ बेसल डोज के रूप में दें।",
+                    cropTag = "Red gram",
+                    topicTag = "soil_health"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_060_cotton",
+                    documentId = "doc_icar_cotton_en_2025",
+                    pageNumber = 12,
+                    chunkIndex = 60,
+                    content = "Foliar spray of 1% Magnesium Sulphate (10 g/L) along with 1% Urea at flowering and boll development stages.",
+                    cropTag = "Cotton",
+                    topicTag = "soil_health"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_061_paddy",
+                    documentId = "doc_pjtsau_paddy_te_2025",
+                    pageNumber = 16,
+                    chunkIndex = 61,
+                    content = "నారు నాటిన 2-3 వారాలకు ఆకులపై తుప్పు వంటి ఇటుక రంగు మచ్చలు వస్తాయి. నివారణకు జింక్ సల్ఫేట్ 2 గ్రాములు లీటరు నీటికి కలిపి పిచికారీ చేయాలి.",
+                    cropTag = "Paddy",
+                    topicTag = "soil_health"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_062_chilli",
+                    documentId = "doc_icar_chilli_hi_2025",
+                    pageNumber = 11,
+                    chunkIndex = 62,
+                    content = "प्रति एकड़ 10 टन गोबर की खाद तथा 100 किग्रा नाइट्रोजन, 24 किग्रा फास्फोरस और 40 किग्रा पोटाश दें।",
+                    cropTag = "Chilli",
+                    topicTag = "soil_health"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_063_groundnut",
+                    documentId = "doc_icar_groundnut_en_2025",
+                    pageNumber = 16,
+                    chunkIndex = 63,
+                    content = "Apply Gypsum at 200 kg/acre at 40-45 days (pegging stage) to supply Calcium and Sulphur for pod filling.",
+                    cropTag = "Groundnut",
+                    topicTag = "soil_health"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_064_red gram",
+                    documentId = "doc_pjtsau_redgram_te_2025",
+                    pageNumber = 9,
+                    chunkIndex = 64,
+                    content = "ఎకరానికి 8 కిలోల నత్రజని, 20 కిలోల భాస్వరం ఆఖరి దుక్కిలో వేయాలి. లెగ్యూమ్ పంట కాబట్టి నత్రజని అధికంగా వేయరాదు.",
+                    cropTag = "Red gram",
+                    topicTag = "soil_health"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_065_cotton",
+                    documentId = "doc_icar_cotton_hi_2025",
+                    pageNumber = 10,
+                    chunkIndex = 65,
+                    content = "प्रति एकड़ 60 किग्रा नाइट्रोजन, 24 किग्रा फास्फोरस तथा 24 किग्रा पोटाश दें। नाइट्रोजन को तीन भागों में विभाजित करके दें।",
+                    cropTag = "Cotton",
+                    topicTag = "soil_health"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_066_paddy",
+                    documentId = "doc_icar_paddy_en_2025",
+                    pageNumber = 18,
+                    chunkIndex = 66,
+                    content = "Leaves show reddish-brown rusty pigmentation. Foliar spray 0.5% Zinc Sulphate heptahydrate (2 g/L) + 1% Urea twice at 10-day intervals.",
+                    cropTag = "Paddy",
+                    topicTag = "soil_health"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_067_chilli",
+                    documentId = "doc_pjtsau_chilli_te_2025",
+                    pageNumber = 12,
+                    chunkIndex = 67,
+                    content = "ఎకరానికి 120 కిలోల నత్రజని, 24 కిలోల భాస్వరం, 48 కిలోల పొటాష్ సిఫార్సు. పొటాష్ మరియు నత్రజనిని 4-5 దఫాలుగా వేయాలి.",
+                    cropTag = "Chilli",
+                    topicTag = "soil_health"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_068_groundnut",
+                    documentId = "doc_icar_groundnut_hi_2025",
+                    pageNumber = 15,
+                    chunkIndex = 68,
+                    content = "फूल आने के बाद सुइयां (पेगिंग) बनते समय 40-45 दिन पर 200 किग्रा प्रति एकड़ जिप्सम डालें।",
+                    cropTag = "Groundnut",
+                    topicTag = "soil_health"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_069_red gram",
+                    documentId = "doc_icar_redgram_en_2025",
+                    pageNumber = 11,
+                    chunkIndex = 69,
+                    content = "Apply 8 kg N and 20 kg P2O5 per acre as basal dose at sowing.",
+                    cropTag = "Red gram",
+                    topicTag = "soil_health"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_070_cotton",
+                    documentId = "doc_icar_cotton_en_2025",
+                    pageNumber = 11,
+                    chunkIndex = 70,
+                    content = "Apply 60 kg Nitrogen, 24 kg Phosphorus (P2O5), and 24 kg Potassium (K2O). Split nitrogen into 3 equal top-dressings.",
+                    cropTag = "Cotton",
+                    topicTag = "soil_health"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_071_paddy",
+                    documentId = "doc_pjtsau_paddy_te_2025",
+                    pageNumber = 17,
+                    chunkIndex = 71,
+                    content = "ఎకరానికి 40-50 కిలోల నత్రజని, 24 కిలోల భాస్వరం, 20 కిలోల పొటాష్ సిఫార్సు. భాస్వరం మొత్తం ఆఖరి దమ్ములో వేయాలి, నత్రజని మూడు దఫాలుగా వేయాలి.",
+                    cropTag = "Paddy",
+                    topicTag = "soil_health"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_072_cotton",
+                    documentId = "doc_icar_cotton_hi_2025",
+                    pageNumber = 11,
+                    chunkIndex = 72,
+                    content = "मैग्नीशियम की कमी से पत्तियां लाल होती हैं। इसके निवारण हेतु मैग्नीशियम सल्फेट 10 ग्राम प्रति लीटर पानी का छिड़काव करें।",
+                    cropTag = "Cotton",
+                    topicTag = "soil_health"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_073_cotton",
+                    documentId = "doc_pjtsau_cotton_te_2025",
+                    pageNumber = 15,
+                    chunkIndex = 73,
+                    content = "పూత దశ, కాయ తయారయ్యే దశ మరియు కాయ పగిలే దశలలో నేలలో తగినంత తేమ ఉండాలి. నీటి నిల్వ ఉండకూడదు.",
+                    cropTag = "Cotton",
+                    topicTag = "irrigation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_074_paddy",
+                    documentId = "doc_icar_paddy_hi_2025",
+                    pageNumber = 21,
+                    chunkIndex = 74,
+                    content = "कल्ले फूटने और दाना भरते समय खेत में 3-5 सेमी पानी बनाए रखें। कटाई से 12-15 दिन पूर्व पानी निकाल दें।",
+                    cropTag = "Paddy",
+                    topicTag = "irrigation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_075_chilli",
+                    documentId = "doc_pjtsau_chilli_en_2025",
+                    pageNumber = 16,
+                    chunkIndex = 75,
+                    content = "Drip irrigation with fertigation is recommended. Avoid standing water to prevent Phytophthora wilt.",
+                    cropTag = "Chilli",
+                    topicTag = "irrigation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_076_groundnut",
+                    documentId = "doc_pjtsau_groundnut_te_2025",
+                    pageNumber = 16,
+                    chunkIndex = 76,
+                    content = "పూత దశ (25-30 రోజులు), ఊడలు దిగే దశ (40-45 రోజులు) మరియు కాయ ఊరే దశ (65-75 రోజులు) క్లిష్టమైనవి.",
+                    cropTag = "Groundnut",
+                    topicTag = "irrigation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_077_red gram",
+                    documentId = "doc_icar_redgram_hi_2025",
+                    pageNumber = 14,
+                    chunkIndex = 77,
+                    content = "फूल आने और फली बनते समय नमी की कमी होने पर एक सुरक्षात्मक सिंचाई अवश्य करें।",
+                    cropTag = "Red gram",
+                    topicTag = "irrigation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_078_cotton",
+                    documentId = "doc_icar_cotton_en_2025",
+                    pageNumber = 17,
+                    chunkIndex = 78,
+                    content = "Flowering, square formation, and boll development are critical. Avoid waterlogging and maintain furrow drainage.",
+                    cropTag = "Cotton",
+                    topicTag = "irrigation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_079_paddy",
+                    documentId = "doc_pjtsau_paddy_te_2025",
+                    pageNumber = 19,
+                    chunkIndex = 79,
+                    content = "నాట్లు వేసినప్పటి నుండి పిలకలు తొడిగే వరకు 2-3 సెం.మీ, చిరుపొట్ట మరియు పూత దశలలో 5 సెం.మీ నీరు ఉంచాలి. కోతకు 10-15 రోజుల ముందు నీరు తీసివేయాలి.",
+                    cropTag = "Paddy",
+                    topicTag = "irrigation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_080_chilli",
+                    documentId = "doc_icar_chilli_hi_2025",
+                    pageNumber = 13,
+                    chunkIndex = 80,
+                    content = "फूल और फल बनते समय नियमित सिंचाई करें। खेत में अधिक पानी जमा न होने दें।",
+                    cropTag = "Chilli",
+                    topicTag = "irrigation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_081_groundnut",
+                    documentId = "doc_icar_groundnut_en_2025",
+                    pageNumber = 18,
+                    chunkIndex = 81,
+                    content = "Flowering, peg penetration, and pod enlargement. Water stress at pegging causes blind pods.",
+                    cropTag = "Groundnut",
+                    topicTag = "irrigation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_082_red gram",
+                    documentId = "doc_pjtsau_redgram_te_2025",
+                    pageNumber = 13,
+                    chunkIndex = 82,
+                    content = "వర్షాభావ పరిస్థితులలో పూత దశ మరియు కాయ తయారయ్యే దశలలో ఒక రక్షక తడి ఇవ్వడం వల్ల దిగుబడి పెరుగుతుంది.",
+                    cropTag = "Red gram",
+                    topicTag = "irrigation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_083_cotton",
+                    documentId = "doc_icar_cotton_hi_2025",
+                    pageNumber = 16,
+                    chunkIndex = 83,
+                    content = "फूल आने और गूलर बनते समय खेत में पर्याप्त नमी आवश्यक है। इन अवस्थाओं में पानी की कमी न होने दें।",
+                    cropTag = "Cotton",
+                    topicTag = "irrigation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_084_paddy",
+                    documentId = "doc_icar_paddy_en_2025",
+                    pageNumber = 23,
+                    chunkIndex = 84,
+                    content = "Maintain 2-3 cm shallow water at panicle initiation and flowering. Drain field 10-14 days before harvest.",
+                    cropTag = "Paddy",
+                    topicTag = "irrigation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_085_chilli",
+                    documentId = "doc_pjtsau_chilli_te_2025",
+                    pageNumber = 14,
+                    chunkIndex = 85,
+                    content = "డ్రిప్ ద్వారా నీటిని అందించడం శ్రేయస్కరం. పొలంలో నీరు నిలవకుండా మురుగు కాలువలు ఏర్పాటు చేయాలి.",
+                    cropTag = "Chilli",
+                    topicTag = "irrigation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_086_groundnut",
+                    documentId = "doc_icar_groundnut_hi_2025",
+                    pageNumber = 17,
+                    chunkIndex = 86,
+                    content = "फूल आना, सुइयां बनना और फली विकास सिंचाई के लिए अति संवेदनशील अवस्थाएं हैं।",
+                    cropTag = "Groundnut",
+                    topicTag = "irrigation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_087_red gram",
+                    documentId = "doc_icar_redgram_en_2025",
+                    pageNumber = 15,
+                    chunkIndex = 87,
+                    content = "Provide one protective irrigation at flowering and another at pod development during extended dry spells.",
+                    cropTag = "Red gram",
+                    topicTag = "irrigation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_088_cotton",
+                    documentId = "doc_pjtsau_cotton_te_2025",
+                    pageNumber = 16,
+                    chunkIndex = 88,
+                    content = "రోజూ లేదా రోజు విడిచి రోజు నేల తేమను బట్టి 1-2 గంటలు డ్రిప్ ద్వారా నీటిని అందించాలి.",
+                    cropTag = "Cotton",
+                    topicTag = "irrigation"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_089_cotton",
+                    documentId = "doc_pjtsau_cotton_te_2025",
+                    pageNumber = 3,
+                    chunkIndex = 89,
+                    content = "కిలో విత్తనానికి ఇమిడాక్లోప్రిడ్ 70% WS 5 గ్రాములు లేదా కార్బోసల్ఫాన్ 5 గ్రాములు కలిపి విత్తన శుద్ధి చేయాలి.",
+                    cropTag = "Cotton",
+                    topicTag = "seeds_storage"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_090_paddy",
+                    documentId = "doc_icar_paddy_hi_2025",
+                    pageNumber = 11,
+                    chunkIndex = 90,
+                    content = "कार्बेन्डाजिम 2 ग्राम प्रति किग्रा बीज की दर से सूखा या गीला उपचार करें ताकि बीजजनित रोगों से बचाव हो।",
+                    cropTag = "Paddy",
+                    topicTag = "seeds_storage"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_091_chilli",
+                    documentId = "doc_pjtsau_chilli_en_2025",
+                    pageNumber = 9,
+                    chunkIndex = 91,
+                    content = "Treat seeds with Thiram 75% WP at 3 g/kg or Trichoderma viride at 10 g/kg seed.",
+                    cropTag = "Chilli",
+                    topicTag = "seeds_storage"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_092_groundnut",
+                    documentId = "doc_pjtsau_groundnut_te_2025",
+                    pageNumber = 7,
+                    chunkIndex = 92,
+                    content = "ఎకరానికి 40-50 కిలోల విత్తన గుజ్జు అవసరం. కిలో విత్తనానికి మాంకోజెబ్ 3 గ్రాములు లేదా ఇమిడాక్లోప్రిడ్ 2 మి.లీ తో శుద్ధి చేయాలి.",
+                    cropTag = "Groundnut",
+                    topicTag = "seeds_storage"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_093_red gram",
+                    documentId = "doc_icar_redgram_hi_2025",
+                    pageNumber = 7,
+                    chunkIndex = 93,
+                    content = "राइजोबियम कल्चर 20 ग्राम प्रति किग्रा बीज की दर से मिलाकर छाया में सुखाकर बुवाई करें।",
+                    cropTag = "Red gram",
+                    topicTag = "seeds_storage"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_094_cotton",
+                    documentId = "doc_icar_cotton_en_2025",
+                    pageNumber = 19,
+                    chunkIndex = 94,
+                    content = "Pick cleanly opened bolls without bracts or dried leaves. Store in well-ventilated dry sheds below 8% moisture.",
+                    cropTag = "Cotton",
+                    topicTag = "seeds_storage"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_095_paddy",
+                    documentId = "doc_pjtsau_paddy_te_2025",
+                    pageNumber = 13,
+                    chunkIndex = 95,
+                    content = "కిలో విత్తనానికి కార్బండజిమ్ 2 గ్రాములు లేదా ట్రైసైక్లాజోల్ 2 గ్రాములు కలిపి పొడి లేదా తడి విత్తన శుద్ధి చేయాలి.",
+                    cropTag = "Paddy",
+                    topicTag = "seeds_storage"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_096_chilli",
+                    documentId = "doc_icar_chilli_hi_2025",
+                    pageNumber = 7,
+                    chunkIndex = 96,
+                    content = "थिरम या कैप्टन 3 ग्राम प्रति किग्रा बीज से उपचारित करके बोएं।",
+                    cropTag = "Chilli",
+                    topicTag = "seeds_storage"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_097_groundnut",
+                    documentId = "doc_icar_groundnut_en_2025",
+                    pageNumber = 8,
+                    chunkIndex = 97,
+                    content = "Treat kernel with Mancozeb at 3 g/kg seed + Imidacloprid 600 FS at 2 ml/kg seed before sowing.",
+                    cropTag = "Groundnut",
+                    topicTag = "seeds_storage"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_098_red gram",
+                    documentId = "doc_pjtsau_redgram_te_2025",
+                    pageNumber = 6,
+                    chunkIndex = 98,
+                    content = "కిలో విత్తనానికి రైజోబియం కల్చర్ 20 గ్రాములు + ట్రైకోడెర్మా విరిడి 4 గ్రాములు కలిపి విత్తన శుద్ధి చేయాలి.",
+                    cropTag = "Red gram",
+                    topicTag = "seeds_storage"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_099_cotton",
+                    documentId = "doc_icar_cotton_hi_2025",
+                    pageNumber = 4,
+                    chunkIndex = 99,
+                    content = "इमिडाक्लोप्रिड 70% WS 5 ग्राम प्रति किलो बीज की दर से उपचारित करें ताकि शुरुआती रसचूसक कीटों से सुरक्षा मिले।",
+                    cropTag = "Cotton",
+                    topicTag = "seeds_storage"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_100_paddy",
+                    documentId = "doc_icar_paddy_en_2025",
+                    pageNumber = 12,
+                    chunkIndex = 100,
+                    content = "Treat seeds with Carbendazim 50% WP or Tricyclazole 75% WP at 2 g/kg seed to protect against seed-borne fungal blast.",
+                    cropTag = "Paddy",
+                    topicTag = "seeds_storage"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_101_chilli",
+                    documentId = "doc_pjtsau_chilli_te_2025",
+                    pageNumber = 8,
+                    chunkIndex = 101,
+                    content = "కిలో విత్తనానికి థైరమ్ లేదా కాప్టాన్ 3 గ్రాములు + ఇమిడాక్లోప్రిడ్ 5 గ్రాములు కలిపి విత్తన శుద్ధి చేయాలి.",
+                    cropTag = "Chilli",
+                    topicTag = "seeds_storage"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_102_groundnut",
+                    documentId = "doc_icar_groundnut_hi_2025",
+                    pageNumber = 8,
+                    chunkIndex = 102,
+                    content = "प्रति किग्रा बीज को 3 ग्राम मैंकोजेब या 2 ग्राम कार्बेन्डाजिम से उपचारित करें।",
+                    cropTag = "Groundnut",
+                    topicTag = "seeds_storage"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_103_red gram",
+                    documentId = "doc_icar_redgram_en_2025",
+                    pageNumber = 7,
+                    chunkIndex = 103,
+                    content = "Inoculate with Rhizobium culture at 20 g/kg seed and dry in shade for 30 minutes before sowing.",
+                    cropTag = "Red gram",
+                    topicTag = "seeds_storage"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_104_cotton",
+                    documentId = "doc_pjtsau_cotton_te_2025",
+                    pageNumber = 18,
+                    chunkIndex = 104,
+                    content = "మంచు ఆరిన తర్వాత బాగా పగిలిన పత్తిని మాత్రమే తీయాలి. చెత్త, ఆకులు కలవకుండా పొడి వాతావరణంలో నిల్వ చేయాలి.",
+                    cropTag = "Cotton",
+                    topicTag = "seeds_storage"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_105_cotton",
+                    documentId = "doc_icar_cotton_en_2025",
+                    pageNumber = 4,
+                    chunkIndex = 105,
+                    content = "Treat with Imidacloprid 70% WS at 5 g/kg seed to protect seedlings against early season sucking pests.",
+                    cropTag = "Cotton",
+                    topicTag = "seeds_storage"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_106_paddy",
+                    documentId = "doc_pjtsau_paddy_te_2025",
+                    pageNumber = 28,
+                    chunkIndex = 106,
+                    content = "ధాన్యాన్ని బాగా ఎండబెట్టి తేమ 12-13% కంటే తక్కువ ఉండేలా చూడాలి. నిల్వ బస్తాలకు వేప నూనె లేదా మలాథియాన్ పిచికారీ చేయాలి.",
+                    cropTag = "Paddy",
+                    topicTag = "seeds_storage"
+                ),
+                DocumentChunkEntity(
+                    id = "chunk_eval_107_cotton",
+                    documentId = "doc_icar_cotton_hi_2025",
+                    pageNumber = 18,
+                    chunkIndex = 107,
+                    content = "ओस सूखने के बाद ही चुनाई करें। सूखे गूलरों से साफ कपास अलग रखें और नमी रहित स्थान पर भंडारित करें।",
+                    cropTag = "Cotton",
+                    topicTag = "seeds_storage"
+                ),
+                DocumentChunkEntity(
+                    id = "ch_cibrc_banned_te_all",
+                    documentId = "doc_cibrc_banned_list_2025",
                     pageNumber = 1,
-                    chunkIndex = 0,
-                    content = "పురుగుమందులు పిచికారీ చేసేటప్పుడు తీసుకోవాల్సిన జాగ్రత్తలు: గాలి వీచే దిశలోనే పిచికారీ చేయాలి. ముక్కు మరియు నోటికి మాస్క్, చేతులకు రబ్బరు గ్లౌజులు ధరించాలి. ఖాళీ డబ్బాలను మూడుసార్లు కడిగి రంధ్రం చేసి పూడ్చివేయాలి. నిరీక్షణ కాలాన్ని (PHI) ఖచ్చితంగా పాటించాలి.",
+                    chunkIndex = 100,
+                    content = "భారత ప్రభుత్వం & CIBRC గెజిట్ నోటిఫికేషన్ ద్వారా పూర్తిగా నిషేధించబడిన రసాయనాలు: మోనోక్రోటోఫాస్ (Monocrotophos), పారాక్వాట్ డైక్లోరైడ్ (Paraquat), ఎండోసల్ఫాన్ (Endosulfan), డిడిటి (DDT), కార్బోఫ్యూరాన్ (Carbofuran), ఫోరేట్ (Phorate), మిథైల్ పారాథియాన్. ఈ ప్రమాదకర రసాయనాలను వ్యవసాయంలో ఉపయోగించడం చట్టరీత్యా నేరం.",
                     cropTag = "Multi",
                     topicTag = "chemical_safety"
                 ),
                 DocumentChunkEntity(
-                    id = "ch_cibrc_safe_en_02",
+                    id = "ch_cibrc_banned_hi_all",
+                    documentId = "doc_cibrc_banned_list_2025",
+                    pageNumber = 1,
+                    chunkIndex = 101,
+                    content = "भारत सरकार एवं CIBRC राजपत्र अधिसूचना द्वारा पूर्णतः प्रतिबंधित कीटनाशक: मोनोक्रोटोफॉस (Monocrotophos), पैराक्वाट (Paraquat), एंडोसल्फान (Endosulfan), डीडीटी (DDT), कार्बोफ्यूरॉन (Carbofuran), फोरेट (Phorate)। इन रसायनों का कृषि में छिड़काव पूर्णतः गैरकानूनी है।",
+                    cropTag = "Multi",
+                    topicTag = "chemical_safety"
+                ),
+                DocumentChunkEntity(
+                    id = "ch_cibrc_banned_en_all",
+                    documentId = "doc_cibrc_banned_list_2025",
+                    pageNumber = 1,
+                    chunkIndex = 102,
+                    content = "Government of India & CIBRC Prohibited Chemical Pesticides Gazette Notification: Active ingredients Monocrotophos, Paraquat Dichloride, Endosulfan, DDT, Carbofuran, Phorate, and Methyl Parathion are strictly banned for agricultural application in India.",
+                    cropTag = "Multi",
+                    topicTag = "chemical_safety"
+                ),
+                DocumentChunkEntity(
+                    id = "ch_cibrc_safety_te_all",
                     documentId = "doc_cibrc_safety_guidelines",
                     pageNumber = 1,
-                    chunkIndex = 1,
-                    content = "Pesticide application safety guidelines and mandatory precautions: Always spray in the direction of wind. Wear protective face masks, eye goggles, and nitrile rubber gloves. Empty pesticide containers must undergo triple-rinsing, puncture destruction, and safe burial away from water bodies. Adhere strictly to the recommended Pre-Harvest Interval (PHI).",
+                    chunkIndex = 103,
+                    content = "పురుగుమందులు పిచికారీ చేసేటప్పుడు తీసుకోవాల్సిన జాగ్రత్తలు: గాలి వీచే దిశలోనే పిచికారీ చేయాలి. ముక్కు మరియు నోటికి మాస్క్, చేతులకు రబ్బరు గ్లౌజులు ధరించాలి. ఖాళీ డబ్బాలను మూడుసార్లు కడిగి రంధ్రం చేసి పూడ్చివేయాలి.",
+                    cropTag = "Multi",
+                    topicTag = "chemical_safety"
+                ),
+                DocumentChunkEntity(
+                    id = "ch_cibrc_safety_hi_all",
+                    documentId = "doc_cibrc_safety_guidelines",
+                    pageNumber = 1,
+                    chunkIndex = 104,
+                    content = "कीटनाशक छिड़कते समय किसान सावधानियां: मास्क, रबर के दस्ताने पहनें। हवा की दिशा में ही छिड़काव करें। खाली डिब्बों को तीन बार धोकर छेद करके जमीन में दबाएं।",
+                    cropTag = "Multi",
+                    topicTag = "chemical_safety"
+                ),
+                DocumentChunkEntity(
+                    id = "ch_cibrc_safety_en_all",
+                    documentId = "doc_cibrc_safety_guidelines",
+                    pageNumber = 1,
+                    chunkIndex = 105,
+                    content = "Pesticide application safety guidelines: Always spray in the direction of wind. Wear protective face masks, eye goggles, and nitrile gloves. Empty pesticide containers must undergo triple-rinsing, puncture destruction, and safe burial away from water bodies.",
                     cropTag = "Multi",
                     topicTag = "chemical_safety"
                 )

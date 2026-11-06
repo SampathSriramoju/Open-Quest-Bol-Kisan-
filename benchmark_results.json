@@ -1,0 +1,98 @@
+[
+  {
+    "mode": "offline",
+    "query": "Cotton Pink Bollworm (Telugu)",
+    "latency_ms": 14.851799998723436,
+    "scenario": "EVIDENCE_AVAILABLE",
+    "provider": "local_sqlite_fts",
+    "citations_count": 2
+  },
+  {
+    "mode": "offline",
+    "query": "Paddy Blast Disease (Telugu)",
+    "latency_ms": 9.811900003114715,
+    "scenario": "EVIDENCE_AVAILABLE",
+    "provider": "local_sqlite_fts",
+    "citations_count": 2
+  },
+  {
+    "mode": "offline",
+    "query": "Chilli Thrips / Mites (Hindi)",
+    "latency_ms": 9.32660000398755,
+    "scenario": "EVIDENCE_AVAILABLE",
+    "provider": "local_sqlite_fts",
+    "citations_count": 1
+  },
+  {
+    "mode": "offline",
+    "query": "Groundnut Tikka Leaf Spot (English)",
+    "latency_ms": 10.562399998889305,
+    "scenario": "EVIDENCE_AVAILABLE",
+    "provider": "local_sqlite_fts",
+    "citations_count": 2
+  },
+  {
+    "mode": "offline",
+    "query": "Banned Chemical Block Check",
+    "latency_ms": 4.33820000034757,
+    "scenario": "CHEMICAL_SAFETY_BLOCK",
+    "provider": "chemical_safety_engine",
+    "citations_count": 0
+  },
+  {
+    "mode": "offline",
+    "query": "Zero-Hallucination Unsupported Query",
+    "latency_ms": 5.7916000005207025,
+    "scenario": "EVIDENCE_UNAVAILABLE_REFUSAL",
+    "provider": "rag_refusal",
+    "citations_count": 0
+  },
+  {
+    "mode": "online_mock",
+    "query": "Cotton Pink Bollworm (Telugu)",
+    "latency_ms": 7.0943000027909875,
+    "scenario": "EVIDENCE_AVAILABLE",
+    "provider": "mock",
+    "citations_count": 2
+  },
+  {
+    "mode": "online_mock",
+    "query": "Paddy Blast Disease (Telugu)",
+    "latency_ms": 5.7670000023790635,
+    "scenario": "EVIDENCE_AVAILABLE",
+    "provider": "mock",
+    "citations_count": 2
+  },
+  {
+    "mode": "online_mock",
+    "query": "Chilli Thrips / Mites (Hindi)",
+    "latency_ms": 7.4034999997820705,
+    "scenario": "EVIDENCE_AVAILABLE",
+    "provider": "mock",
+    "citations_count": 1
+  },
+  {
+    "mode": "online_mock",
+    "query": "Groundnut Tikka Leaf Spot (English)",
+    "latency_ms": 7.221599997137673,
+    "scenario": "EVIDENCE_AVAILABLE",
+    "provider": "mock",
+    "citations_count": 2
+  },
+  {
+    "mode": "online_mock",
+    "query": "Banned Chemical Block Check",
+    "latency_ms": 4.720299999462441,
+    "scenario": "CHEMICAL_SAFETY_BLOCK",
+    "provider": "chemical_safety_engine",
+    "citations_count": 0
+  },
+  {
+    "mode": "online_mock",
+    "query": "Zero-Hallucination Unsupported Query",
+    "latency_ms": 5.039199997554533,
+    "scenario": "EVIDENCE_UNAVAILABLE_REFUSAL",
+    "provider": "rag_refusal",
+    "citations_count": 0
+  }
+]

@@ -1,0 +1,52 @@
+{
+  "total_questions": 1000,
+  "languages": {
+    "te": 334,
+    "hi": 333,
+    "en": 333
+  },
+  "categories": {
+    "Ambiguous and clarification questions": 25,
+    "Unsupported and out-of-scope questions": 25,
+    "Pesticide and chemical safety": 100,
+    "Crop cultivation and management": 200,
+    "Pest identification and management": 150,
+    "Plant diseases and symptoms": 150,
+    "Soil health and nutrient deficiencies": 150,
+    "Irrigation and water management": 100,
+    "Seeds, harvesting and storage": 100
+  },
+  "splits": {
+    "dev_set": {
+      "count": 700,
+      "file": "dev_set_700.jsonl"
+    },
+    "val_set": {
+      "count": 150,
+      "file": "val_set_150.jsonl"
+    },
+    "holdout_test_set": {
+      "count": 150,
+      "file": "holdout_test_set_150.jsonl"
+    }
+  },
+  "documents_cited": [
+    "PJTSAU Cotton Integrated Pest Management Guide 2025-26",
+    "ICAR-CICR कपास समेकित कीट एवं रोग प्रबंधन संदर्शिका 2025",
+    "ICAR-CICR Best Management Practices for Cotton in India 2025",
+    "PJTSAU Paddy Crop Management & Protection Guide 2025-26",
+    "ICAR-IIRR धान कीट एवं रोग प्रबंधन संदर्शिका 2025",
+    "ICAR-IIRR Rice Crop Production & Protection Guidelines 2025",
+    "PJTSAU Chilli Integrated Pest & Disease Management Guide 2025-26",
+    "ICAR मिर्च में कीट एवं रोग नियंत्रण संदर्शिका 2025",
+    "PJTSAU Chilli Production & IPM Advisory Bulletin 2025",
+    "PJTSAU వేరుశనగ సమగ్ర సస్యరక్షణ మరియు యాజమాన్య దర్శిని 2025-26",
+    "ICAR-DGR मूंगफली कीट एवं रोग प्रबंधन संदर्शिका 2025",
+    "ICAR-DGR Integrated Groundnut Crop Protection Manual 2025",
+    "PJTSAU కంది పంట సమగ్ర యాజమాన్యం మరియు తెగుళ్ల నివారణ 2025-26",
+    "ICAR-IIPR अरहर (कबूतर मटर) कीट एवं रोग प्रबंधन 2025",
+    "ICAR-IIPR Package of Practices for Pigeonpea (Red Gram) 2025",
+    "CIBRC Gazette List of Banned & Prohibited Pesticides in India 2025",
+    "CIBRC Pesticide Safety, Dosage & Label Regulations"
+  ]
+}

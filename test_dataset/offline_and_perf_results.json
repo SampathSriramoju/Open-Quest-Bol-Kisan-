@@ -1,0 +1,8 @@
+{
+  "airplane_mode_tested": true,
+  "offline_query_scenario": "NON_PLANT_OBJECT",
+  "offline_has_crash": false,
+  "startup_total_time_ms": 10067,
+  "memory_pss_total": "TOTAL PSS:   348707            TOTAL RSS:   466428       TOTAL SWAP PSS:      335",
+  "timestamp": "2026-11-06 00:56:01"
+}

@@ -26,6 +26,7 @@ fun AdvisoryResultCard(
     answerText: String,
     citationDoc: String?,
     citationPage: Int,
+    modeLabel: String? = null,
     modifier: Modifier = Modifier
 ) {
     if (answerText.isBlank()) return
@@ -58,26 +59,51 @@ fun AdvisoryResultCard(
         // Header Banner
         Row(
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
                 .background(headerBg, RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
                 .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            val (icon, title, color) = when {
-                isChemicalBlock -> Triple(Icons.Filled.Warning, "Chemical Safety Refusal (భద్రతా హెచ్చరిక)", AlertRed)
-                isRefusal -> Triple(Icons.Filled.Info, "Zero-Hallucination Refusal (ధృవీకరించబడలేదు)", EarthBrown)
-                isClarification -> Triple(Icons.Filled.Info, "Missing Context Clarification (వివరాలు అవసరం)", WarningAmber)
-                else -> Triple(Icons.Filled.Verified, "Verified Agricultural Advice (ఆమోదిత సమాచారం)", GreenPrimary)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.weight(1f, fill = false)
+            ) {
+                val (icon, title, color) = when {
+                    isChemicalBlock -> Triple(Icons.Filled.Warning, "Chemical Safety Refusal (భద్రతా హెచ్చరిక)", AlertRed)
+                    isRefusal -> Triple(Icons.Filled.Info, "Zero-Hallucination Refusal (ధృవీకరించబడలేదు)", EarthBrown)
+                    isClarification -> Triple(Icons.Filled.Info, "Missing Context Clarification (వివరాలు అవసరం)", WarningAmber)
+                    else -> Triple(Icons.Filled.Verified, "Verified Agricultural Advice (ఆమోదిత సమాచారం)", GreenPrimary)
+                }
+
+                Icon(imageVector = icon, contentDescription = null, tint = color, modifier = Modifier.size(18.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = title,
+                    color = color,
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
 
-            Icon(imageVector = icon, contentDescription = null, tint = color, modifier = Modifier.size(18.dp))
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = title,
-                color = color,
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Bold
-            )
+            if (!modeLabel.isNullOrBlank()) {
+                val isOnline = modeLabel.contains("Online", ignoreCase = true)
+                val badgeBg = if (isOnline) OnlineGreen.copy(alpha = 0.15f) else WarningAmber.copy(alpha = 0.15f)
+                val badgeColor = if (isOnline) OnlineGreen else WarningAmber
+                Box(
+                    modifier = Modifier
+                        .background(badgeBg, RoundedCornerShape(6.dp))
+                        .border(0.5.dp, badgeColor, RoundedCornerShape(6.dp))
+                        .padding(horizontal = 6.dp, vertical = 2.dp)
+                ) {
+                    Text(
+                        text = modeLabel,
+                        color = badgeColor,
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
         }
 
         // Answer Body

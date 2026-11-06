@@ -1,0 +1,141 @@
+{
+  "total_images": 200,
+  "overall_pass_rate": 41.5,
+  "quality_rejection_accuracy": 90.0,
+  "machinery_ood_accuracy": 55.0,
+  "healthy_crop_safety": 72.0,
+  "unsupported_uncertainty": 80.0,
+  "disease_pest_pass_rate": 24.17,
+  "heuristic_top1_accuracy": 10.83,
+  "heuristic_top3_accuracy": 24.17,
+  "grounded_citation_coverage": 31.72,
+  "latency_mean_ms": 6.6,
+  "latency_p50_ms": 6,
+  "latency_p95_ms": 12,
+  "categories_breakdown": {
+    "disease_pest": {
+      "count": 120,
+      "passed": 29,
+      "pass_rate": 24.2
+    },
+    "healthy": {
+      "count": 25,
+      "passed": 10,
+      "pass_rate": 40.0
+    },
+    "machinery_nonagri": {
+      "count": 20,
+      "passed": 14,
+      "pass_rate": 70.0
+    },
+    "unknown_unsupported": {
+      "count": 15,
+      "passed": 12,
+      "pass_rate": 80.0
+    },
+    "quality_degraded": {
+      "count": 20,
+      "passed": 18,
+      "pass_rate": 90.0
+    }
+  },
+  "crops_breakdown": {
+    "Cotton": {
+      "count": 49,
+      "passed": 24,
+      "pass_rate": 49.0
+    },
+    "Paddy": {
+      "count": 29,
+      "passed": 7,
+      "pass_rate": 24.1
+    },
+    "Chilli": {
+      "count": 29,
+      "passed": 13,
+      "pass_rate": 44.8
+    },
+    "Groundnut": {
+      "count": 29,
+      "passed": 7,
+      "pass_rate": 24.1
+    },
+    "Red gram": {
+      "count": 29,
+      "passed": 6,
+      "pass_rate": 20.7
+    },
+    "None": {
+      "count": 20,
+      "passed": 14,
+      "pass_rate": 70.0
+    },
+    "Apple": {
+      "count": 3,
+      "passed": 3,
+      "pass_rate": 100.0
+    },
+    "Grape": {
+      "count": 3,
+      "passed": 3,
+      "pass_rate": 100.0
+    },
+    "Tomato": {
+      "count": 3,
+      "passed": 2,
+      "pass_rate": 66.7
+    },
+    "Maize": {
+      "count": 3,
+      "passed": 2,
+      "pass_rate": 66.7
+    },
+    "Potato": {
+      "count": 3,
+      "passed": 2,
+      "pass_rate": 66.7
+    }
+  },
+  "modalities_breakdown": {
+    "Image + Typed Telugu": {
+      "count": 30,
+      "passed": 6,
+      "pass_rate": 20.0
+    },
+    "Image + Typed Hindi": {
+      "count": 30,
+      "passed": 9,
+      "pass_rate": 30.0
+    },
+    "Image + Typed English": {
+      "count": 30,
+      "passed": 12,
+      "pass_rate": 40.0
+    },
+    "Image + Telugu Voice": {
+      "count": 30,
+      "passed": 8,
+      "pass_rate": 26.7
+    },
+    "Image + Hindi Voice": {
+      "count": 20,
+      "passed": 1,
+      "pass_rate": 5.0
+    },
+    "Image + English Voice": {
+      "count": 20,
+      "passed": 13,
+      "pass_rate": 65.0
+    },
+    "Image Only (Visual Diagnosis)": {
+      "count": 20,
+      "passed": 16,
+      "pass_rate": 80.0
+    },
+    "Quality & OOD Inquiry": {
+      "count": 20,
+      "passed": 18,
+      "pass_rate": 90.0
+    }
+  }
+}

@@ -19,6 +19,8 @@ class RAGAndChemicalSafetyTest {
         private val docs = mutableMapOf<String, DocumentEntity>()
         private val chunks = mutableListOf<DocumentChunkEntity>()
 
+        override suspend fun getChunkCount(): Int = chunks.size
+
         override suspend fun searchChunksByKeyword(keyword: String): List<ChunkWithDoc> {
             val kw = keyword.lowercase()
             return chunks.filter { it.content.lowercase().contains(kw) }.map { c ->

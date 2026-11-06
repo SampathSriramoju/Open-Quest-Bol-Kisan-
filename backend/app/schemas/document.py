@@ -70,9 +70,11 @@ class KnowledgePackResponse(BaseModel):
 
 class RagQueryRequest(BaseModel):
     query: str
-    language: Optional[str] = "te" # 'te' or 'hi'
+    language: Optional[str] = "te" # 'te', 'hi', or 'en'
     crop: Optional[str] = None
     region: Optional[str] = "Telangana"
+    mode: Optional[str] = "online" # 'online' (Online AI LLM) or 'offline' (Extractive RAG)
+    provider: Optional[str] = None # Optional provider override ('gemini', 'groq', 'mock')
 
 class CitationResponse(BaseModel):
     document_title: str
@@ -92,3 +94,7 @@ class RagQueryResponse(BaseModel):
     chemical_safety_warning: Optional[str] = None
     escalation_needed: bool = False
     latency_ms: int = 0
+    mode: Optional[str] = "online"
+    model_provider: Optional[str] = None
+    model_name: Optional[str] = None
+    is_fallback: bool = False

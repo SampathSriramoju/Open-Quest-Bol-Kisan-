@@ -26,6 +26,7 @@ bol_kisan_server.db
 classes.jar
 out/
 *.log
+screen_emu*.png
 
 # OS
 Thumbs.db
